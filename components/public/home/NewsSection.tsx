@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { getPosts } from '@/lib/ghost'
 import { MOCK_POSTS } from '@/lib/mock-posts'
 
 function formatDate(dateStr: string) {
@@ -8,36 +7,8 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-export default async function NewsSection() {
-  let posts: Awaited<ReturnType<typeof getPosts>>['posts'] = []
-
-  try {
-    const result = await getPosts(1, 3)
-    posts = result.posts
-  } catch {
-    // Ghost unreachable — fall through to mock data
-  }
-
-  const displayPosts = posts.length > 0
-    ? posts
-    : MOCK_POSTS.map((p) => ({
-        id: p.id,
-        slug: p.slug,
-        title: p.title,
-        excerpt: p.excerpt,
-        feature_image: p.feature_image,
-        feature_image_alt: p.feature_image_alt,
-        published_at: p.published_at,
-        reading_time: p.reading_time,
-        primary_tag: p.primary_tag,
-        primary_author: p.primary_author,
-        tags: p.tags,
-        html: p.html,
-        og_image: null,
-        meta_title: null,
-        meta_description: null,
-        updated_at: p.published_at,
-      }))
+export default function NewsSection() {
+  const posts = MOCK_POSTS.slice(0, 3)
 
   return (
     <section className="bg-[#F6F5F1] py-16 md:py-24">
@@ -59,7 +30,7 @@ export default async function NewsSection() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
-          {displayPosts.map((post) => (
+          {posts.map((post) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
