@@ -3,12 +3,9 @@
 import Image from 'next/image'
 import { motion } from 'motion/react'
 
+// ── Desktop orbit arc ──────────────────────────────────────────────
 // SVG arc: viewBox="0 0 100 60", path="M 2,58 C 25,4 75,4 98,58"
-// preserveAspectRatio="none" → x% maps directly to left%, y/60*100 maps to top%
-//
-// Cubic bezier B(t): P0=(2,58) P1=(25,4) P2=(75,4) P3=(98,58)
-// Avatars placed at t = 0.05, 0.25, 0.50, 0.75, 0.95
-// Pills offset slightly above the curve (top - ~8%)
+// Avatars placed at bezier t = 0.05, 0.25, 0.50, 0.75, 0.95
 const AVATARS = [
   { src: '/images/events/opening-2026-networking.jpg', left: '0%',    top: '72%',   size: 60 },
   { src: '/images/events/opening-2026-mentoring.jpg',  left: '23.5%', top: '35%',   size: 48 },
@@ -17,12 +14,23 @@ const AVATARS = [
   { src: '/images/events/opening-2026-pitching.jpg',   left: '94.4%', top: '83.8%', size: 60 },
 ]
 
-// t≈0.12, 0.35, 0.62, 0.87 — shifted up ~10% from curve
 const PILLS = [
   { text: '2026 開幕式',   icon: '🎉', left: '13%',  top: '56%', green: false },
   { text: '業師配對完成', icon: '✓',   left: '35%',  top: '26%', green: true  },
   { text: 'Demo Day ✓',   icon: '📊',  left: '62%',  top: '26%', green: false },
   { text: '80+ 創業者',   icon: '👥',  left: '85%',  top: '54%', green: false },
+]
+
+// ── Mobile circle — pentagon positions ────────────────────────────
+// Container: 300×300px, center=(150,150), ring radius=105px
+// angle[i] = -90° + i*72°  (top → clockwise)
+const CX = 150, CY = 150, R = 105
+const PENTAGON = [
+  { x: CX,                                  y: CY - R                                }, // top
+  { x: CX + R * Math.cos((-18 * Math.PI) / 180), y: CY + R * Math.sin((-18 * Math.PI) / 180) }, // top-right
+  { x: CX + R * Math.cos((54  * Math.PI) / 180), y: CY + R * Math.sin((54  * Math.PI) / 180) }, // bot-right
+  { x: CX + R * Math.cos((126 * Math.PI) / 180), y: CY + R * Math.sin((126 * Math.PI) / 180) }, // bot-left
+  { x: CX + R * Math.cos((198 * Math.PI) / 180), y: CY + R * Math.sin((198 * Math.PI) / 180) }, // top-left
 ]
 
 const STATS = [
@@ -48,7 +56,7 @@ export default function CommunitySection() {
             Community
           </motion.p>
           <motion.h2
-            className="text-3xl font-bold text-[#181614] md:text-4xl"
+            className="text-2xl font-bold text-[#181614] md:text-3xl lg:text-4xl"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -67,71 +75,40 @@ export default function CommunitySection() {
           </motion.p>
         </div>
 
-        {/* Orbit arc — avatars + pills only */}
+        {/* ── Desktop: orbit arc ── */}
         <motion.div
-          className="relative mx-auto w-full max-w-3xl"
+          className="relative mx-auto hidden w-full max-w-3xl md:block"
           style={{ height: '280px' }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
-          {/* SVG arc line: viewBox 0 0 100 60, preserveAspectRatio none */}
-          <svg
-            className="absolute inset-0 h-full w-full"
-            viewBox="0 0 100 60"
-            preserveAspectRatio="none"
-            fill="none"
-          >
-            <path
-              d="M 2,58 C 25,4 75,4 98,58"
-              stroke="#e5e7eb"
-              strokeWidth="0.6"
-            />
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 60" preserveAspectRatio="none" fill="none">
+            <path d="M 2,58 C 25,4 75,4 98,58" stroke="#e5e7eb" strokeWidth="0.6" />
           </svg>
 
-          {/* Avatar circles — centered on bezier points */}
           {AVATARS.map((a, i) => (
             <motion.div
               key={i}
               className="absolute overflow-hidden rounded-full border-2 border-white shadow-md"
-              style={{
-                left: a.left,
-                top: a.top,
-                width: a.size,
-                height: a.size,
-                transform: 'translate(-50%, -50%)',
-              }}
+              style={{ left: a.left, top: a.top, width: a.size, height: a.size, transform: 'translate(-50%, -50%)' }}
               initial={{ opacity: 0, scale: 0.6 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: [0.34, 1.4, 0.64, 1] }}
             >
-              <Image
-                src={a.src}
-                alt=""
-                width={a.size}
-                height={a.size}
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
+              <Image src={a.src} alt="" fill className="object-cover" sizes="80px" loading="lazy" />
             </motion.div>
           ))}
 
-          {/* Pill badges — floating near the arc */}
           {PILLS.map((p, i) => (
             <motion.div
               key={i}
               className={`absolute flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium shadow-sm whitespace-nowrap ${
-                p.green
-                  ? 'border-green-200 bg-green-50 text-green-700'
-                  : 'border-gray-200 bg-white text-slate-600'
+                p.green ? 'border-green-200 bg-green-50 text-green-700' : 'border-gray-200 bg-white text-slate-600'
               }`}
-              style={{
-                left: p.left,
-                top: p.top,
-                transform: 'translate(-50%, -50%)',
-              }}
+              style={{ left: p.left, top: p.top, transform: 'translate(-50%, -50%)' }}
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -143,7 +120,47 @@ export default function CommunitySection() {
           ))}
         </motion.div>
 
-        {/* Stats row — below the arc */}
+        {/* ── Mobile: circle with pentagon avatars ── */}
+        <motion.div
+          className="relative mx-auto block md:hidden"
+          style={{ width: 300, height: 300 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Circle ring — 210×210px centered in 300×300 */}
+          <div
+            className="absolute rounded-full border border-gray-200"
+            style={{ width: R * 2, height: R * 2, top: CY - R, left: CX - R }}
+          />
+
+          {/* Center label */}
+          <div
+            className="absolute flex flex-col items-center justify-center gap-0.5"
+            style={{ width: R * 2, height: R * 2, top: CY - R, left: CX - R }}
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">NTUTEC</span>
+            <span className="text-[9px] text-slate-300">2026</span>
+          </div>
+
+          {/* Pentagon avatars — all 56px, centered on ring */}
+          {AVATARS.map((a, i) => (
+            <motion.div
+              key={i}
+              className="absolute overflow-hidden rounded-full border-2 border-white shadow-md"
+              style={{ width: 56, height: 56, top: PENTAGON[i].y - 28, left: PENTAGON[i].x - 28 }}
+              initial={{ opacity: 0, scale: 0.6 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: [0.34, 1.4, 0.64, 1] }}
+            >
+              <Image src={a.src} alt="" fill className="object-cover" sizes="56px" loading="lazy" />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Stats row */}
         <div className="mt-6 flex justify-center gap-14">
           {STATS.map((s, i) => (
             <motion.div
@@ -154,7 +171,7 @@ export default function CommunitySection() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
             >
-              <span className="text-4xl font-bold text-[#181614] md:text-5xl">{s.value}</span>
+              <span className="text-3xl font-bold text-[#181614] md:text-4xl lg:text-5xl">{s.value}</span>
               <span className="mt-1 text-xs text-slate-400">{s.label}</span>
             </motion.div>
           ))}
@@ -169,10 +186,7 @@ export default function CommunitySection() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {['台大加速器', '台大車庫', '企業垂直加速器', '台大天使會', 'Demo Day'].map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-slate-500"
-            >
+            <span key={tag} className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-slate-500">
               {tag}
             </span>
           ))}
