@@ -56,7 +56,7 @@ export default function NTUEcosystemSection() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-teal">
             Ecosystem
           </p>
-          <h2 className="text-3xl font-bold text-[#181614] md:text-4xl">台大創新生態系</h2>
+          <h2 className="text-2xl font-bold text-[#181614] md:text-3xl lg:text-4xl">台大創新生態系</h2>
           <p className="mt-4 mx-auto max-w-lg text-base leading-relaxed text-slate-500">
             NTUTEC 與台大各創新單位緊密協作，共同構建校園創業生態，連結研究能量與市場資本。
           </p>

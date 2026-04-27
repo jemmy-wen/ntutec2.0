@@ -20,7 +20,7 @@ export default function AudienceCards() {
         </motion.p>
 
         <motion.h2
-          className="mb-8 text-3xl font-bold text-[#181614] md:text-4xl"
+          className="mb-8 text-2xl font-bold text-[#181614] md:text-3xl lg:text-4xl"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -53,7 +53,7 @@ export default function AudienceCards() {
               <span className="mb-3 inline-block w-fit rounded-full bg-teal px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
                 For Startups
               </span>
-              <h3 className="text-3xl font-bold text-white">新創團隊</h3>
+              <h3 className="text-2xl font-bold text-white md:text-3xl">新創團隊</h3>
               <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/75">
                 從技術驗證到市場擴展，台大加速器與台大車庫提供完整的輔導資源、業師網絡與募資對接。
               </p>

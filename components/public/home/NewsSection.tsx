@@ -48,7 +48,7 @@ export default async function NewsSection() {
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-teal">
               Latest Updates
             </p>
-            <h2 className="text-3xl font-bold text-[#181614] md:text-4xl">最新動態</h2>
+            <h2 className="text-2xl font-bold text-[#181614] md:text-3xl lg:text-4xl">最新動態</h2>
           </div>
           <Link
             href="/news"
