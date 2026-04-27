@@ -19,8 +19,6 @@ export default function GlobalError({
               我們已記錄此問題，如持續發生請聯繫 ntutec@ntutec.com<br/>
               We&apos;ve logged the issue. Please contact ntutec@ntutec.com if it persists.
             </p>
-            {/* DEBUG — remove after diagnosis */}
-            <p className="text-xs text-red-500 mb-2 font-mono break-all">{error.message}</p>
             {error.digest && (
               <p className="text-xs text-slate-muted mb-4 font-mono">Error ID: {error.digest}</p>
             )}

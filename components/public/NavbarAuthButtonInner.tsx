@@ -21,8 +21,8 @@ export default function NavbarAuthButtonInner({ onNavigate, transparent }: Navba
 
   useEffect(() => {
     const supabase = createClient()
+    if (!supabase) { setLoading(false); return }
 
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -32,7 +32,6 @@ export default function NavbarAuthButtonInner({ onNavigate, transparent }: Navba
       }
     })
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -49,6 +48,7 @@ export default function NavbarAuthButtonInner({ onNavigate, transparent }: Navba
   async function fetchRoles(userId: string) {
     try {
       const supabase = createClient()
+      if (!supabase) { setLoading(false); return }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data } = await (supabase.from('module_roles') as any)
         .select('role')
@@ -203,6 +203,7 @@ export function MobileNavbarAuthButtonInner({ onNavigate }: NavbarAuthButtonProp
 
   useEffect(() => {
     const supabase = createClient()
+    if (!supabase) { setLoading(false); return }
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
       setLoading(false)
