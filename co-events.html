@@ -126,10 +126,10 @@ function Hero() {
 
 /* ════ EVENT TYPES ════ */
 const EVENT_TYPES = [
-  { title: '產業論壇', body: '邀請業界領袖與學術專家，探討前沿趨勢與創新機會。' },
-  { title: 'Demo Day', body: '新創團隊公開展示成果，與企業及投資人面對面交流。' },
-  { title: '工作坊', body: '主題式實作課程，涵蓋技術、商業模式與募資策略。' },
-  { title: '交流媒合會', body: '促進新創團隊、企業與投資人之間的深度互動與合作機會。' },
+  { title: '產業論壇', body: '邀請業界領袖與學術專家，探討前沿趨勢與創新機會。', img: 'images/events/opening-2026-audience.jpg' },
+  { title: 'Demo Day', body: '新創團隊公開展示成果，與企業及投資人面對面交流。', img: 'images/events/demo-day-2025-01.jpg' },
+  { title: '工作坊', body: '主題式實作課程，涵蓋技術、商業模式與募資策略。', img: 'images/events/opening-2026-mentor-session.jpg' },
+  { title: '交流媒合會', body: '促進新創團隊、企業與投資人之間的深度互動與合作機會。', img: 'images/events/opening-2026-networking.jpg' },
 ];
 
 function EventTypes() {
@@ -148,8 +148,11 @@ function EventTypes() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 28 : 40 }}>
           {EVENT_TYPES.map((item, i) => (
             <AnimUp key={i} delay={i * 80}>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: '28px 32px', background: 'var(--offwhite)', borderLeft: '3px solid var(--mint)' }}>
-                <div>
+              <div style={{ background: 'var(--offwhite)', borderLeft: '3px solid var(--mint)', overflow: 'hidden' }}>
+                <div style={{ height: 200, overflow: 'hidden' }}>
+                  <img src={item.img} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div style={{ padding: isMobile ? '24px 24px' : '28px 32px' }}>
                   <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 17 : 20, fontWeight: 600, color: 'var(--navy)', marginBottom: 10, lineHeight: 1.4 }}>{item.title}</h3>
                   <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{item.body}</p>
                 </div>
@@ -164,10 +167,10 @@ function EventTypes() {
 
 /* ════ FLAGSHIP EVENTS ════ */
 const FLAGSHIP = [
-  { title: '台大創新創業嘉年華', badge: '年度旗艦', body: '中心年度最大規模創新活動，匯聚新創、投資人、企業與學研各界，共同展示台灣創新能量。' },
-  { title: '台大天使會月例會', badge: '每月', body: '每月定期舉辦天使投資人例會，精選新創上台路演，推動早期投資媒合與社群交流。' },
-  { title: 'Demo Day', badge: '每年 12 月', body: '加速器與車庫畢業團隊成果發表會，向創投與天使投資人集中展示，促進投資媒合。' },
-  { title: '產業論壇與工作坊', badge: '不定期', body: '與企業夥伴共同舉辦產業論壇、技術工作坊，深化跨域知識交流與產學合作機會。' },
+  { title: '台大創新創業嘉年華', badge: '年度旗艦', body: '中心年度最大規模創新活動，匯聚新創、投資人、企業與學研各界，共同展示台灣創新能量。', img: 'images/events/opening-2026-biggroup.jpg' },
+  { title: '台大天使會月例會', badge: '每月', body: '每月定期舉辦天使投資人例會，精選新創上台路演，推動早期投資媒合與社群交流。', img: 'images/events/opening-2026-pitching.jpg' },
+  { title: 'Demo Day', badge: '每年 12 月', body: '加速器與車庫畢業團隊成果發表會，向創投與天使投資人集中展示，促進投資媒合。', img: 'images/events/demo-day-2025-group.jpg' },
+  { title: '產業論壇與工作坊', badge: '不定期', body: '與企業夥伴共同舉辦產業論壇、技術工作坊，深化跨域知識交流與產學合作機會。', img: 'images/events/opening-2026-coaching.jpg' },
 ];
 
 function FlagshipEvents() {
@@ -186,21 +189,22 @@ function FlagshipEvents() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
           {FLAGSHIP.map((ev, i) => (
             <AnimUp key={i} delay={i * 80}>
-              <div style={{
-                background: '#fff', padding: isMobile ? '28px 24px' : '36px 40px',
-                borderRadius: 4, border: '1px solid var(--rule)',
-                transition: 'border-color 0.2s',
-              }}
+              <div style={{ borderRadius: 4, border: '1px solid var(--rule)', overflow: 'hidden', background: '#fff', transition: 'border-color 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--teal)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--rule)'}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  background: 'rgba(0,216,200,0.12)', border: '1px solid var(--mint)',
-                  color: '#007A74', fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
-                  letterSpacing: '0.06em', padding: '4px 12px', borderRadius: 20, marginBottom: 16,
-                }}>{ev.badge}</div>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 18 : 22, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 12 }}>{ev.title}</h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{ev.body}</p>
+                <div style={{ height: 220, overflow: 'hidden' }}>
+                  <img src={ev.img} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div style={{ padding: isMobile ? '24px 24px' : '32px 40px' }}>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    background: 'rgba(0,216,200,0.12)', border: '1px solid var(--mint)',
+                    color: '#007A74', fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
+                    letterSpacing: '0.06em', padding: '4px 12px', borderRadius: 20, marginBottom: 16,
+                  }}>{ev.badge}</div>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 18 : 22, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 12 }}>{ev.title}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{ev.body}</p>
+                </div>
               </div>
             </AnimUp>
           ))}
@@ -223,6 +227,7 @@ function CTA() {
           display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
           justifyContent: 'space-between', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 32 : 48,
         }}>
+          <img src="images/events/opening-2026-01.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.15, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', inset: 0, opacity: 0.12, backgroundImage: 'radial-gradient(circle, rgba(0,216,200,0.6) 1px, transparent 1px)', backgroundSize: '44px 44px', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, right: '30%', bottom: 0, width: 1, background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
