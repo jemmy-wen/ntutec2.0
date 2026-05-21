@@ -120,7 +120,7 @@ function Hero() {
   return (
     <section style={{ position: 'relative', background: 'var(--navy)', overflow: 'hidden', minHeight: isMobile ? 'auto' : '88vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, clipPath: isMobile ? 'none' : hexClip, overflow: 'hidden' }}>
-        <img src="ntutec-design-handoff/public/images/events/opening-2026-pitching.jpg" alt="新創投遞"
+        <img src="images/events/opening-2026-pitching.jpg" alt="新創投遞"
           style={{ width: '100%', height: isMobile ? 220 : '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.4 }} />
       </div>
       {!isMobile && <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
@@ -232,9 +232,9 @@ function AfterSubmit() {
       </AnimUp>
       {(() => {
         const STEP_IMGS = [
-          'ntutec-design-handoff/public/images/events/opening-2026-mentor-session.jpg',
-          'ntutec-design-handoff/public/images/events/opening-2026-vincent.jpg',
-          'ntutec-design-handoff/public/images/events/demo-day-2025-01.jpg',
+          'images/events/opening-2026-mentor-session.jpg',
+          'images/events/opening-2026-vincent.jpg',
+          'images/events/demo-day-2025-01.jpg',
         ];
         return (
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
@@ -294,7 +294,7 @@ function SubmitCTA() {
     <section id="submit" style={{ background: 'var(--offwhite)', padding: isMobile ? '48px 24px' : '80px 7%' }}>
       <AnimUp>
         <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 28px' : '80px 72px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <img src="ntutec-design-handoff/public/images/events/opening-2026-audience.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.18, pointerEvents: 'none' }} />
+          <img src="images/events/opening-2026-audience.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.18, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
             <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.14em', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>Submit</span>
             <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: '#fff', marginBottom: 16 }}>立即投遞</h2>
