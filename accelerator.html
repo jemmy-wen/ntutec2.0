@@ -19,8 +19,7 @@
       --text: #1A1A18; --muted: #6C727B;
       --serif: 'Noto Sans TC', sans-serif;
       --mono: 'Lato', sans-serif;
-      --sans: 'Lato', 'Noto Sans TC', sans-serif;
-      --italic: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif; --italic: 'Cormorant Garamond', Georgia, serif;
     }
     html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
     body { font-family: var(--sans); background: var(--white); color: var(--text); overflow-x: hidden; max-width: 100vw; }
@@ -199,7 +198,7 @@ function Hero() {
           {[{ num: '10', suffix: '個月', label: '深度輔導期' }, { num: '40', plus: '+', label: '業師顧問' }, { num: '20', label: '錄取隊數' }, { num: '0', suffix: '元', label: '參與費用' }].map((s, i) => (
             <div key={i} style={{ padding: '20px 24px', flex: '1 1 45%', borderBottom: i < 2 ? '1px solid var(--rule)' : 'none', borderRight: i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-                <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 32, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 32, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
                 {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
                 {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
               </div>
@@ -215,7 +214,7 @@ function Hero() {
                 {i > 0 && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
                 <div style={{ padding: '24px 36px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-                    <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                    <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
                     {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
                     {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
                   </div>

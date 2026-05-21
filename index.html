@@ -26,7 +26,7 @@
       --muted: #888884;
       --serif: 'Noto Sans TC', sans-serif;
       --mono: 'Lato', sans-serif;
-      --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif; --italic: 'Cormorant Garamond', Georgia, serif;
     }
     html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
     body { font-family: var(--sans); background: var(--white); color: var(--text); overflow-x: hidden; max-width: 100vw; }
@@ -953,7 +953,7 @@ function Programs() {
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
                     zIndex: 5,
                   }}>
-                    <span style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 600, color: 'var(--navy)', lineHeight: 1 }}>{p.num}</span>
+                    <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 26, fontWeight: 600, color: 'var(--navy)', lineHeight: 1 }}>{p.num}</span>
                     <span style={{ fontFamily: 'var(--mono)', fontSize: 8, letterSpacing: '0.12em', color: 'var(--teal)', textTransform: 'uppercase' }}>{p.en}</span>
                   </div>
                 </div>
@@ -1477,7 +1477,7 @@ function Journey() {
                 }}>
                   <div style={{ flexShrink: 0, textAlign: 'center', width: 36 }}>
                     <div style={{ fontFamily: 'var(--mono)', fontSize: 8, letterSpacing: '0.1em', color: pal.monthCol, textTransform: 'uppercase', marginBottom: 2 }}>STEP</div>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: pal.numCol, lineHeight: 1 }}>{p.num}</div>
+                    <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 28, fontWeight: 600, color: pal.numCol, lineHeight: 1 }}>{p.num}</div>
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em', color: pal.monthCol, marginBottom: 4 }}>{p.month}</div>
@@ -1514,7 +1514,7 @@ function Journey() {
                     display: 'flex', flexDirection: 'column', justifyContent: 'center',
                   }}>
                     <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.14em', color: pal.monthCol, textTransform: 'uppercase', marginBottom: 4 }}>STEP</div>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 38, fontWeight: 600, color: pal.numCol, lineHeight: 1, letterSpacing: '-0.02em', marginBottom: 12 }}>{p.num}</div>
+                    <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 38, fontWeight: 600, color: pal.numCol, lineHeight: 1, letterSpacing: '-0.02em', marginBottom: 12 }}>{p.num}</div>
                     <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em', color: pal.monthCol, marginBottom: 10 }}>{p.month}</div>
                     <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: pal.titleCol, lineHeight: 1.35, marginBottom: 10 }}>{p.title}</div>
                     <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: pal.descCol, lineHeight: 1.75 }}>{p.desc}</div>
