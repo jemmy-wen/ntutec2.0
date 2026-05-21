@@ -96,7 +96,8 @@ function Hero() {
           <polygon points="1200,640 876,640 1200,480" fill="#F7F5F1" />
         </svg>
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '160px 10% 100px' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: '100%', maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
           <div style={{
             opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
             transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
@@ -115,6 +116,7 @@ function Hero() {
             fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 16, fontWeight: 300,
             lineHeight: 1.9, color: 'rgba(255,255,255,0.84)', maxWidth: 520,
           }}>歡迎有志參與早期新創投資的投資人，一同加入以台大創業生態系為核心的天使投資社群。</p>
+          </div>
         </div>
       </section>
     </div>

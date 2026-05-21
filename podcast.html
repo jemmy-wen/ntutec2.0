@@ -101,7 +101,8 @@ function Hero() {
           <polygon points="1200,520 940,520 1200,390" fill="#F7F5F1" />
         </svg>
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '140px 10% 80px' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: '100%', maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
           <div style={{
             opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
             transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
@@ -120,6 +121,7 @@ function Hero() {
             fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 16, fontWeight: 300,
             lineHeight: 1.9, color: 'rgba(255,255,255,0.84)', maxWidth: 520,
           }}>由台大創創中心製作，深度專訪創業業師、新創創辦人與產業專家。</p>
+          </div>
         </div>
       </section>
     </div>
