@@ -57,9 +57,9 @@ const HI3 = [
 ];
 
 const ALUMNI_HIGHLIGHTS = [
-  { name: '配客嘉 PackAge+', tag: '循環包裝 × ESG', result: 'Pre-A NT$5,200 萬', detail: '獲國發基金、中信、彰銀入股，合作 200+ 企業，持續拓展東南亞市場。' },
-  { name: '艾斯創生醫 Astron Medtech', tag: '醫療器材 × 國際', result: '募資 USD 250 萬（2024）', detail: 'SelectUSA MedTech 冠軍，NBA 球隊指定名醫等國際骨科權威投資。' },
-  { name: 'Botbonnie', tag: '聊天機器人 × AI', result: '被 Appier 收購（2023）', detail: '創辦人為台大創創歷屆校友。最終被 Appier（東京上市的 AI 公司）收購。' },
+  { name: '配客嘉 PackAge+', tag: '循環包裝 × ESG', result: 'Pre-A NT$5,200 萬', detail: '獲國發基金、中信、彰銀入股，合作 200+ 企業，持續拓展東南亞市場。', img: 'images/events/demo-day-2025-04.jpg' },
+  { name: '艾斯創生醫 Astron Medtech', tag: '醫療器材 × 國際', result: '募資 USD 250 萬（2024）', detail: 'SelectUSA MedTech 冠軍，NBA 球隊指定名醫等國際骨科權威投資。', img: 'images/events/opening-2026-04.jpg' },
+  { name: 'Botbonnie', tag: '聊天機器人 × AI', result: '被 Appier 收購（2023）', detail: '創辦人為台大創創歷屆校友。最終被 Appier（東京上市的 AI 公司）收購。', img: 'images/events/demo-day-2025-05.jpg' },
 ];
 
 const MILESTONES = [
@@ -86,8 +86,9 @@ function Hero() {
   return (
     <div style={{ position: 'relative' }}>
       <section style={{ position: 'relative', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--navy) 0%, #0D1E33 40%, #1A3A5A 70%, var(--teal) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.06, backgroundImage: 'radial-gradient(circle at 60% 40%, var(--mint) 0%, transparent 60%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+        <img src="images/events/opening-2026-biggroup.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.22, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(26,46,74,0.95) 0%, rgba(26,46,74,0.75) 60%, rgba(26,74,90,0.6) 100%)' }} />
         <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
           <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
           <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
@@ -122,17 +123,20 @@ function Mission() {
   return (
     <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80, alignItems: 'center' }}>
           <AnimUp>
             <span className="sec-en">Our Mission</span>
             <h2 style={{ display: 'inline-block', marginBottom: 32 }}>
               <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>使命與願景</span>
             </h2>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>台大創創中心是台大創業生態系的實戰基地，以「連結台大、連結產業、連結資本」三個連結為核心，將台大最好的技術能量與人才，轉化為可投資的新創公司。</p>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>13 年來，我們累計輔導逾 600+ 支新創團隊，支持新創從技術驗證走入市場。</p>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)' }}>我們的願景是成為臺灣創業生態圈受新創信賴的校園創業加速器，以 HI3 模型系統性支持新創。</p>
           </AnimUp>
           <AnimUp delay={120}>
-            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>台大創創中心是台大創業生態系的實戰基地，以「連結台大、連結產業、連結資本」三個連結為核心，將台大最好的技術能量與人才，轉化為可投資的新創公司。</p>
-            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>13 年來，我們累計輔導逾 600+ 支新創團隊。透過台大加速器、台大車庫、企業垂直加速器（27 期、35 家企業）與台大天使會（150+ 投資人網絡），支持新創從技術驗證走入市場。</p>
-            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)' }}>我們的願景是成為臺灣創業生態圈受新創信賴的校園創業加速器，以 HI3 模型系統性支持新創，深耕台灣 13 年的大學創業基地。</p>
+            <div style={{ height: isMobile ? 260 : 420, overflow: 'hidden', borderRadius: 4 }}>
+              <img src="images/events/opening-2026-coaching.jpg" alt="台大創創中心輔導現場" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+            </div>
           </AnimUp>
         </div>
       </div>
@@ -186,11 +190,16 @@ function AlumniHighlights() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 24 }}>
           {ALUMNI_HIGHLIGHTS.map((a, i) => (
             <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: 'var(--offwhite)', padding: '32px 28px', borderRadius: 4 }}>
-                <span style={{ display: 'inline-block', background: 'rgba(88,168,160,0.12)', color: 'var(--teal)', fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 500, padding: '3px 12px', borderRadius: 12, marginBottom: 16 }}>{a.tag}</span>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>{a.name}</h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 20, fontWeight: 600, color: 'var(--teal)', marginBottom: 12 }}>{a.result}</p>
-                <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'var(--muted)' }}>{a.detail}</p>
+              <div style={{ background: 'var(--offwhite)', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{ height: 200, overflow: 'hidden' }}>
+                  <img src={a.img} alt={a.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div style={{ padding: '28px 28px' }}>
+                  <span style={{ display: 'inline-block', background: 'rgba(88,168,160,0.12)', color: 'var(--teal)', fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 500, padding: '3px 12px', borderRadius: 12, marginBottom: 16 }}>{a.tag}</span>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>{a.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 20, fontWeight: 600, color: 'var(--teal)', marginBottom: 12 }}>{a.result}</p>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'var(--muted)' }}>{a.detail}</p>
+                </div>
               </div>
             </AnimUp>
           ))}
@@ -242,13 +251,14 @@ function CTA() {
     <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <AnimUp>
-          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32 }}>
-            <div>
+          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32, position: 'relative', overflow: 'hidden' }}>
+            <img src="images/events/opening-2026-mentoring.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, pointerEvents: 'none' }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
               <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--mint)', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>Start Your Journey</span>
               <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 16 }}>認識我們的團隊</h2>
               <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 480 }}>投資經理、輔導經理——每位成員都是新創的第一線戰友，不只給建議，更一起把關鍵路上每個節點走完。</p>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
               <a href="team.html" style={{ display: 'inline-block', background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 15, padding: '14px 32px', borderRadius: 2, whiteSpace: 'nowrap', textAlign: 'center' }}>查看完整團隊</a>
               <a href="apply.html" style={{ display: 'inline-block', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--serif)', fontSize: 15, padding: '14px 32px', borderRadius: 2, whiteSpace: 'nowrap', textAlign: 'center', border: '1px solid rgba(255,255,255,0.2)' }}>啟動創業之旅</a>
             </div>
