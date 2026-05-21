@@ -1,6 +1,26 @@
 # Design handoff source (not part of the deployed site)
 ntutec-design-handoff/
 
+# Next.js app source (lives in a separate repo)
+app/
+components/
+lib/
+hooks/
+types/
+data/
+i18n/
+supabase/
+__tests__/
+middleware.ts
+next.config.ts
+next-env.d.ts
+tsconfig.json
+vitest.config.ts
+.env.example
+.env.local.example
+.github/
+.staging-marker.md
+
 # macOS
 .DS_Store
 *.pem
