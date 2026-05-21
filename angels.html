@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台大天使會 NTUTEC Angels — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 700; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ── Figma image assets ── */
+const IMG_AHEAD   = "https://www.figma.com/api/mcp/asset/2177ee73-51e2-4bc3-81ee-55ac219fd7e2";
+const IMG_MOBAGEL = "https://www.figma.com/api/mcp/asset/729c689e-5ca5-4a94-b0b7-770175ef3085";
+const IMG_SAVFE   = "https://www.figma.com/api/mcp/asset/2de57055-7e29-4f56-9f86-0f33ab8fb43b";
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12, rootMargin: opts.rootMargin || '0px' });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+/* ════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════ */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const STATS = [
+    { num: '40', plus: '+', label: '天使會員' },
+    { num: '12', plus: '', suffix: '/年', label: '天使例會' },
+    { num: '3',  plus: '', suffix: '階',  label: '嚴格盡調' },
+  ];
+
+  const statsRow = (
+    <div style={{
+      background: '#fff',
+      boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18), 0 2px 12px -4px rgba(26,46,74,0.10)',
+      display: 'flex',
+      flexWrap: isMobile ? 'wrap' : 'nowrap',
+      opacity: loaded ? 1 : 0,
+      transition: 'opacity 0.7s 0.6s',
+    }}>
+      {STATS.map((s, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+          <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', flex: isMobile ? '1 1 45%' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
+              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+              {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
+              {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
+            </div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>{s.label}</div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+
+        {/* ── Photo + overlays, clipped to diagonal hexagon ── */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'url(uploads/angels-group.png)', backgroundSize: 'cover', backgroundPosition: '55% 40%', backgroundRepeat: 'no-repeat',
+            opacity: 0.88,
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: isMobile
+              ? 'linear-gradient(to bottom, rgba(26,46,74,0.75) 0%, rgba(26,46,74,0.55) 100%)'
+              : 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.55) 32%, rgba(0,216,200,0.10) 55%, transparent 75%)',
+          }} />
+          {!isMobile && <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to right, rgba(26,46,74,0.45) 0%, transparent 42%)',
+          }} />}
+        </div>
+
+        {/* ── SVG corner triangles in offwhite ── */}
+        <svg
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }}
+          viewBox="0 0 1200 720" preserveAspectRatio="none"
+        >
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+
+        {/* ── Main content ── */}
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          {isMobile ? (
+            <div>
+              <div style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+                fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500,
+                letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16,
+              }}>
+                Angel Investment Club
+              </div>
+              <h1 style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+                transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+                fontFamily: 'var(--sans)', fontSize: 36, fontWeight: 700,
+                lineHeight: 1.2, color: '#fff', letterSpacing: '0.04em', marginBottom: 20,
+              }}>
+                NTUTEC ANGELS<br />台大天使會
+              </h1>
+              <p style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+                fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300,
+                lineHeight: 1.95, color: 'rgba(255,255,255,0.84)',
+              }}>
+                以台大創業生態系為核心的天使投資社群。每月精選優質新創、三段嚴格盡調、記名投票，與 40+ 位天使會員共同佈局早期新創。
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 64, alignItems: 'center' }}>
+              {/* Left — copy */}
+              <div>
+                <div style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                  transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+                  fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
+                  letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24,
+                }}>
+                  Angel Investment Club
+                </div>
+                <h1 style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+                  transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+                  fontFamily: 'var(--sans)', fontSize: 58, fontWeight: 700,
+                  lineHeight: 1.12, color: '#fff', letterSpacing: '0.04em', marginBottom: 28,
+                }}>
+                  NTUTEC ANGELS<br />台大天使會
+                </h1>
+                <p style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                  transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+                  fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300,
+                  lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520,
+                }}>
+                  以台大創業生態系為核心的天使投資社群。每月精選優質新創、三段嚴格盡調、記名投票，與 40+ 位天使會員共同佈局早期新創。
+                </p>
+              </div>
+              {/* Right — decorative caption */}
+              <div style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(16px)',
+                transition: 'opacity 0.7s 0.36s, transform 0.7s 0.36s',
+                alignSelf: 'stretch', display: 'flex', flexDirection: 'column',
+                justifyContent: 'flex-end', alignItems: 'flex-end', minHeight: 480,
+              }}>
+                <div style={{ width: 100, height: 1, background: 'linear-gradient(90deg, transparent, var(--mint))', marginBottom: 18 }} />
+                <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 22, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 260 }}>
+                  共同佈局台灣<br />最有潛力的早期新創。
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── CTA link — sits in offwhite bottom-right triangle (desktop only) ── */}
+      {!isMobile && (
+        <a href="#membership" style={{
+          position: 'absolute',
+          bottom: 36, right: '4%',
+          zIndex: 5,
+          display: 'inline-flex', alignItems: 'center', gap: 12,
+          fontFamily: 'var(--serif)', fontSize: 16, color: 'var(--navy)',
+          paddingBottom: 8, borderBottom: '1px solid var(--navy)',
+          opacity: loaded ? 1 : 0,
+          transition: 'opacity 0.65s 0.5s',
+        }}>
+          加入天使網絡
+          <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
+            <path d="M0 5h28m0 0l-4-4m4 4l-4 4" stroke="currentColor" strokeWidth="1.2"/>
+          </svg>
+        </a>
+      )}
+
+      {/* ── Stats white card — desktop: absolute float; mobile: inline block ── */}
+      {isMobile ? (
+        <div style={{ margin: '0 0 0 0' }}>{statsRow}</div>
+      ) : (
+        <div style={{ position: 'absolute', bottom: 0, left: '10%', zIndex: 10 }}>{statsRow}</div>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   RECENT INVESTMENTS
+════════════════════════════════════════════════════ */
+const CASES = [
+  {
+    img: IMG_AHEAD,
+    quarter: '2025 Q4',
+    category: '生技醫療 · AI 診斷',
+    company: 'AHEAD Medicine 先勁智能',
+    body: '台大醫學院校友 Andrea Wang 創辦的 AI 醫療輔助診斷平台，協助醫師縮短 X 光片判讀時間，獲台大天使會投資。',
+    links: [],
+  },
+  {
+    img: IMG_MOBAGEL,
+    quarter: '2026 Q1',
+    category: 'AI · 數據分析',
+    company: 'MoBagel 行動貝果',
+    body: '鍾哲民創辦的 AI/數據分析平台，累計募資 US$21M+，服務 3,000+ 品牌。台大車庫與加速器歷屆校友，2026 Q1 接受台大天使會投資。',
+    links: ['INSIDE 報導', '工商時報專訪'],
+  },
+  {
+    img: IMG_SAVFE,
+    quarter: '2025 Q4',
+    category: '硬科技 · 手術導航',
+    company: '思輔科技 SAVFE',
+    body: '周皓凱創辦的微創手術導航技術公司，2025 國家新創獎，亞東醫院場域驗證，2026 Q1 獲台大天使會投資。',
+    links: ['國家新創獎官方頁'],
+  },
+];
+
+function CaseCard({ data, delay }) {
+  return (
+    <AnimUp delay={delay} style={{ height: '100%' }}>
+      <div style={{
+        background: '#fff',
+        borderRadius: 4,
+        overflow: 'hidden',
+        boxShadow: '0 8px 18px -6px rgba(0,0,0,0.12), 0 12px 42px -4px rgba(0,0,0,0.12)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+      }}>
+        {/* Photo */}
+        <div style={{
+          height: 220,
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}>
+          <img src={data.img} alt={data.company}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: '24px 24px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          {/* Tags row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center',
+              background: '#00C4CC', color: '#fff',
+              fontFamily: 'var(--sans)', fontSize: 13,
+              padding: '2px 10px', borderRadius: 14,
+            }}>{data.quarter}</span>
+            <span style={{
+              fontFamily: 'var(--sans)', fontSize: 13, color: '#00BDC4',
+            }}>{data.category}</span>
+          </div>
+
+          {/* Company name */}
+          <h3 style={{
+            fontFamily: 'var(--sans)', fontSize: 20, fontWeight: 700,
+            color: 'var(--navy)', lineHeight: 1.4, marginBottom: 12,
+          }}>{data.company}</h3>
+
+          {/* Body */}
+          <p style={{
+            fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300,
+            lineHeight: 1.95, color: 'var(--muted)', flex: 1, marginBottom: data.links.length ? 20 : 0,
+          }}>{data.body}</p>
+
+          {/* Links */}
+          {data.links.length > 0 && (
+            <div>
+              {data.links.map((lk, i) => (
+                <div key={i} style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  borderBottom: '1px dashed rgba(217,217,217,0.84)',
+                  padding: '6px 0',
+                  fontFamily: 'var(--sans)', fontSize: 12, color: '#00C4CC',
+                }}>
+                  <span>{lk}</span>
+                  <span style={{ fontSize: 16 }}>＋</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </AnimUp>
+  );
+}
+
+function RecentInvestments() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 36 : 56 }}>
+            <span className="sec-en">Recent Investment</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>近期投資案例</span>
+            </h2>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 24, alignItems: 'stretch' }}>
+          {CASES.map((c, i) => <CaseCard key={i} data={c} delay={i * 80} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   MEMBER BENEFITS
+════════════════════════════════════════════════════ */
+const BENEFITS = [
+  { icon: <Icon name="ShieldCheck" size={28} color="currentColor" />, title: '嚴選優質案源', body: '每案皆經三段嚴格篩選，由投資經理親自盡調。省去自行篩選的時間成本，直接接觸已通過高門檻評估的優質新創。' },
+  { icon: <Icon name="FileText" size={28} color="currentColor" />, title: '完整投資備忘錄', body: '每個上架月會的新創均附完整 DD 備忘錄：市場分析、財務模型、競爭優勢、風險評估與 Term Sheet 建議，支援你的投資決策。' },
+  { icon: <Icon name="Banknote" size={28} color="currentColor" />, title: '彈性個人直接投資', body: '會員以個人資金直接投資，不受機構共投限制，投資金額自主決定，完全掌握決策時機與規模。' },
+  { icon: <Icon name="Network" size={28} color="currentColor" />, title: '生態系長期支持', body: '連結台大業師網絡、校友資源與企業合作夥伴，被投企業獲得的不只是資金，而是持續成長的生態系動能。' },
+];
+
+function MemberBenefits() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: '0 0 0', background: 'transparent', position: 'relative', overflow: 'visible' }}>
+      {/* White angled background — desktop only */}
+      {!isMobile && <div style={{
+        position: 'absolute',
+        top: 32, left: 0, right: 0, bottom: 0,
+        background: '#fff',
+        clipPath: 'polygon(0% 0%, 73% 0%, 100% 29%, 100% 100%, 27% 100%, 0% 71%)',
+        zIndex: 0,
+      }} />}
+      {isMobile && <div style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 0 }} />}
+
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%', position: 'relative', zIndex: 1 }}>
+        <AnimUp>
+          <div style={{ textAlign: isMobile ? 'left' : 'right', paddingTop: isMobile ? 48 : 8, marginBottom: isMobile ? 40 : 64 }}>
+            <span className="sec-en" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end', display: 'flex' }}>Member Benefits</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 36 }}>加入台大天使會的理由</span>
+            </h2>
+          </div>
+        </AnimUp>
+
+        <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? '36px' : '56px 80px' }}>
+          {!isMobile && (
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 64, height: 64, pointerEvents: 'none', zIndex: 0 }}>
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <line x1="32" y1="0" x2="32" y2="64" stroke="#3ABFBF" strokeWidth="1.5"/>
+                <line x1="0" y1="32" x2="64" y2="32" stroke="#3ABFBF" strokeWidth="1.5"/>
+              </svg>
+            </div>
+          )}
+
+          {BENEFITS.map((b, i) => (
+            <AnimUp key={i} delay={i * 80} style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', gap: isMobile ? 16 : 0, alignItems: isMobile ? 'flex-start' : 'stretch', flexDirection: isMobile ? 'row' : 'column' }}>
+                <div style={{ color: 'var(--navy)', marginBottom: isMobile ? 0 : 18, flexShrink: 0 }}>{b.icon}</div>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--serif)', fontSize: isMobile ? 17 : 20, fontWeight: 700,
+                    color: 'var(--navy)', marginBottom: 10, lineHeight: 1.4,
+                  }}>{b.title}</h3>
+                  <p style={{
+                    fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300,
+                    lineHeight: 1.9, color: 'var(--muted)',
+                  }}>{b.body}</p>
+                </div>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+      <div style={{ height: isMobile ? 48 : 100 }} />
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   MONTHLY PIPELINE (Serpentine Pill)
+════════════════════════════════════════════════════ */
+function MonthlyPipeline() {
+  const isMobile = useIsMobile();
+  const steps = [
+    { num: '01', title: '案源進入', body: '申請、業師推薦或校友引薦', icon: <Icon name="Upload" size={32} color="white" /> },
+    { num: '02', title: '三段篩選', body: '投資經理全程主導盡職調查', icon: <Icon name="Filter" size={32} color="white" /> },
+    { num: '03', title: '上架資訊卡', body: '月會前開放閱覽，附完整投資評估摘要', icon: <Icon name="FileText" size={32} color="white" /> },
+    { num: '04', title: '個人直接投資', body: '會員以個人名義直接持股，中心協助撮合文件流程', icon: <Icon name="UserPlus" size={32} color="white" /> },
+    { num: '05', title: '記名投票', body: '針對有意投資的案件表態與說明偏好', icon: <Icon name="ClipboardCheck" size={32} color="white" /> },
+    { num: '06', title: '天使例會', body: '新創 Pitch 與 Q&A，會員現場互動提問', icon: <Icon name="CalendarDays" size={32} color="white" /> },
+  ];
+
+  const ArrowR = () => (
+    <div style={{ display:'flex', alignItems:'center', flexShrink:0, color:'rgba(255,255,255,0.75)' }}>
+      <svg width="32" height="14" viewBox="0 0 32 14" fill="none">
+        <path d="M0 7h28M22 1l8 6-8 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+
+  const ArrowL = () => (
+    <div style={{ display:'flex', alignItems:'center', flexShrink:0, color:'rgba(255,255,255,0.75)' }}>
+      <svg width="32" height="14" viewBox="0 0 32 14" fill="none">
+        <path d="M32 7H4M10 1l-8 6 8 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+
+  const IconBox = () => (
+    <div style={{ width:32, height:32, background:'rgba(255,255,255,0.3)', marginBottom:12, flexShrink:0 }} />
+  );
+
+  function StepItem({ s, delay }) {
+    const [ref, v] = useInView();
+    return (
+      <div ref={ref} style={{ opacity: v?1:0, transform: v?'none':'translateY(16px)', transition:`opacity 0.6s ${delay}ms, transform 0.6s ${delay}ms`, minWidth:0 }}>
+        <div style={{ marginBottom:12 }}>{s.icon}</div>
+        <div style={{ fontFamily:'var(--italic)', fontStyle:'italic', fontWeight:600, fontSize:'clamp(24px,2.5vw,36px)', color:'#fff', lineHeight:1, marginBottom:6 }}>{s.num}</div>
+        <div style={{ fontFamily:'var(--serif)', fontSize:'clamp(13px,1.2vw,17px)', fontWeight:700, color:'#fff', marginBottom:6, lineHeight:1.4 }}>{s.title}</div>
+        <div style={{ fontFamily:'var(--sans)', fontSize:'clamp(11px,0.9vw,13px)', fontWeight:300, lineHeight:1.8, color:'rgba(255,255,255,0.85)' }}>{s.body}</div>
+      </div>
+    );
+  }
+
+  return (
+    <section style={{ paddingTop: isMobile ? 72 : 120, background:'var(--offwhite)', overflow:'hidden' }}>
+      <div style={{ maxWidth:1280, margin:'0 auto', padding: isMobile ? '0 6%' : '0 5%', paddingBottom:48 }}>
+        <AnimUp>
+          <div>
+            <span className="sec-en">Monthly Cycle</span>
+            <div style={{ display:'flex', alignItems:'baseline', gap:24, flexWrap:'wrap' }}>
+              <h2 style={{ display:'inline-block' }}>
+                <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 36 }}>每月如何運作</span>
+              </h2>
+              <p style={{ fontFamily:'var(--sans)', fontSize:14, fontWeight:300, color:'var(--muted)', lineHeight:1.85 }}>
+                從案源進入到投資決策，每一步都有清楚的流程。
+              </p>
+            </div>
+          </div>
+        </AnimUp>
+      </div>
+      <div style={{ maxWidth:1280, margin:'0 auto', padding: isMobile ? '0 6% 60px' : '0 5% 80px' }}>
+        <img src="uploads/graphic_hoeitwork.png" alt="" style={{ display:'block', width:'100%', height:'auto' }} />
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   THREE STAGE SCREENING
+════════════════════════════════════════════════════ */
+function ThreeStageScreening() {
+  const isMobile = useIsMobile();
+  const stages = [
+    {
+      tag: '第一關',
+      title: '初篩（硬過濾）',
+      body: '基本資格與領域契合度篩選，確認案件符合聚焦領域（AI 軟體、生技醫療、硬科技、創新商模）。',
+    },
+    {
+      tag: '第二關',
+      title: '快速評分',
+      body: '團隊、商業模式、市場規模、競爭優勢、執行力等多維度評分，由投資經理評估是否進入下一階段。',
+    },
+    {
+      tag: '第三關',
+      title: '完整 DD 報告',
+      body: '含市場分析、財務模型、Term Sheet 建議的完整投資評估報告。通過後進入月例會向會員 Pitch。',
+    },
+  ];
+
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ textAlign: isMobile ? 'left' : 'right', marginBottom: isMobile ? 40 : 72 }}>
+            <span className="sec-en" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end', display: 'flex' }}>Screening Process</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 20 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 36 }}>三段嚴格篩選機制</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.9, maxWidth: 520, marginLeft: isMobile ? 0 : 'auto' }}>
+              每個上架到月例會的案件，都經過投資經理的完整盡調，嚴格篩選，不輕易上架。
+            </p>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 32 : 0 }}>
+          {stages.map((s, i) => (
+            <AnimUp key={i} delay={i * 100}>
+              <div style={{
+                paddingLeft: isMobile ? 0 : (i === 0 ? 0 : 48),
+                paddingRight: isMobile ? 0 : (i === stages.length - 1 ? 0 : 48),
+                paddingBottom: isMobile && i < stages.length - 1 ? 32 : 0,
+                borderLeft: isMobile ? 'none' : (i === 0 ? 'none' : '1px solid #E5E5DF'),
+                borderBottom: isMobile && i < stages.length - 1 ? '1px solid #E5E5DF' : 'none',
+              }}>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  background: 'rgba(0,216,200,0.1)',
+                  border: '1.5px solid var(--mint)',
+                  color: '#007A74',
+                  fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 600, letterSpacing: '0.06em',
+                  padding: '5px 14px', borderRadius: 8, marginBottom: 20,
+                }}>{s.tag}</div>
+                <h3 style={{
+                  fontFamily: 'var(--serif)', fontSize: isMobile ? 22 : 26, fontWeight: 700,
+                  color: 'var(--navy)', lineHeight: 1.35, marginBottom: 16,
+                }}>{s.title}</h3>
+                <p style={{
+                  fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 300,
+                  lineHeight: 1.95, color: 'var(--muted)',
+                }}>{s.body}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   MEMBERSHIP PLANS
+════════════════════════════════════════════════════ */
+function MembershipPlans() {
+  const isMobile = useIsMobile();
+  const individualFeatures = [
+    '每月精選新創資訊卡片',
+    '完整 DD 備忘錄與盡調資料',
+    '月會出席與記名投票權',
+    '40+ 天使投資人社群交流',
+    '投後 Portfolio 追蹤更新',
+    '月會後新創實地參訪',
+  ];
+  const corporateFeatures = [
+    '可指派 3 位代表出席',
+    '包含所有個人會員權益',
+    '優先企業參訪安排',
+    '企業品牌曝光與共投機會',
+    '專屬案源推薦通道',
+    '年度投資趨勢報告',
+  ];
+
+  const CheckIcon = ({ light }) => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <circle cx="8" cy="8" r="7" stroke={light ? 'rgba(0,216,200,0.5)' : 'rgba(88,168,160,0.5)'} strokeWidth="1"/>
+      <path d="M5 8l2 2 4-4" stroke={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+
+  return (
+    <section id="membership" style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 36 : 64 }}>
+            <span className="sec-en">Membership Plans</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 20 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>會員方案</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>
+              年費制，申請隨時開放，採審核制。
+            </p>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.85 }}>
+              來信申請後，投資團隊將審核資料，通過者安排面談，確認雙方契合度後正式入會。
+            </p>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24 }}>
+          {/* Individual */}
+          <AnimUp>
+            <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 44px', height: '100%', borderRadius: 4 }}>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: 'var(--navy)', marginBottom: 6 }}>個人會員</div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)', marginBottom: 24 }}>天使投資人．企業高階主管</div>
+              <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 48, color: 'var(--navy)', lineHeight: 1, marginBottom: 36 }}>
+                NT$50,000 <span style={{ fontSize: 16, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'var(--muted)' }}>/年</span>
+              </div>
+              <div style={{ borderTop: '1px solid var(--rule)', paddingTop: 28 }}>
+                {individualFeatures.map((f, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+                    <CheckIcon light={false} />
+                    <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.65, color: 'var(--text)' }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AnimUp>
+
+          {/* Corporate */}
+          <AnimUp delay={120}>
+            <div style={{ background: '#0d0d0d', border: '2px solid var(--mint)', padding: isMobile ? '32px 24px' : '48px 44px', height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 4 }}>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 6 }}>企業會員</div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 24 }}>CVC．創投．金融機構．企業集團</div>
+              <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 48, color: '#fff', lineHeight: 1, marginBottom: 36 }}>
+                NT$100,000 <span style={{ fontSize: 16, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'rgba(255,255,255,0.5)' }}>/年</span>
+              </div>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 28, flex: 1 }}>
+                {corporateFeatures.map((f, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+                    <CheckIcon light={true} />
+                    <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.65, color: 'rgba(255,255,255,0.82)' }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+              <a href="mailto:angels@ntutec.com" style={{
+                display: 'block', textAlign: 'center',
+                background: 'var(--mint)', color: 'var(--navy)',
+                fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 600,
+                padding: '16px 28px', marginTop: 32, borderRadius: 4,
+                transition: 'background 0.2s',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background='#00bfb8'}
+              onMouseLeave={e => e.currentTarget.style.background='var(--mint)'}>
+                申請入會審核
+              </a>
+            </div>
+          </AnimUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   DEMO DAY
+════════════════════════════════════════════════════ */
+function DemoDay() {
+  const isMobile = useIsMobile();
+  const stats = [
+    { num: '74',    unit: '位',  label: '投資人單場到場', sub: '創投與天使投資人' },
+    { num: '51',    unit: '件',  label: '媒合意向',       sub: '18 自行聯繫 + 33 中心協助' },
+    { num: '9,775', unit: '次',  label: 'Accupass 瀏覽',  sub: '近 7 屆最高紀錄' },
+    { num: '9.06',  unit: '/10', label: '活動滿意度',     sub: '51 份現場問卷' },
+  ];
+
+  if (isMobile) {
+    return (
+      <section style={{ background: '#fff', marginBottom: 64 }}>
+        {/* Images */}
+        <div style={{ display: 'flex', height: 220 }}>
+          <img src="Uploads/fig-demo-1.png" alt="Demo Day 現場" style={{ flex: 1, objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+          <img src="Uploads/fig-demo-2.png" alt="Demo Day 現場" style={{ flex: 1, objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+        </div>
+        {/* Text */}
+        <AnimUp>
+          <div style={{ padding: '36px 6%' }}>
+            <span className="sec-en">Demo Day</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 700, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 16 }}>
+              一年一度的投資媒合盛會
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginBottom: 28 }}>
+              每年 12 月在台大校園舉辦年度 Demo Day，精選新創向投資人 Pitch。台大天使會會員優先取得名額並參與投後追蹤。
+            </p>
+            <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 600, color: 'var(--navy)', border: '1.5px solid var(--navy)', padding: '10px 20px' }}>
+              瞭解更多 Demo Day →
+            </a>
+          </div>
+        </AnimUp>
+        {/* Stats bar */}
+        <div style={{ background: 'rgba(13, 22, 42, 0.9)', padding: '20px 6%' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px 0' }}>
+            {stats.map((s, i) => (
+              <div key={i} style={{ borderLeft: i % 2 !== 0 ? '1px solid rgba(255,255,255,0.18)' : 'none', paddingLeft: i % 2 !== 0 ? 20 : 0 }}>
+                <div><span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 24, color: 'var(--mint)' }}>{s.num}</span><span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--mint)', marginLeft: 2 }}>{s.unit}</span></div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 11, fontWeight: 600, color: '#fff', marginBottom: 2 }}>{s.label}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: 'rgba(255,255,255,0.5)' }}>{s.sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section style={{ position: 'relative', background: '#fff', overflow: 'hidden', marginBottom: 160 }}>
+      <div style={{ display: 'flex', alignItems: 'stretch', height: 420, overflow: 'hidden' }}>
+
+        {/* Left: text column */}
+        <AnimUp style={{ flex: 1 }}>
+          <div style={{
+            paddingLeft: 128,
+            paddingRight: 48,
+            paddingTop: 40,
+            paddingBottom: 140,
+          }}>
+            <span className="sec-en">Demo Day</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: 34, fontWeight: 700, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 16 }}>
+              一年一度的投資媒合盛會
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginBottom: 28 }}>
+              每年 12 月在台大校園舉辦年度 Demo Day，精選新創向投資人 Pitch。台大天使會會員優先取得名額並參與投後追蹤。
+            </p>
+            <a href="#"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 600,
+                color: 'var(--navy)', border: '1.5px solid var(--navy)',
+                padding: '10px 20px', cursor: 'pointer',
+                transition: 'background 0.2s, color 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--navy)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--navy)'; }}
+            >
+              瞭解更多 Demo Day →
+            </a>
+          </div>
+        </AnimUp>
+
+        {/* Right: two near-square images, centered crop */}
+        <AnimUp delay={80} style={{ flex: '0 0 760px', display: 'flex' }}>
+          <img src="Uploads/fig-demo-1.png" alt="Demo Day 現場"
+            style={{ width: 380, height: 420, objectFit: 'cover', objectPosition: 'center', display: 'block', flexShrink: 0 }} />
+          <img src="Uploads/fig-demo-2.png" alt="Demo Day 現場"
+            style={{ width: 380, height: 420, objectFit: 'cover', objectPosition: 'center', display: 'block', flexShrink: 0 }} />
+        </AnimUp>
+
+      </div>
+
+      {/* Stats overlay */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0,
+        width: 'calc(100% - 760px)',
+        background: 'rgba(13, 22, 42, 0.87)',
+        backdropFilter: 'blur(2px)',
+      }}>
+        <AnimUp>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '18px 32px', gap: 0 }}>
+            {stats.map((s, i) => (
+              <div key={i} style={{ borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.18)' : 'none', paddingLeft: i > 0 ? 24 : 0 }}>
+                <div style={{ marginBottom: 2 }}>
+                  <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 30, color: 'var(--mint)', lineHeight: 1 }}>{s.num}</span>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500, color: 'var(--mint)', marginLeft: 2 }}>{s.unit}</span>
+                </div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 600, color: '#fff', marginBottom: 2 }}>{s.label}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>{s.sub}</div>
+              </div>
+            ))}
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   CTA
+════════════════════════════════════════════════════ */
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '0 6% 72px' : '0 10% 120px', maxWidth: 1280, margin: '0 auto' }}>
+      <AnimUp>
+        <div style={{
+          position: 'relative', overflow: 'hidden',
+          borderRadius: 4,
+          backgroundImage: 'url(Uploads/bg_CTA.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          padding: isMobile ? '48px 28px' : '64px 80px',
+          minHeight: isMobile ? 'auto' : 282,
+          display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
+          justifyContent: 'space-between',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? 32 : 48,
+        }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(6,18,38,0.62)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.12, backgroundImage: 'radial-gradient(circle, rgba(0,216,200,0.6) 1px, transparent 1px)', backgroundSize: '44px 44px', pointerEvents: 'none' }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 14 }}>
+              Become an Angel
+            </div>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 700, color: '#fff', lineHeight: 1.35, marginBottom: 10 }}>
+              成為台大天使世界的一員
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.72)' }}>
+              加入台灣最具影響力的天使投資社群，與頂尖投資人共同佈局未來。
+            </p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, flexShrink: 0, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+            <a href="mailto:angels@ntutec.com" style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '14px 28px', background: 'var(--mint)',
+              fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 600, color: 'var(--navy)',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background='#00bfb8'}
+            onMouseLeave={e => e.currentTarget.style.background='var(--mint)'}>
+              立即申請加入 →
+            </a>
+            <a href="#membership" style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '14px 28px', border: '1px solid rgba(255,255,255,0.5)',
+              fontFamily: 'var(--sans)', fontSize: 14.5, color: '#fff',
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor='#fff'; e.currentTarget.style.background='rgba(255,255,255,0.1)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.5)'; e.currentTarget.style.background='transparent'; }}>
+              查看方案
+            </a>
+          </div>
+        </div>
+      </AnimUp>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   PAGE
+════════════════════════════════════════════════════ */
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="台大天使會" />
+      <SharedSocialSidebar />
+      <Hero />
+      <div style={{ maxWidth: 1440, margin: '0 auto', overflow: 'hidden', position: 'relative' }}>
+        <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+          <RecentInvestments />
+          <MemberBenefits />
+          <MonthlyPipeline />
+          <ThreeStageScreening />
+          <MembershipPlans />
+          <DemoDay />
+          <CTA />
+        </main>
+      </div>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台大車庫孵化器計畫 NTU Garage — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const BENEFITS = [
+  { label: '01', title: '虛擬進駐', desc: '免費虛擬進駐台大水源校區，享有中心會議室預約與活動場地使用權，彈性配合創業節奏。' },
+  { label: '02', title: '創業社群', desc: '與同梯團隊並肩創業，互介紹客戶、共解技術問題，是台大校園內最活躍的早期新創社群。' },
+  { label: '03', title: '工作坊與課程', desc: '不定期主題工作坊，涵蓋商業模式設計、財務規劃、法務實務等議題，由業師與業界專家主講。' },
+  { label: '04', title: '業師諮詢', desc: '可申請業師一對一諮詢時段，針對特定議題獲得專業建議。' },
+  { label: '05', title: '加速器銜接', desc: '畢業後優先銜接台大加速器，延續成長動能。' },
+  { label: '06', title: '校園資源', desc: '台大師生身分優先錄取，可接觸校內各院系資源與研究能量，有助推動跨領域合作。' },
+];
+
+const ALUMNI = [
+  { name: 'MoBagel 行動貝果', sector: 'AutoML / 企業 AI', highlight: '累計募資 US$21M+，服務 3,000+ 品牌（含 Fortune 500），2026 Q1 獲台大天使會投資。' },
+  { name: '方格子 vocus', sector: '華文內容訂閱平台', highlight: '月均 200 萬不重複造訪、會員 72 萬、創作者 2 萬+。' },
+  { name: '3drens 三維人', sector: '車聯網 × IoT × 大數據', highlight: '募得近 NT$1 億（台杉、活水、廣信領投），客戶含 yoxi、PChome。' },
+  { name: 'Hotcake 夯客', sector: '美業預約與會員系統', highlight: 'Pre-A 輪 US$1M+，商家續訂率 98%，2025 拓展日泰。' },
+];
+
+const ELIGIBILITY = [
+  '台大在校生、校友或教職員組成的創業團隊（外部團隊可個案評估）',
+  '處於概念驗證至 MVP 開發階段',
+  '團隊至少 2 人，具備明確的共同創業承諾',
+  '具備創新技術或商業模式構想',
+  '願意參與車庫社群活動與分享交流',
+];
+
+const SCHEDULE = [
+  { active: true, label: '2026 年度梯次（進行中）', desc: '2026 年 3 月 ~ 12 月 · 現有團隊進駐中' },
+  { active: false, label: '2027 年度梯次申請期', desc: '2026 年 12 月 ~ 2027 年 1 月 · 正式開放線上申請' },
+  { active: false, label: '2027 年度梯次公布結果', desc: '2027 年 2 月 · 入選團隊名單公告' },
+  { active: false, label: '2027 年度梯次正式進駐', desc: '2027 年 3 月 ~ 12 月' },
+];
+
+function BenefitItem({ item }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderTop: '1px solid var(--rule)' }}>
+      <button onClick={() => setOpen(!open)} style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '24px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', color: 'var(--muted)', textTransform: 'uppercase' }}>{item.label}</span>
+          <span style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--text)' }}>{item.title}</span>
+        </div>
+        <span style={{ color: open ? 'var(--teal)' : 'var(--muted)', fontSize: 20, flexShrink: 0 }}>{open ? '−' : '+'}</span>
+      </button>
+      {open && <p style={{ paddingBottom: 24, fontFamily: 'var(--sans)', fontSize: 14, lineHeight: 1.85, color: 'var(--muted)' }}>{item.desc}</p>}
+    </div>
+  );
+}
+
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const STATS = [
+    { num: '20', suffix: '隊', label: '每年錄取' },
+    { num: '10', suffix: '個月', label: '進駐期間' },
+    { num: '0', suffix: '元', label: '完全免費' },
+    { num: '100+', suffix: '', label: '歷屆校友團隊' },
+  ];
+
+  const statsRow = (
+    <div style={{ background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18), 0 2px 12px -4px rgba(26,46,74,0.10)', display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap', opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s' }}>
+      {STATS.map((s, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+          <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', flex: isMobile ? '1 1 45%' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 6 }}>
+              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+              {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--teal)', marginLeft: 2 }}>{s.suffix}</span>}
+            </div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>{s.label}</div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+        <div style={{ position: 'absolute', inset: 0, clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-classroom.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 60%', backgroundRepeat: 'no-repeat', opacity: 0.82 }} />
+          <div style={{ position: 'absolute', inset: 0, background: isMobile ? 'linear-gradient(to bottom, rgba(26,46,74,0.75) 0%, rgba(26,46,74,0.55) 100%)' : 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.55) 32%, rgba(0,216,200,0.10) 55%, transparent 75%)' }} />
+          {!isMobile && <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(26,46,74,0.45) 0%, transparent 42%)' }} />}
+        </div>
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          {isMobile ? (
+            <div>
+              <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16 }}>NTU Garage</div>
+              <h1 style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)', transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s', fontFamily: 'var(--sans)', fontSize: 36, fontWeight: 600, lineHeight: 1.2, color: '#fff', letterSpacing: '0.04em', marginBottom: 20 }}>台大車庫<br />NTU GARAGE</h1>
+              <p style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s', fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.95, color: 'rgba(255,255,255,0.84)' }}>專為早期團隊設計的彈性孵化計畫。虛擬進駐、社群共學，從概念驗證到 MVP，陪你走過最關鍵的第一步。</p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 64, alignItems: 'center' }}>
+              <div>
+                <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s', fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24 }}>NTU Garage · Incubator Program</div>
+                <h1 style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)', transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s', fontFamily: 'var(--sans)', fontSize: 58, fontWeight: 600, lineHeight: 1.12, color: '#fff', letterSpacing: '0.04em', marginBottom: 28 }}>台大車庫<br />NTU GARAGE</h1>
+                <p style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s', fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520 }}>專為早期團隊設計的彈性孵化計畫。虛擬進駐、社群共學，從概念驗證到 MVP，陪你走過最關鍵的第一步。</p>
+              </div>
+              <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(16px)', transition: 'opacity 0.7s 0.36s, transform 0.7s 0.36s', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end', minHeight: 480 }}>
+                <div style={{ width: 100, height: 1, background: 'linear-gradient(90deg, transparent, var(--mint))', marginBottom: 18 }} />
+                <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 22, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 260 }}>從概念到 MVP，<br />陪你走過最關鍵的第一步。</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+      {!isMobile && (
+        <a href="apply.html" style={{ position: 'absolute', bottom: 36, right: '4%', zIndex: 5, display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: 'var(--serif)', fontSize: 16, color: 'var(--navy)', paddingBottom: 8, borderBottom: '1px solid var(--navy)', opacity: loaded ? 1 : 0, transition: 'opacity 0.65s 0.5s' }}>
+          預約 2027 梯次通知
+          <svg width="32" height="10" viewBox="0 0 32 10" fill="none"><path d="M0 5h28m0 0l-4-4m4 4l-4 4" stroke="currentColor" strokeWidth="1.2"/></svg>
+        </a>
+      )}
+      {isMobile ? <div style={{ margin: '0 0 0 0' }}>{statsRow}</div> : <div style={{ position: 'absolute', bottom: 0, left: '10%', zIndex: 10 }}>{statsRow}</div>}
+    </div>
+  );
+}
+
+function Overview() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80, alignItems: 'start' }}>
+          <AnimUp>
+            <span className="sec-en">Overview</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 32 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>計畫概覽</span>
+            </h2>
+            <div style={{ height: isMobile ? 200 : 280, background: 'var(--offwhite)', borderRadius: 4, overflow: 'hidden', marginTop: 32 }}>
+              <img src="ntutec-design-handoff/public/images/events/opening-2026-01.jpg" alt="台大車庫" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </AnimUp>
+          <AnimUp delay={120}>
+            <div style={{ paddingTop: isMobile ? 0 : 80 }}>
+              <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>台大車庫成立於 2013 年，是台大創創中心為早期創業團隊打造的共享孵化空間。13 年來，超過百支新創團隊曾於此起步，從概念驗證走向 MVP 與市場驗證。</p>
+              <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)', marginBottom: 24 }}>不同於加速器的密集輔導，車庫提供更彈性的時程安排，讓團隊在校園中安心探索、驗證與迭代。</p>
+              <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2.05, color: 'var(--muted)' }}>我們提供安全的試錯空間，搭配同儕社群、業師諮詢與基礎資源，幫助團隊在正式進入市場前建立扎實根基。</p>
+            </div>
+          </AnimUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Benefits() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80 }}>
+          <AnimUp>
+            <div style={{ textAlign: isMobile ? 'left' : 'right' }}>
+              <span className="sec-en" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end', display: 'flex' }}>Benefits</span>
+              <h2 style={{ display: 'inline-block', marginBottom: 24 }}>
+                <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>你將獲得的資源</span>
+              </h2>
+            </div>
+          </AnimUp>
+          <AnimUp delay={100}>
+            {BENEFITS.map((b) => <BenefitItem key={b.label} item={b} />)}
+            <div style={{ borderTop: '1px solid var(--rule)' }} />
+          </AnimUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Eligibility() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
+          <span className="sec-en">Eligibility</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>誰可以申請？</span>
+          </h2>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 16 }}>
+          {ELIGIBILITY.map((item, i) => (
+            <AnimUp key={i} delay={i * 60}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '20px 24px', background: 'var(--offwhite)', borderRadius: 4 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--teal)', flexShrink: 0, marginTop: 6 }} />
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{item}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AlumniSection() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--teal)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56, textAlign: isMobile ? 'left' : 'right' }}>
+          <span className="sec-en" style={{ color: 'rgba(255,255,255,0.65)', display: 'flex', justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>Alumni Highlights</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, lineHeight: 1.4, color: '#fff', display: 'inline', background: 'var(--navy)', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', padding: '4px 10px', fontSize: isMobile ? 28 : 36 }}>歷屆校友（列舉）</span>
+          </h2>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
+          {ALUMNI.map((a, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ background: 'rgba(255,255,255,0.12)', padding: '28px 32px', borderRadius: 4, backdropFilter: 'blur(8px)' }}>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', marginBottom: 10 }}>{a.sector}</p>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>{a.name}</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(255,255,255,0.8)' }}>{a.highlight}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BatchSchedule() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
+          <span className="sec-en">Batch Schedule</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>梯次時程</span>
+          </h2>
+        </AnimUp>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2, color: 'var(--muted)', marginBottom: 40 }}>車庫採年度梯次制，每年 3 月進駐至 12 月結束。2027 梯次預計 2026 年 12 月開放申請。</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {SCHEDULE.map((item, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '24px 0', borderTop: '1px solid var(--rule)' }}>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: item.active ? 'var(--teal)' : 'var(--rule)', flexShrink: 0, marginTop: 4 }} />
+                <div>
+                  <p style={{ fontFamily: 'var(--serif)', fontWeight: item.active ? 600 : 400, fontSize: 16, color: item.active ? 'var(--text)' : 'var(--muted)', marginBottom: 4 }}>{item.label}</p>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)' }}>{item.desc}</p>
+                </div>
+              </div>
+            </AnimUp>
+          ))}
+          <div style={{ borderTop: '1px solid var(--rule)' }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <AnimUp>
+          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32 }}>
+            <div>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--mint)', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>Apply</span>
+              <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 16 }}>有興趣加入 2027 梯次？</h2>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 480 }}>提前登記你的團隊，12 月正式申請開放時，我們將第一時間通知你。</p>
+            </div>
+            <a href="apply.html" style={{ display: 'inline-block', background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 15, padding: '14px 32px', borderRadius: 2, whiteSpace: 'nowrap', flexShrink: 0 }}>預約 2027 梯次通知</a>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="輔導計畫" />
+      <SharedSocialSidebar />
+      <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <Hero />
+        <Overview />
+        <Benefits />
+        <Eligibility />
+        <AlumniSection />
+        <BatchSchedule />
+        <CTA />
+      </main>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

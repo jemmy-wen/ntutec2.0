@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>申請與提前登記 Apply — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl { font-family: var(--serif); font-weight: 600; line-height: 1.4; color: var(--navy); display: inline; background: var(--mint); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 4px 10px; }
+    input, select, textarea { font-family: var(--sans); }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const TRACKS = [
+  { label: '01', name: '台大加速器', en: 'Accelerator Program', description: '適合已有 MVP 或初期營收的成長期新創。為期十個月（每年 3 月 ~ 12 月），提供業師輔導、企業對接與募資機會。不限台大身分。', note: '2027 梯次申請：2026 年 12 月 ~ 2027 年 1 月開放', href: 'accelerator.html' },
+  { label: '02', name: '台大車庫', en: 'Garage Incubator', description: '適合概念驗證至 MVP 階段的早期團隊。年度梯次制（每年 3 月 ~ 12 月），虛擬進駐、會議室使用與創業社群資源。台大身分優先。', note: '2027 梯次申請：2026 年 12 月 ~ 2027 年 1 月開放', href: 'garage.html' },
+];
+
+const TIMELINE = [
+  { step: '1', label: '線上申請', desc: '填寫申請表單，提交團隊與計畫資料' },
+  { step: '2', label: '書面審查', desc: '中心團隊進行初步書面審核' },
+  { step: '3', label: '面試邀約', desc: '通過書審者將受邀進行線上或實體面談' },
+  { step: '4', label: '結果通知', desc: '面試後三週內通知錄取結果並安排入駐' },
+];
+
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+        <div style={{ position: 'absolute', inset: 0, clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-pitching.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 40%', backgroundRepeat: 'no-repeat', opacity: 0.82 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(26,46,74,0.92) 0%, rgba(88,168,160,0.50) 35%, transparent 70%)' }} />
+        </div>
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.65s 0.1s', fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24 }}>Apply / Pre-register</div>
+          <h1 style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.65s 0.2s', fontFamily: 'var(--sans)', fontSize: isMobile ? 36 : 58, fontWeight: 600, lineHeight: 1.12, color: '#fff', marginBottom: 28 }}>申請與<br />提前登記</h1>
+          <p style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.65s 0.3s', fontFamily: 'var(--serif)', fontSize: isMobile ? 15 : 16, fontWeight: 300, lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520 }}>加速器與車庫採年度梯次制，非隨時招生。2027 梯次正式申請於 2026 年 12 月開放。</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function BatchNotice() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '80px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ background: 'rgba(88,168,160,0.08)', border: '1px solid rgba(88,168,160,0.25)', borderRadius: 4, padding: isMobile ? '28px 24px' : '40px 48px', maxWidth: 760 }}>
+            <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 12 }}>關於申請時程</p>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 1.9, color: 'var(--text)', marginBottom: 20 }}>台大創創中心的加速器與車庫採用<strong style={{ fontWeight: 600 }}>年度梯次制</strong>，每年 3 月進駐、12 月結束，<strong style={{ fontWeight: 600 }}>不接受隨時插班</strong>。</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                { label: '2026 梯次', value: '進行中（3 月 ~ 12 月），現有團隊輔導中' },
+                { label: '2027 梯次申請期', value: '2026 年 12 月 ~ 2027 年 1 月' },
+                { label: '2027 梯次公布結果', value: '2027 年 2 月' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'baseline' }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 600, color: 'var(--navy)', whiteSpace: 'nowrap' }}>• {item.label}</span>
+                  <span style={{ fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 300, color: 'var(--muted)' }}>{item.value}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)', marginTop: 20 }}>提前登記不等同申請，正式申請仍須在申請期內提交完整文件。</p>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+function TwoTracks() {
+  const isMobile = useIsMobile();
+  return (
+    <>
+      {TRACKS.map((track, i) => (
+        <section key={i} style={{ padding: isMobile ? '72px 0' : '100px 0', background: i % 2 === 0 ? '#fff' : 'var(--offwhite)' }}>
+          <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80, alignItems: 'center' }}>
+              <AnimUp style={{ textAlign: i % 2 === 1 && !isMobile ? 'right' : 'left' }}>
+                <span className="sec-en" style={{ justifyContent: i % 2 === 1 && !isMobile ? 'flex-end' : 'flex-start', display: 'flex' }}>{track.en}</span>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 56, fontWeight: 700, color: 'var(--rule)', marginBottom: 8 }}>{track.label}</div>
+                <h2 style={{ display: 'inline-block' }}>
+                  <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 32 }}>{track.name}</span>
+                </h2>
+              </AnimUp>
+              <AnimUp delay={120}>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2, color: 'var(--muted)', marginBottom: 12 }}>{track.description}</p>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--teal)', marginBottom: 32 }}>{track.note}</p>
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                  <a href="#preregister" style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 14, padding: '12px 24px', borderRadius: 2 }}>提前登記通知</a>
+                  <a href={track.href} style={{ display: 'inline-block', background: 'transparent', color: 'var(--navy)', fontFamily: 'var(--serif)', fontSize: 14, padding: '12px 24px', borderRadius: 2, border: '1px solid var(--rule)' }}>先了解計畫細節</a>
+                </div>
+              </AnimUp>
+            </div>
+          </div>
+        </section>
+      ))}
+    </>
+  );
+}
+
+function ApplicationFlow() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--navy)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 48 : 64, textAlign: 'center' }}>
+          <span className="sec-en" style={{ color: 'rgba(255,255,255,0.5)', justifyContent: 'center', display: 'flex' }}>Process</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, lineHeight: 1.4, color: '#fff', display: 'inline', background: 'var(--teal)', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', padding: '4px 10px', fontSize: isMobile ? 26 : 32 }}>申請流程</span>
+          </h2>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 1, background: 'rgba(255,255,255,0.1)' }}>
+          {TIMELINE.map((t, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ background: 'rgba(255,255,255,0.05)', padding: isMobile ? '28px 20px' : '48px 32px', textAlign: 'center' }}>
+                <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 600, color: '#fff' }}>{t.step}</div>
+                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{t.label}</h4>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>{t.desc}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PreRegister() {
+  const [form, setForm] = useState({ name: '', email: '', company: '', track: '', note: '' });
+  const [sent, setSent] = useState(false);
+  const isMobile = useIsMobile();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // In a real site this would POST to an API
+    setSent(true);
+  };
+
+  const inputStyle = { width: '100%', padding: '12px 16px', border: '1px solid var(--rule)', borderRadius: 2, fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--text)', background: '#fff', outline: 'none' };
+
+  return (
+    <section id="preregister" style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80, alignItems: 'start' }}>
+          <AnimUp>
+            <span className="sec-en">Pre-register</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 24 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>提前登記</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2, color: 'var(--muted)' }}>2027 梯次申請將於 2026 年 12 月開放。提前登記不等同申請，正式開放時優先通知。</p>
+          </AnimUp>
+          <AnimUp delay={120}>
+            {sent ? (
+              <div style={{ padding: '48px 32px', background: 'rgba(88,168,160,0.08)', borderRadius: 4, textAlign: 'center' }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>✓</div>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 22, fontWeight: 600, color: 'var(--navy)', marginBottom: 12 }}>登記成功！</h3>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, color: 'var(--muted)' }}>我們將在 2026 年 12 月申請開放時第一時間通知你。</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div>
+                    <label style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--muted)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>姓名 *</label>
+                    <input required type="text" value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="你的名字" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--muted)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Email *</label>
+                    <input required type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="your@email.com" style={inputStyle} />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--muted)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>團隊 / 公司名稱</label>
+                  <input type="text" value={form.company} onChange={e => setForm({...form, company: e.target.value})} placeholder="你的新創名稱" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--muted)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>有興趣的計畫</label>
+                  <select value={form.track} onChange={e => setForm({...form, track: e.target.value})} style={inputStyle}>
+                    <option value="">請選擇</option>
+                    <option value="accelerator">台大加速器</option>
+                    <option value="garage">台大車庫</option>
+                    <option value="both">兩者都有興趣</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--muted)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>簡短描述你的新創</label>
+                  <textarea value={form.note} onChange={e => setForm({...form, note: e.target.value})} rows={3} placeholder="一兩句話介紹你的產品或服務方向" style={{ ...inputStyle, resize: 'vertical' }} />
+                </div>
+                <button type="submit" style={{ background: 'var(--teal)', color: '#fff', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 15, padding: '14px 32px', borderRadius: 2, border: 'none', cursor: 'pointer', marginTop: 8 }}>提交提前登記</button>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>提前登記不等同正式申請。正式開放申請時，你需要另行提交完整申請資料。</p>
+              </form>
+            )}
+          </AnimUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FaqLink() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <AnimUp>
+          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', textAlign: 'center' }}>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', marginBottom: 16 }}>還有疑問？</h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 400, margin: '0 auto 32px' }}>查看常見問題，了解更多關於申請條件、計畫內容與費用的細節。</p>
+            <a href="faq.html" style={{ display: 'inline-block', background: 'transparent', color: '#fff', fontFamily: 'var(--serif)', fontSize: 15, padding: '14px 40px', borderRadius: 2, border: '1px solid rgba(255,255,255,0.3)' }}>查看常見問題</a>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="輔導計畫" />
+      <SharedSocialSidebar />
+      <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <Hero />
+        <BatchNotice />
+        <TwoTracks />
+        <ApplicationFlow />
+        <PreRegister />
+        <FaqLink />
+      </main>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

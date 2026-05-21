@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch 媒合 — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const recentInvestments = [
+  { name: 'AHEAD Medicine 先勁智能', round: '2025 Q4', sector: '生技醫療 · AI 診斷', desc: '台大醫學院校友 Andrea Wang 創辦，AI 醫療輔助診斷平台，協助醫師縮短 X 光片判讀時間，獲台大天使會投資。', sources: [] },
+  { name: 'MoBagel 行動貝果', round: '2026 Q1', sector: 'AI · 數據分析', desc: '鍾哲民創辦的 AI/數據分析平台，累計募資 US$21M+，服務 3,000+ 品牌。台大車庫與加速器歷屆校友，2026 Q1 接受台大天使會投資。', sources: [{ label: 'INSIDE 報導', url: 'https://www.inside.com.tw/article/27055-mobagel' }] },
+  { name: '思輔科技 SAVFE', round: '2026 Q1', sector: '硬科技 · 手術導航', desc: '周皓凱創辦的微創手術導航技術公司，2025 國家新創獎，亞東醫院場域驗證，2026 Q1 獲台大天使會投資。', sources: [] },
+];
+
+const whyPitch = [
+  { label: '01', title: '接觸認真的投資人', desc: '40+ 位天使會員每月定期出席例會，帶著明確投資意圖。這不是瀏覽履歷的平台，而是有人主動為你的案件背書、安排上台的機制。' },
+  { label: '02', title: '投資經理全程主導', desc: '有投資經理親自審閱、安排面談、撰寫評估報告並向天使會員呈現。你不是自己冷投，而是有人幫你把案件帶進對的場合。' },
+  { label: '03', title: '台大校友網絡加持', desc: '進入 NTUTEC 評估流程，即接觸超過 13 年累積的台大創業校友網絡。獲投後除資金外，可對接業師與企業合作夥伴。' },
+  { label: '04', title: '隨時投遞，無截止日', desc: '不設申請梯次或截止日，隨時投遞隨時進入評估。符合條件的新創，投資經理會主動聯繫，不需要等待。' },
+];
+
+const afterSubmit = [
+  { step: '01', title: '投資經理審閱', desc: '投資經理逐一審閱投遞資料，主動與符合條件的新創聯繫，安排進一步了解。' },
+  { step: '02', title: '一對一面談', desc: '與投資經理進行面談，深入討論產品現況、市場策略與融資需求，雙方確認契合度。' },
+  { step: '03', title: '天使月例會 Pitch', desc: '通過評估後，安排在天使月例會向 40+ 位天使投資人現場 Pitch。例會後若有投資人表達意向，中心協助雙方建立後續聯繫。' },
+];
+
+const eligibility = [
+  '具備技術創新或商業模式創新，有清晰的問題定義與解決方案',
+  '聚焦領域：AI 軟體、生技醫療、硬科技、創新商模；其他具潛力領域歡迎個案評估',
+  '台大創創中心輔導計畫（台大加速器、台大車庫）校友享優先推薦資格',
+  '有核心團隊與明確的創辦人，具備推進產品與市場的執行能力',
+  '願意配合盡調流程，並對外部投資保持開放態度',
+];
+
+/* ── Hero ── */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const STATS = [
+    { num: '150', plus: '+', label: '投資人網絡' },
+    { num: '每月', label: '天使例會' },
+    { num: '3', suffix: '週', label: '初審回覆' },
+  ];
+
+  const statsCard = (
+    <div style={{ background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18), 0 2px 12px -4px rgba(26,46,74,0.10)', display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap', opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s' }}>
+      {STATS.map((s, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+          <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', flex: isMobile ? '1 1 45%' : 'none', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
+              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)' }}>{s.num}</span>
+              {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 16, color: 'var(--teal)' }}>{s.plus}</span>}
+              {s.suffix && <span style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 13, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
+            </div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', whiteSpace: 'nowrap' }}>{s.label}</div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  const hexClip = 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)';
+
+  return (
+    <section style={{ position: 'relative', background: 'var(--navy)', overflow: 'hidden', minHeight: isMobile ? 'auto' : '88vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, clipPath: isMobile ? 'none' : hexClip, overflow: 'hidden' }}>
+        <img src="ntutec-design-handoff/public/images/events/opening-2026-pitching.jpg" alt="新創投遞"
+          style={{ width: '100%', height: isMobile ? 220 : '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.4 }} />
+      </div>
+      {!isMobile && <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+        <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+        <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+      </svg>}
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(26,46,74,0.88) 0%, rgba(26,46,74,0.55) 100%)', zIndex: 1 }} />
+      <div style={{ position: 'relative', zIndex: 3, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '48px 24px 32px' : '0 7% 100px' }}>
+        <span className="sec-en" style={{ color: 'var(--mint)', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s 0.1s' }}>Pitch to NTUTEC Angels</span>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 36 : 60, lineHeight: 1.2, color: '#fff', maxWidth: 700, opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.6s 0.2s, transform 0.6s 0.2s', marginBottom: 20, whiteSpace: isMobile ? 'normal' : 'nowrap' }}>
+          投遞你的新創
+        </h1>
+        <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: isMobile ? 15 : 18, color: 'rgba(255,255,255,0.82)', maxWidth: 520, lineHeight: 1.7, marginBottom: 40, opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.35s' }}>
+          將你的新創提交給 NTUTEC ANGELS 台大天使會。投資經理親自審閱，符合條件者安排面談，通過評估後在每月天使例會向 40+ 位天使投資人現場 Pitch。
+        </p>
+        <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.45s' }}>
+          <a href="#submit" style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 15, padding: '16px 36px', borderRadius: 2 }}>
+            立即投遞 →
+          </a>
+        </div>
+      </div>
+      {!isMobile ? (
+        <div style={{ position: 'absolute', bottom: 0, left: '7%', zIndex: 10 }}>{statsCard}</div>
+      ) : (
+        <div style={{ position: 'relative', zIndex: 10, padding: '0 24px 32px' }}>{statsCard}</div>
+      )}
+    </section>
+  );
+}
+
+/* ── Recent Investments ── */
+function RecentInvestments() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--navy)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <AnimUp>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="sec-en" style={{ color: 'var(--mint)' }}>Track Record</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: '#fff', marginBottom: 12 }}>台大天使會近期投資案例</h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'rgba(255,255,255,0.5)' }}>這是進入天使例會後可能發生的事</p>
+        </div>
+      </AnimUp>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'rgba(255,255,255,0.10)' }}>
+        {recentInvestments.map((inv, i) => (
+          <AnimUp key={inv.name} delay={i * 80}>
+            <div style={{ background: 'var(--navy)', padding: isMobile ? '32px 24px' : '40px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                <span style={{ background: 'rgba(0,216,200,0.15)', color: 'var(--mint)', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 2 }}>{inv.round}</span>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>{inv.sector}</span>
+              </div>
+              <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: '#fff', marginBottom: 12 }}>{inv.name}</h4>
+              <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'rgba(255,255,255,0.60)', lineHeight: 1.75 }}>{inv.desc}</p>
+              {inv.sources.length > 0 && (
+                <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  {inv.sources.map(s => (
+                    <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>{s.label} →</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </AnimUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Why Pitch ── */
+function WhyPitch() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 64, alignItems: 'flex-start' }}>
+        <AnimUp style={{ flexShrink: 0, maxWidth: 340 }}>
+          <span className="sec-en">Why NTUTEC Angels</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)' }}>
+            <span className="sec-title-hl">為什麼選擇這裡</span>
+          </h2>
+        </AnimUp>
+        <div style={{ flex: 1 }}>
+          {whyPitch.map((item, i) => (
+            <AnimUp key={item.label} delay={i * 60}>
+              <div style={{ borderTop: i === 0 ? 'none' : '1px solid var(--rule)', padding: i === 0 ? '0 0 28px' : '28px 0' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', letterSpacing: '0.14em' }}>{item.label}</span>
+                <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 20, color: 'var(--navy)', margin: '8px 0 12px' }}>{item.title}</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── After Submit ── */
+function AfterSubmit() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <AnimUp>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="sec-en">What Happens Next</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: 'var(--navy)', marginBottom: 12 }}>
+            <span className="sec-title-hl">投遞之後</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'var(--muted)', marginTop: 20, maxWidth: 560, margin: '20px auto 0' }}>投遞沒有截止日。每份資料都會由投資經理親自看過，符合條件的新創我們會主動聯繫。</p>
+        </div>
+      </AnimUp>
+      {(() => {
+        const STEP_IMGS = [
+          'ntutec-design-handoff/public/images/events/opening-2026-mentor-session.jpg',
+          'ntutec-design-handoff/public/images/events/opening-2026-vincent.jpg',
+          'ntutec-design-handoff/public/images/events/demo-day-2025-01.jpg',
+        ];
+        return (
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
+            {afterSubmit.map((s, i) => (
+              <AnimUp key={s.step} delay={i * 80}>
+                <div style={{ background: 'var(--offwhite)' }}>
+                  <div style={{ height: 200, overflow: 'hidden' }}>
+                    <img src={STEP_IMGS[i]} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                  <div style={{ padding: isMobile ? '28px 24px' : '36px 40px' }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontWeight: 700, fontSize: 36, color: 'var(--rule)', marginBottom: 16 }}>{s.step}</div>
+                    <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 20, color: 'var(--navy)', marginBottom: 12 }}>{s.title}</h4>
+                    <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.75 }}>{s.desc}</p>
+                  </div>
+                </div>
+              </AnimUp>
+            ))}
+          </div>
+        );
+      })()}
+    </section>
+  );
+}
+
+/* ── Eligibility ── */
+function Eligibility() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 64, alignItems: 'flex-start' }}>
+        <AnimUp style={{ flexShrink: 0, maxWidth: 340 }}>
+          <span className="sec-en">Eligibility</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)', marginBottom: 16 }}>
+            <span className="sec-title-hl">適合投遞的新創</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, marginTop: 20 }}>不確定是否符合？歡迎直接投遞，投資經理審閱後會主動聯繫，說明下一步。</p>
+        </AnimUp>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {eligibility.map((item, i) => (
+            <AnimUp key={i} delay={i * 60}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--teal)', flexShrink: 0, marginTop: 7 }} />
+                <span style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'var(--muted)', lineHeight: 1.7 }}>{item}</span>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Submit CTA ── */
+function SubmitCTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section id="submit" style={{ background: 'var(--offwhite)', padding: isMobile ? '48px 24px' : '80px 7%' }}>
+      <AnimUp>
+        <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 28px' : '80px 72px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <img src="ntutec-design-handoff/public/images/events/opening-2026-audience.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.18, pointerEvents: 'none' }} />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.14em', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>Submit</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: '#fff', marginBottom: 16 }}>立即投遞</h2>
+            <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 16, color: 'rgba(255,255,255,0.70)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 40px' }}>
+              提交後，投資經理將逐一審閱並主動與你聯繫。
+            </p>
+            <a href="https://forms.gle/yu4ftYfVdsWaynxY8" target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 16, padding: '18px 48px', borderRadius: 2 }}>
+              填寫新創投遞表單 →
+            </a>
+            <div style={{ marginTop: 48, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16 }}>
+              <a href="programs.html" style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.25)', color: 'rgba(255,255,255,0.70)', fontFamily: 'var(--sans)', fontWeight: 400, fontSize: 14, padding: '12px 28px', borderRadius: 2 }}>了解輔導計畫</a>
+              <a href="angels.html" style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.25)', color: 'rgba(255,255,255,0.70)', fontFamily: 'var(--sans)', fontWeight: 400, fontSize: 14, padding: '12px 28px', borderRadius: 2 }}>了解台大天使會</a>
+            </div>
+          </div>
+        </div>
+      </AnimUp>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <React.Fragment>
+      <SharedNav activeKey="最新動態" />
+      <SharedSocialSidebar />
+      <Hero />
+      <RecentInvestments />
+      <WhyPitch />
+      <AfterSubmit />
+      <Eligibility />
+      <SubmitCTA />
+      <SharedFooter />
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

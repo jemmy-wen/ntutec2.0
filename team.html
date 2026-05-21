@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>執行團隊 Our Team — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl { font-family: var(--serif); font-weight: 600; line-height: 1.4; color: var(--navy); display: inline; background: var(--mint); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 4px 10px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const LEADERSHIP = [
+  { initials: '莊', name: '莊裕澤', title: '中心主任', en: 'Director', bio: '台大資訊管理學系暨研究所專任教授，具多年新創育成經驗。主任代表校方監督中心營運，負責對校層級的治理、財務、人事與組織規章。' },
+  { initials: '林', name: '林文欽 Vincent', title: '執行長 CEO', en: 'Chief Executive Officer', bio: '前騰訊副總經理、京東商城副總裁，台大 EMBA。負責中心日常營運、策略方向與投資決策，主導台大天使會與新創輔導整體規劃。' },
+];
+
+const TEAM = [
+  { initials: '陳', name: '陳盈盈 Yingying', title: '資深經理', en: 'Senior Manager', focus: '硬科技 & 先進製造組', bio: '主責加速器、企業垂直加速器與中心行政營運。輔導小組帶領硬科技與先進製造組，串接企業合作夥伴資源。' },
+  { initials: '江', name: '江旻壕 Howard', title: '投資經理', en: 'Investment Manager', focus: '生技醫療組', bio: '主責台大天使會與案源篩選評估，協同企業垂直加速器。輔導小組帶領生技醫療組，負責投資人關係經營與案源評估。' },
+  { initials: '許', name: '許瀞之 Raven', title: '輔導經理', en: 'Program Manager', focus: '創新商模組', bio: '主責台大車庫與整體輔導計畫設計，含必修課程規劃。輔導小組帶領創新商模組，打造新創團隊的成長路徑。' },
+  { initials: '楊', name: '楊智堯 Neil', title: '營運經理', en: 'Operations Manager', focus: 'AI 軟體組', bio: '主責對外行銷、活動企劃與校友關懷。輔導小組帶領 AI 軟體組，連結校友網絡與生態系。' },
+];
+
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+        <div style={{ position: 'absolute', inset: 0, clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-group.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 30%', backgroundRepeat: 'no-repeat', opacity: 0.82 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.55) 32%, rgba(0,216,200,0.10) 55%, transparent 75%)' }} />
+        </div>
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.1s', fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24 }}>Our Team</div>
+          <h1 style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)', transition: 'opacity 0.65s 0.2s', fontFamily: 'var(--sans)', fontSize: isMobile ? 36 : 58, fontWeight: 600, lineHeight: 1.12, color: '#fff', letterSpacing: '0.04em', marginBottom: 28 }}>執行團隊</h1>
+          <p style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.3s', fontFamily: 'var(--serif)', fontSize: isMobile ? 15 : 16, fontWeight: 300, lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520 }}>結合學術視野、產業經驗與創投背景，全力支持每一支新創團隊的成長。</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function LeadershipSection() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
+          <span className="sec-en">Leadership</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>中心領導</span>
+          </h2>
+        </AnimUp>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {LEADERSHIP.map((m, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 24, padding: '32px 0', borderTop: '1px solid var(--rule)' }}>
+                <div style={{ width: 64, height: 80, borderRadius: 4, background: 'linear-gradient(135deg, var(--teal), var(--navy))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: '#fff' }}>{m.initials}</span>
+                </div>
+                <div>
+                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.16em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 6 }}>{m.en}</p>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{m.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>{m.title}</p>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', maxWidth: 640 }}>{m.bio}</p>
+                </div>
+              </div>
+            </AnimUp>
+          ))}
+          <div style={{ borderTop: '1px solid var(--rule)' }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CoreTeam() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56, textAlign: isMobile ? 'left' : 'right' }}>
+          <span className="sec-en" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end', display: 'flex' }}>Core Team</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>核心團隊</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginTop: 20, maxWidth: 440, marginLeft: 'auto' }}>四位經理依四大聚焦領域分工，分別帶領 AI 軟體、生技醫療、硬科技與創新商模輔導小組。</p>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
+          {TEAM.map((m, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ background: '#fff', padding: '28px 28px', borderRadius: 4, display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(88,168,160,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--teal)' }}>{m.initials}</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
+                    <h3 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>{m.name}</h3>
+                    <span style={{ background: 'rgba(88,168,160,0.12)', color: 'var(--teal)', fontFamily: 'var(--sans)', fontSize: 11, fontWeight: 500, padding: '2px 10px', borderRadius: 10, whiteSpace: 'nowrap' }}>{m.focus}</span>
+                  </div>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>{m.title} · {m.en}</p>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{m.bio}</p>
+                </div>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <AnimUp>
+          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', textAlign: 'center' }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--mint)', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Contact</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 16 }}>有任何問題？</h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 400, margin: '0 auto 32px' }}>歡迎聯繫我們的輔導團隊，我們將盡快回覆。</p>
+            <a href="mailto:ntutec@ntutec.com" style={{ display: 'inline-block', background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 15, padding: '14px 40px', borderRadius: 2 }}>聯繫輔導經理</a>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="關於我們" />
+      <SharedSocialSidebar />
+      <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <Hero />
+        <LeadershipSection />
+        <CoreTeam />
+        <CTA />
+      </main>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

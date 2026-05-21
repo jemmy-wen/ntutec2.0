@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>業師陣容 Mentor Network — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl { font-family: var(--serif); font-weight: 600; line-height: 1.4; color: var(--navy); display: inline; background: var(--mint); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 4px 10px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const CATEGORIES = [
+  { key: 'vc', title: '投資人', en: 'VC Partners', count: '10+', description: '現職或前創投 / 天使 / 加速器主理人。能投資、能介紹 LP、能提供融資策略。' },
+  { key: 'founder', title: '創業家', en: 'Serial Founders', count: '10+', description: '有 exit 經驗或正在經營第二、第三家公司的實戰派。踩過的坑都能告訴你。' },
+  { key: 'exec', title: '企業高管', en: 'Corporate Executives', count: '10+', description: '大企業 C-level / VP / 集團策略主管。打開客戶、通路、策略合作的入口。' },
+  { key: 'expert', title: '產業專家', en: 'Domain Experts', count: '5+', description: '深度技術 / 法律 / 財會 / 營運 know-how。特定領域的顧問深度。' },
+];
+
+const MENTORS = [
+  // VC
+  { name: '江旻峻', title: '富旌創投 創始合夥人 / 台大校友創投 總裁', category: 'vc', is_new: true },
+  { name: '王俊傑', title: '前大潤發 CTO；前蘇寧零售技術研究院院長', category: 'vc', is_new: true },
+  { name: '彭志強', title: '宏誠創投 總經理', category: 'vc', is_new: true },
+  { name: '黃凱祥', title: '如海創業投資 總經理；FITI 業師', category: 'vc', is_new: true },
+  { name: '張家銘', title: '東安投資 副總經理', category: 'vc', is_new: true },
+  { name: '江進元', title: '艾新銳創業顧問 執行長；天使與 Pre-A 募資專家', category: 'vc', is_new: false },
+  { name: '李明哲', title: 'Visionary Capital 維思諾理投資有限公司 董事長', category: 'vc', is_new: false },
+  { name: '李晃', title: 'Astra Partners Founder & Managing Partner', category: 'vc', is_new: false },
+  { name: '林文欽', title: '微曦投資 董事長 ／ 蜂行資本 Venture Partner；前騰訊副總；前京東副總裁', category: 'vc', is_new: false },
+  { name: '陳一強', title: '活水影響力投資 共同創辦人暨總經理', category: 'vc', is_new: false },
+  { name: '陳怡如', title: '創投 10+ 年經驗；醫材背景；生醫專家', category: 'vc', is_new: false },
+  { name: '蕭一白', title: 'BonHope Capital Managing Partner；跨產業天使投資人', category: 'vc', is_new: false },
+  { name: '瞿志豪', title: 'ITIC 創新工業技術移轉 總經理／VSense 董事長；前橡子園創投合夥人', category: 'vc', is_new: false },
+  // Founders
+  { name: '李昆謀', title: '91APP 產品長；前宇軒數位創辦人 / CEO', category: 'founder', is_new: true },
+  { name: '楊立偉', title: '意藍資訊（6925）董事總經理——AI 智能數據首家掛牌新創', category: 'founder', is_new: true },
+  { name: '鄧耀中', title: 'VOCAL MIDDLE 創辦人暨執行長', category: 'founder', is_new: true },
+  { name: '任麗玲', title: '全方位諮詢：策略、商模、客戶、產品、通路、品牌', category: 'founder', is_new: false },
+  { name: '洪小玲', title: '前 Yahoo!奇摩 董事總經理；前亞馬遜全球副總裁', category: 'founder', is_new: false },
+  { name: '陳宏益', title: '優照護 & 優時間銀行雲 創辦人', category: 'founder', is_new: false },
+  { name: '梁幸堯', title: '甲尚科技（Reallusion, TPE:6882）獨立董事', category: 'founder', is_new: false },
+  { name: '鍾哲民', title: 'MoBagel 行動貝果創辦人暨執行長；累計募資 US$21M+', category: 'founder', is_new: false },
+  // Exec
+  { name: '史大俠', title: 'Garena 全球副總裁；前 Yahoo 大中華區總裁', category: 'exec', is_new: false },
+  { name: '詹益鑑', title: 'AppWorks 創始合夥人；台灣科技新創生態推手', category: 'exec', is_new: false },
+  { name: '游直翰', title: 'CloudMile 萬里雲 創辦人暨執行長；Google Cloud 台灣區總經理', category: 'exec', is_new: false },
+  { name: '王俞蓉', title: '玉山銀行數位金融事業群 執行副總', category: 'exec', is_new: true },
+  { name: '吳建頤', title: '台灣微軟 Office of CTO 首席技術官辦公室首席技術官', category: 'exec', is_new: true },
+  // Expert
+  { name: '陳建良', title: '台大機械系教授；精準製造與智慧感測領域專家', category: 'expert', is_new: false },
+  { name: '李怡志', title: '科技媒體人；前 INSIDE 總編輯', category: 'expert', is_new: false },
+  { name: '李美英', title: '會計師；新創財務與法規合規顧問', category: 'expert', is_new: false },
+];
+
+function MentorCard({ mentor, delay }) {
+  return (
+    <AnimUp delay={delay}>
+      <div style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--rule)' }}>
+        <div style={{ background: 'linear-gradient(135deg, rgba(88,168,160,0.12), rgba(26,46,74,0.06))', height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          {mentor.is_new && <span style={{ position: 'absolute', top: 8, left: 8, background: 'var(--teal)', color: '#fff', fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 500, padding: '2px 8px', borderRadius: 10 }}>2026 新任</span>}
+          <span style={{ fontFamily: 'var(--serif)', fontSize: 40, fontWeight: 600, color: 'rgba(88,168,160,0.3)' }}>{mentor.name.charAt(0)}</span>
+        </div>
+        <div style={{ padding: '16px 16px 20px' }}>
+          <h3 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 6 }}>{mentor.name}</h3>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, lineHeight: 1.7, color: 'var(--muted)' }}>{mentor.title}</p>
+        </div>
+      </div>
+    </AnimUp>
+  );
+}
+
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+        <div style={{ position: 'absolute', inset: 0, clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-mentoring.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 40%', backgroundRepeat: 'no-repeat', opacity: 0.8 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.50) 32%, transparent 70%)' }} />
+        </div>
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.1s', fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24 }}>Mentor Network</div>
+          <h1 style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)', transition: 'opacity 0.65s 0.2s', fontFamily: 'var(--sans)', fontSize: isMobile ? 36 : 58, fontWeight: 600, lineHeight: 1.12, color: '#fff', letterSpacing: '0.04em', marginBottom: 28 }}>業師陣容</h1>
+          <p style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.65s 0.3s', fontFamily: 'var(--serif)', fontSize: isMobile ? 15 : 16, fontWeight: 300, lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520 }}>歷年累計 80+ 位業師，涵蓋投資人、創業家、企業高管與產業專家，一對一深度輔導每支新創。</p>
+        </div>
+      </section>
+      <div style={{ position: isMobile ? 'static' : 'absolute', bottom: 0, left: isMobile ? undefined : '10%', zIndex: 10 }}>
+        <div style={{ background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18)', display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap', opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s' }}>
+          {[{ num: '80+', label: '歷年業師累計' }, { num: '30+', label: '2026 陪跑業師' }, { num: '20年+', label: '平均產業深耕' }].map((s, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+              <div style={{ padding: isMobile ? '20px 28px' : '24px 40px', flex: isMobile ? '1 1 45%' : 'none' }}>
+                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 28 : 36, lineHeight: 1, color: 'var(--navy)', marginBottom: 6 }}>{s.num}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>{s.label}</div>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CategoryOverview() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
+          <span className="sec-en">Mentor Categories</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>四大業師類型</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginTop: 20 }}>依背景類型劃分，幫助新創快速找到最適合的諮詢對象</p>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
+          {CATEGORIES.map((cat, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{ background: '#fff', padding: '32px 24px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 32, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.count}</p>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.title}</p>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginBottom: 12 }}>{cat.en}</p>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, lineHeight: 1.75, color: 'var(--muted)' }}>{cat.description}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MentorGrid({ category, bg }) {
+  const isMobile = useIsMobile();
+  const cat = CATEGORIES.find(c => c.key === category);
+  const mentors = MENTORS.filter(m => m.category === category);
+  return (
+    <section id={category} style={{ padding: isMobile ? '72px 0' : '120px 0', background: bg }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
+          <span className="sec-en">{cat.en}</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 32 }}>{cat.title}</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginTop: 12 }}>{cat.description}</p>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 16 }}>
+          {mentors.map((m, i) => <MentorCard key={i} mentor={m} delay={i * 40} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <AnimUp>
+          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', textAlign: 'center' }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--mint)', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Join Us</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 16 }}>與頂尖業師並肩創業</h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 480, margin: '0 auto 32px' }}>申請台大加速器或台大車庫，通過錄取後由中心依需求為你媒合最適合的業師。</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <a href="apply.html" style={{ display: 'inline-block', background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 15, padding: '14px 32px', borderRadius: 2 }}>立即申請輔導計畫</a>
+              <a href="mailto:ntutec@ntutec.com?subject=業師申請" style={{ display: 'inline-block', background: 'transparent', color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--serif)', fontSize: 15, padding: '14px 32px', borderRadius: 2, border: '1px solid rgba(255,255,255,0.2)' }}>有意成為業師？洽詢中心</a>
+            </div>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="關於我們" />
+      <SharedSocialSidebar />
+      <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <Hero />
+        <CategoryOverview />
+        <MentorGrid category="vc" bg="var(--offwhite)" />
+        <MentorGrid category="founder" bg="#fff" />
+        <MentorGrid category="exec" bg="var(--offwhite)" />
+        <MentorGrid category="expert" bg="#fff" />
+        <CTA />
+      </main>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

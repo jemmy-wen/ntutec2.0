@@ -1,0 +1,13 @@
+# Design handoff source (not part of the deployed site)
+ntutec-design-handoff/
+
+# macOS
+.DS_Store
+
+# Claude local config
+.claude/
+AGENTS.md
+
+# Misc
+.design-canvas.state.json
+_test_canary.txt

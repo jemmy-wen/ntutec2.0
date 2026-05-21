@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>申請加入台大天使會 — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif;
+      --mono: 'Lato', sans-serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setV(true); obs.disconnect(); }
+    }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return (
+    <div ref={ref} style={{
+      opacity: v ? 1 : 0,
+      transform: v ? 'none' : 'translateY(28px)',
+      transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+
+/* ════ HERO ════ */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 640 }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          clipPath: isMobile ? 'none' : 'polygon(55% 0%, 100% 0%, 100% 100%, 42% 100%)',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-biggroup.jpg)',
+            backgroundSize: 'cover', backgroundPosition: 'center 30%',
+            opacity: 0.88,
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: isMobile
+              ? 'linear-gradient(to bottom, rgba(26,46,74,0.75) 0%, rgba(26,46,74,0.55) 100%)'
+              : 'linear-gradient(to right, rgba(26,46,74,0.98) 0%, rgba(26,46,74,0.6) 55%, transparent 75%)',
+          }} />
+        </div>
+
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }}
+          viewBox="0 0 1200 640" preserveAspectRatio="none">
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,640 876,640 1200,480" fill="#F7F5F1" />
+        </svg>
+
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '160px 10% 100px' }}>
+          <div style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+            transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+            fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
+            letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 20,
+          }}>Apply to Join</div>
+          <h1 style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+            transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+            fontFamily: 'var(--serif)', fontSize: isMobile ? 36 : 58, fontWeight: 600,
+            lineHeight: 1.15, color: '#fff', letterSpacing: '0.04em', marginBottom: 24,
+          }}>加入 NTUTEC ANGELS</h1>
+          <p style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+            transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+            fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 16, fontWeight: 300,
+            lineHeight: 1.9, color: 'rgba(255,255,255,0.84)', maxWidth: 520,
+          }}>歡迎有志參與早期新創投資的投資人，一同加入以台大創業生態系為核心的天使投資社群。</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ════ ELIGIBILITY ════ */
+const ELIGIBILITY = [
+  '對早期新創投資有興趣，願意投入時間與資源',
+  '認同台大創創中心的使命與價值觀',
+  '願意參與每月天使例會及相關活動',
+  '繳納年度會費（個人會員 NT$50,000/年；企業會員 NT$100,000/年）',
+];
+
+function Eligibility() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 40 : 64 }}>
+            <span className="sec-en">Membership Criteria</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 36 }}>入會資格</span>
+            </h2>
+          </div>
+        </AnimUp>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 720 }}>
+          {ELIGIBILITY.map((item, i) => (
+            <AnimUp key={i} delay={i * 70}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '20px 24px', background: 'var(--offwhite)', borderLeft: '3px solid var(--mint)' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 500, color: 'var(--teal)', marginTop: 2, flexShrink: 0 }}>0{i + 1}</span>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: 'var(--text)' }}>{item}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════ FEATURES ════ */
+const FEATURES = [
+  { title: '瀏覽候選新創', body: '每月天使例會前，上架精選新創的六張資訊卡片。' },
+  { title: '投資意向投票', body: '天使例會後進行記名投票，表達對各新創的投資意向。' },
+  { title: '本月 Pipeline', body: '即時查看當月評估中的新創列表與各階段篩選進度。' },
+  { title: '學習中心', body: '天使投資入門、盡職調查方法論與產業趨勢資源。' },
+  { title: '即時通知', body: '卡片上架、投票開放、天使例會等重要事件即時推送。' },
+];
+
+function MemberFeatures() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--mint)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 40 : 64 }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--navy)', textTransform: 'uppercase', display: 'block', marginBottom: 12, opacity: 0.7 }}>Member Access</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: 'var(--navy)', lineHeight: 1.4 }}>入會後，你可以做什麼</h2>
+          </div>
+        </AnimUp>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {FEATURES.map((f, i) => (
+            <AnimUp key={i} delay={i * 70}>
+              <div style={{
+                display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
+                gap: isMobile ? 16 : 40,
+                padding: isMobile ? '20px 0' : '24px 0',
+                borderBottom: i < FEATURES.length - 1 ? '1px solid rgba(26,46,74,0.15)' : 'none',
+                flexDirection: isMobile ? 'column' : 'row',
+              }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, color: 'rgba(26,46,74,0.5)', flexShrink: 0, width: isMobile ? 'auto' : 60 }}>0{i + 1}</span>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 17 : 20, fontWeight: 600, color: 'var(--navy)', flexShrink: 0, width: isMobile ? 'auto' : 220 }}>{f.title}</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(26,46,74,0.75)' }}>{f.body}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════ APPLICATION ════ */
+function Application() {
+  const isMobile = useIsMobile();
+  const CheckIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <circle cx="8" cy="8" r="7" stroke="rgba(0,216,200,0.5)" strokeWidth="1" />
+      <path d="M5 8l2 2 4-4" stroke="var(--mint)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 40 : 64 }}>
+            <span className="sec-en">Application</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 26 : 36 }}>申請入會</span>
+            </h2>
+          </div>
+        </AnimUp>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24, marginBottom: 40 }}>
+          {/* Individual */}
+          <AnimUp>
+            <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, border: '1px solid var(--rule)', height: '100%' }}>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>個人會員</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 32, fontWeight: 400, color: 'var(--navy)', lineHeight: 1, marginBottom: 8 }}>
+                NT$50,000
+                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'var(--muted)', marginLeft: 6 }}>/年</span>
+              </div>
+              <div style={{ borderTop: '1px solid var(--rule)', marginTop: 28, paddingTop: 28 }}>
+                <a href="https://forms.gle/zgjGP7RW7sgG911YA" target="_blank" rel="noopener" style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  padding: '14px 28px', background: 'var(--navy)',
+                  fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, color: 'var(--mint)',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#243d5e'}
+                onMouseLeave={e => e.currentTarget.style.background = 'var(--navy)'}>
+                  個人申請表單 →
+                </a>
+              </div>
+            </div>
+          </AnimUp>
+          {/* Corporate */}
+          <AnimUp delay={100}>
+            <div style={{ background: '#0d0d0d', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, border: '2px solid var(--mint)', height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 8 }}>企業會員</div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>可指派 3 位代表</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 32, fontWeight: 400, color: '#fff', lineHeight: 1, marginBottom: 8 }}>
+                NT$100,000
+                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', marginLeft: 6 }}>/年</span>
+              </div>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', marginTop: 28, paddingTop: 28, flex: 1, display: 'flex', alignItems: 'flex-end' }}>
+                <a href="https://forms.gle/n38sNQznLG62ypyK9" target="_blank" rel="noopener" style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  padding: '14px 28px', background: 'var(--mint)',
+                  fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, color: 'var(--navy)',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#00bfb8'}
+                onMouseLeave={e => e.currentTarget.style.background = 'var(--mint)'}>
+                  企業申請表單 →
+                </a>
+              </div>
+            </div>
+          </AnimUp>
+        </div>
+        <AnimUp delay={150}>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 32 }}>
+            申請審核通過後，中心將引導您完成年費繳納流程（台大捐款平台）。
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--text)' }}>有任何問題嗎？</span>
+            <a href="mailto:ntutec@ntutec.com" style={{
+              fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--teal)',
+              borderBottom: '1px solid var(--teal)', paddingBottom: 2,
+            }}>ntutec@ntutec.com</a>
+          </div>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+/* ════ PAGE ════ */
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="台大天使會" />
+      <SharedSocialSidebar />
+      <Hero />
+      <div style={{ maxWidth: 1440, margin: '0 auto', overflow: 'hidden', position: 'relative' }}>
+        <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+          <Eligibility />
+          <MemberFeatures />
+          <Application />
+        </main>
+      </div>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企業創新諮詢 Consulting — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const services = [
+  {
+    label: '01',
+    en: 'Innovation Strategy',
+    title: '企業創新策略諮詢',
+    desc: '協助企業制定創新轉型策略，導入新創思維與敏捷開發方法論，建立內部創新機制。',
+    features: ['創新文化診斷', '內部創業機制設計', '開放式創新策略'],
+  },
+  {
+    label: '02',
+    en: 'Technology Commercialization',
+    title: '技術商業化輔導',
+    desc: '將學術研究成果轉化為具商業價值的產品或服務，提供從概念驗證到市場進入的完整輔導。',
+    features: ['技術評估與定位', '商業模式設計', '市場進入策略'],
+  },
+  {
+    label: '03',
+    en: 'Startup Acceleration',
+    title: '新創加速輔導',
+    desc: '為早期新創團隊提供系統化的輔導計畫，涵蓋產品開發、團隊建設、募資策略與市場拓展。',
+    features: ['產品市場適配', '募資簡報優化', '業師一對一輔導'],
+  },
+];
+
+/* ── Hero ── */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const STATS = [
+    { num: '27', suffix: '期', label: '企業垂直加速器' },
+    { num: '35', plus: '+', label: '企業合作夥伴' },
+    { num: '13', suffix: '年', label: '台大加速器 Know-how' },
+  ];
+
+  const statsCard = (
+    <div style={{
+      background: '#fff',
+      boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18), 0 2px 12px -4px rgba(26,46,74,0.10)',
+      display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap',
+      opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s',
+    }}>
+      {STATS.map((s, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+          <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', flex: isMobile ? '1 1 45%' : 'none', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
+              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 32 : 40, color: 'var(--navy)' }}>{s.num}</span>
+              {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
+              {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
+            </div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', whiteSpace: 'nowrap' }}>{s.label}</div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  const hexClip = 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)';
+
+  return (
+    <section style={{ position: 'relative', background: 'var(--navy)', overflow: 'hidden', minHeight: isMobile ? 'auto' : '88vh', display: 'flex', flexDirection: 'column' }}>
+      {/* photo */}
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, clipPath: isMobile ? 'none' : hexClip, overflow: 'hidden' }}>
+        <img src="ntutec-design-handoff/public/images/events/opening-2026-04.jpg" alt="企業創新諮詢"
+          style={{ width: '100%', height: isMobile ? 220 : '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.45 }} />
+      </div>
+      {/* SVG triangles */}
+      {!isMobile && <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+        <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+        <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+      </svg>}
+      {/* overlay */}
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(26,46,74,0.82) 0%, rgba(26,46,74,0.55) 100%)', zIndex: 1 }} />
+      {/* content */}
+      <div style={{ position: 'relative', zIndex: 3, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '48px 24px 32px' : '0 7% 80px' }}>
+        <span className="sec-en" style={{ color: 'var(--mint)', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s 0.1s' }}>Consulting</span>
+        <h1 style={{
+          fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 38 : 62,
+          lineHeight: 1.25, color: '#fff', maxWidth: 640,
+          opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+          transition: 'opacity 0.6s 0.2s, transform 0.6s 0.2s',
+          marginBottom: 20,
+        }}>企業創新<br />諮詢服務</h1>
+        <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: isMobile ? 15 : 18, color: 'rgba(255,255,255,0.82)', maxWidth: 520, lineHeight: 1.7, marginBottom: 36, opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.35s' }}>
+          突破創新卡點，結合 13 年台大加速器 know-how 與產業實務，提供企業端對端的創新轉型解決方案。
+        </p>
+        <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.45s' }}>
+          <a href="mailto:ntutec@ntutec.com?subject=諮詢服務洽詢" style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 14, padding: '14px 32px', borderRadius: 2 }}>
+            來信洽詢
+          </a>
+        </div>
+      </div>
+      {/* stats */}
+      {!isMobile ? (
+        <div style={{ position: 'absolute', bottom: 0, left: '7%', zIndex: 10 }}>{statsCard}</div>
+      ) : (
+        <div style={{ position: 'relative', zIndex: 10, padding: '0 24px 32px' }}>{statsCard}</div>
+      )}
+    </section>
+  );
+}
+
+/* ── Services ── */
+function Services() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <AnimUp>
+        <span className="sec-en">Our Services</span>
+        <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: 'var(--navy)', marginBottom: 56 }}>
+          <span className="sec-title-hl">三大服務項目</span>
+        </h2>
+      </AnimUp>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+        {services.map((svc, idx) => (
+          <AnimUp key={svc.label} delay={idx * 80}>
+            <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 48, borderTop: '1px solid var(--rule)', paddingTop: 36 }}>
+              <div style={{ flexShrink: 0, width: isMobile ? '100%' : 320 }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--teal)', textTransform: 'uppercase', letterSpacing: '0.14em', display: 'block', marginBottom: 8 }}>{svc.en}</span>
+                <div style={{ fontFamily: 'var(--mono)', fontWeight: 700, fontSize: 48, color: 'var(--rule)', lineHeight: 1 }}>{svc.label}</div>
+                <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 22 : 28, color: 'var(--navy)', marginTop: 8 }}>{svc.title}</h3>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 16, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 24 }}>{svc.desc}</p>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {svc.features.map(f => (
+                    <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'var(--sans)', fontSize: 15, color: 'var(--text)' }}>
+                      <span style={{ width: 24, height: 1, background: 'var(--teal)', flexShrink: 0 }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </AnimUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Track Record ── */
+function TrackRecord() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 48, alignItems: 'flex-start' }}>
+        <AnimUp style={{ flexShrink: 0, maxWidth: 360 }}>
+          <span className="sec-en">Track Record</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)', marginBottom: 20 }}>
+            <span className="sec-title-hl">垂直加速器成功案例</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'var(--muted)', lineHeight: 1.75 }}>
+            自 2019 年首創企業垂直加速器，累計 27 期、35 家企業夥伴，涵蓋科技、媒體、金融等多元產業。透過深度共創，協助企業發現新市場、孵育新事業。
+          </p>
+          <a href="corporate-partners.html" style={{ display: 'inline-block', marginTop: 28, fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 14, color: 'var(--teal)', borderBottom: '1px solid var(--teal)', paddingBottom: 2 }}>
+            查看企業合作案例 →
+          </a>
+        </AnimUp>
+        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24 }}>
+          {[
+            { industry: '科技媒體', company: '聯合報系', batch: 'Batch 2022', desc: '孵育 AI 新聞摘要新創，完成 POC 並獲集團採用。' },
+            { industry: '金融保險', company: '富邦金控', batch: 'Batch 2023', desc: '共創數位保險服務，協助三組新創完成銀行場域驗證。' },
+            { industry: '零售通路', company: '全家便利商店', batch: 'Batch 2023', desc: '結合 AIoT 技術優化門市運營，完成 50 店 PoC。' },
+            { industry: '能源製造', company: '台灣電力', batch: 'Batch 2024', desc: '協助電網數位轉型，孵育三組能源管理新創團隊。' },
+          ].map((c, i) => (
+            <AnimUp key={c.company} delay={i * 60}>
+              <div style={{ background: '#fff', padding: 28, borderRadius: 2 }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{c.industry}</span>
+                <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--navy)', margin: '8px 0 4px' }}>{c.company}</h4>
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{c.batch}</span>
+                <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.65, marginTop: 12 }}>{c.desc}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Process ── */
+function Process() {
+  const isMobile = useIsMobile();
+  const steps = [
+    { step: '01', title: '需求盤點', desc: '釐清企業創新痛點、目標市場及期望成果，制定客製化合作方案。' },
+    { step: '02', title: '方案設計', desc: '結合台大創創中心資源，設計符合企業需求的輔導路徑與 KPI 框架。' },
+    { step: '03', title: '深度共創', desc: '業師駐場輔導、新創媒合、場域驗證，全程陪跑確保成果落地。' },
+    { step: '04', title: '成果驗收', desc: '期末評估成果達成率，提交完整報告並規劃後續擴大部署策略。' },
+  ];
+  return (
+    <section style={{ background: 'var(--navy)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <AnimUp>
+        <span className="sec-en" style={{ color: 'var(--mint)' }}>Process</span>
+        <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: '#fff', marginBottom: 56 }}>
+          合作流程
+        </h2>
+      </AnimUp>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(4,1fr)', gap: 24 }}>
+        {steps.map((s, i) => (
+          <AnimUp key={s.step} delay={i * 80}>
+            <div style={{ borderTop: '2px solid var(--teal)', paddingTop: 24 }}>
+              <div style={{ fontFamily: 'var(--mono)', fontWeight: 700, fontSize: 36, color: 'rgba(255,255,255,0.15)', marginBottom: 16 }}>{s.step}</div>
+              <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 20, color: '#fff', marginBottom: 12 }}>{s.title}</h4>
+              <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7 }}>{s.desc}</p>
+            </div>
+          </AnimUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── CTA ── */
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '48px 24px' : '80px 7%' }}>
+      <AnimUp>
+        <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '40px 28px' : '64px 72px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32 }}>
+          <div>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.14em', textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>Get in Touch</span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: '#fff', marginBottom: 12 }}>洽詢諮詢服務</h2>
+            <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'rgba(255,255,255,0.70)', lineHeight: 1.7, maxWidth: 480 }}>
+              請來信說明您的需求（企業規模、創新議題、期望時程），我們評估後安排合適窗口。通常於 3 個工作日內回覆。
+            </p>
+            <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.40)', marginTop: 16 }}>ntutec@ntutec.com　·　週一至週五 9:00–18:00</p>
+          </div>
+          <a href="mailto:ntutec@ntutec.com?subject=諮詢服務洽詢" style={{ flexShrink: 0, display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 15, padding: '16px 40px', borderRadius: 2, whiteSpace: 'nowrap' }}>
+            來信洽詢
+          </a>
+        </div>
+      </AnimUp>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <React.Fragment>
+      <SharedNav activeKey="企業合作" />
+      <SharedSocialSidebar />
+      <Hero />
+      <Services />
+      <TrackRecord />
+      <Process />
+      <CTA />
+      <SharedFooter />
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

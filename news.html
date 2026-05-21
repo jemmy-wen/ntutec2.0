@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最新消息 News — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif;
+      --mono: 'Lato', sans-serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setV(true); obs.disconnect(); }
+    }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return (
+    <div ref={ref} style={{
+      opacity: v ? 1 : 0,
+      transform: v ? 'none' : 'translateY(28px)',
+      transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+
+/* ════ HERO ════ */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 400 : 520 }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          clipPath: isMobile ? 'none' : 'polygon(55% 0%, 100% 0%, 100% 100%, 42% 100%)',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'url(ntutec-design-handoff/public/images/events/opening-2026-biggroup.jpg)',
+            backgroundSize: 'cover', backgroundPosition: 'center 40%',
+            opacity: 0.88,
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: isMobile
+              ? 'linear-gradient(to bottom, rgba(26,46,74,0.80) 0%, rgba(26,46,74,0.60) 100%)'
+              : 'linear-gradient(to right, rgba(26,46,74,0.98) 0%, rgba(26,46,74,0.6) 55%, transparent 75%)',
+          }} />
+        </div>
+
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }}
+          viewBox="0 0 1200 520" preserveAspectRatio="none">
+          <polygon points="0,0 260,0 0,130" fill="#F7F5F1" />
+          <polygon points="1200,520 940,520 1200,390" fill="#F7F5F1" />
+        </svg>
+
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '140px 10% 80px' }}>
+          <div style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+            transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+            fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
+            letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 20,
+          }}>News</div>
+          <h1 style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+            transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+            fontFamily: 'var(--serif)', fontSize: isMobile ? 40 : 64, fontWeight: 600,
+            lineHeight: 1.15, color: '#fff', letterSpacing: '0.04em', marginBottom: 24,
+          }}>最新消息</h1>
+          <p style={{
+            opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+            transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+            fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 16, fontWeight: 300,
+            lineHeight: 1.9, color: 'rgba(255,255,255,0.84)', maxWidth: 480,
+          }}>掌握台大創創中心的最新動態與重要公告。</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ════ NEWS LIST ════ */
+const NEWS = [
+  {
+    date: '2026 年 3 月 1 日',
+    tag: '計畫公告',
+    title: '【錄取公告】2026 台大加速器 20 組新創正式入選',
+    excerpt: '2026 梯次台大加速器錄取結果公告，本屆共計 20 組優質新創團隊通過層層審核，正式加入台大加速器計畫，涵蓋 AI、生技、硬科技等多元領域。',
+  },
+  {
+    date: '2025 年 12 月 20 日',
+    tag: '活動報導',
+    title: '【活動報導】2025 Demo Day 圓滿落幕，74 位投資人到場',
+    excerpt: '年度 Demo Day 於 12 月舉行，吸引 74 位創投及天使投資人到場，共計完成 51 件媒合意向，創下近七屆 Accupass 瀏覽量最高紀錄 9,775 次。',
+  },
+  {
+    date: '2025 年 11 月 15 日',
+    tag: '申請公告',
+    title: '【申請開放】2027 台大車庫申請即將開放，12 月起受理',
+    excerpt: '2027 梯次台大車庫將於 12 月至 1 月開放申請，提供創業早期團隊辦公空間、業師輔導與生態系資源，歡迎有意申請的團隊提前準備。',
+  },
+  {
+    date: '2025 年 10 月 28 日',
+    tag: '天使例會',
+    title: '【天使例會】11 月天使例會報名開放，3 組新創上台路演',
+    excerpt: '11 月天使例會將於台大水源校區舉辦，本月共有 3 組通過嚴格盡調的新創上台路演，歡迎台大天使會會員踴躍出席。',
+  },
+  {
+    date: '2025 年 10 月 10 日',
+    tag: '媒體報導',
+    title: '【媒體報導】台大創創中心獲《數位時代》專題報導',
+    excerpt: '《數位時代》特別企劃專訪台大創創中心，深度報導中心在加速器、天使投資與校園創業生態系建構上的最新進展與未來規劃。',
+  },
+];
+
+const TAG_COLORS = {
+  '計畫公告': '#1A2E4A',
+  '活動報導': '#58A8A0',
+  '申請公告': '#007A74',
+  '天使例會': '#8B5CF6',
+  '媒體報導': '#D97706',
+};
+
+function NewsCard({ item, delay }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <AnimUp delay={delay}>
+      <div
+        style={{
+          background: '#fff', borderRadius: 4,
+          border: `1px solid ${hovered ? 'var(--teal)' : 'var(--rule)'}`,
+          padding: '28px 32px', cursor: 'pointer',
+          transition: 'border-color 0.2s',
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>{item.date}</span>
+          <span style={{
+            fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.06em',
+            background: TAG_COLORS[item.tag] || 'var(--navy)', color: '#fff',
+            padding: '3px 10px', borderRadius: 20,
+          }}>{item.tag}</span>
+        </div>
+        <h3 style={{
+          fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600,
+          color: 'var(--navy)', lineHeight: 1.5, marginBottom: 12,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>{item.title}</h3>
+        <p style={{
+          fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300,
+          lineHeight: 1.85, color: 'var(--muted)',
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>{item.excerpt}</p>
+      </div>
+    </AnimUp>
+  );
+}
+
+function NewsList() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 36 : 56 }}>
+            <span className="sec-en">Latest Updates</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 24 : 32 }}>全部消息</span>
+            </h2>
+          </div>
+        </AnimUp>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {NEWS.map((item, i) => (
+            <NewsCard key={i} item={item} delay={i * 60} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════ PAGE ════ */
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="最新動態" />
+      <SharedSocialSidebar />
+      <Hero />
+      <div style={{ maxWidth: 1440, margin: '0 auto', overflow: 'hidden', position: 'relative' }}>
+        <main style={{ paddingRight: isMobile ? 0 : 80 }}>
+          <NewsList />
+        </main>
+      </div>
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

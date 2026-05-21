@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A;
+      --teal: #58A8A0;
+      --mint: #00D8C8;
+      --white: #FAFAF8;
+      --offwhite: #F5F5F2;
+      --rule: #E0E0DC;
+      --text: #1A1A18;
+      --muted: #888884;
+      --serif: 'Noto Sans TC', sans-serif;
+      --mono: 'Lato', sans-serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--white); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    a { color: inherit; text-decoration: none; }
+
+    /* Section label pattern */
+    .sec-en {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--teal);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: var(--serif);
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      display: inline;
+      background: var(--mint);
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      padding: 2px 6px;
+    }
+    .sec-title::selection {
+      background: var(--navy);
+      color: var(--mint);
+    }
+    .sec-title-wrap {
+      display: block;
+      margin-bottom: 0;
+    }
+    .more-detail {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--navy);
+      border-bottom: 1px solid var(--navy);
+      padding-bottom: 2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .more-detail:hover { color: var(--teal); border-color: var(--teal); }
+    .more-detail::after { content: '→'; font-size: 14px; }
+
+    /* Hero carousel */
+    @keyframes fadeSlide {
+      0%   { opacity: 0; transform: scale(1.04); }
+      8%   { opacity: 1; transform: scale(1); }
+      92%  { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0; transform: scale(1.04); }
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes scrollLine { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeLeft { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeRight { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+    .anim-fadeUp { animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-fadeLeft { animation: fadeLeft 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-fadeRight { animation: fadeRight 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-scaleIn { animation: scaleIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+    .anim-hidden { opacity: 0; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .desktop-nav-triggers { display: none !important; }
+      .desktop-sidebar { display: none !important; }
+      .hamburger-btn { display: flex !important; }
+    }
+    @media (min-width: 769px) {
+      .hamburger-btn { display: none !important; }
+      .mobile-drawer { display: none !important; }
+    }
+    .mobile-drawer-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(20,36,60,0.55);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease both;
+    }
+    .mobile-drawer-panel {
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: min(340px, 88vw);
+      background: var(--white);
+      display: flex; flex-direction: column;
+      animation: slideInRight 0.3s cubic-bezier(0.22,1,0.36,1) both;
+      overflow-y: auto;
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "heroJP": "從台大出發。連結產業。走向市場。",
+  "heroEN": "Bridging NTU Innovation to Global Impact",
+  "accentColor": "#00D8C8",
+  "showAngel": true
+}/*EDITMODE-END*/;
+
+
+/* ── useInView hook ─────────────────────────────────── */
+function useInView(options = {}) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold: options.threshold || 0.3, rootMargin: options.rootMargin || '-240px 0px' });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+}
+
+/* ── useIsMobile hook ───────────────────────────────── */
+function useIsMobile(bp = 768) {
+  const [mobile, setMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= bp : false
+  );
+  useEffect(() => {
+    const h = () => setMobile(window.innerWidth <= bp);
+    window.addEventListener('resize', h, { passive: true });
+    return () => window.removeEventListener('resize', h);
+  }, [bp]);
+  return mobile;
+}
+
+/* ── AnimBlock: wraps children with scroll-triggered animation ── */
+function AnimBlock({ children, animation = 'anim-fadeUp', delay = 0, style = {} }) {
+  const [ref, inView] = useInView();
+  return (
+    <div ref={ref} className={inView ? animation : 'anim-hidden'}
+      style={{ animationDelay: delay + 'ms', ...style }}>
+      {children}
+    </div>
+  );
+}
+
+/* ── SHARED DIVIDER ─────────────────────────────────── */
+const Rule = ({ style }) => (
+  <div style={{ width: '100%', height: 1, background: 'var(--rule)', ...style }} />
+);
+
+/* ── PLACEHOLDER IMAGE ──────────────────────────────── */
+function ImgPlaceholder({ label, aspect, style, colors = ['#B8D0CA', '#8BBCB2'] }) {
+  return (
+    <div style={{
+      width: '100%', aspectRatio: aspect || '4/3',
+      background: `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`,
+      position: 'relative', overflow: 'hidden', ...style,
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 22px)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 6,
+      }}>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 10, letterSpacing: '0.12em', color: 'rgba(26,46,74,0.35)', textTransform: 'uppercase' }}>photo</div>
+        {label && <div style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'rgba(26,46,74,0.3)' }}>{label}</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ── NAV ────────────────────────────────────────────── */
+const megaMenus = {
+  '輔導計畫': {
+    featured: { label: '新創輔導計畫總覽', desc: '從孵化到加速，提供最完整的創業支援體系。', href: '#programs' },
+    cols: [
+      { heading: '計畫', links: [{ label: '台大創創加速器計畫', desc: '規模化驗證基地', href: 'accelerator.html' }, { label: '台大車庫孵化器計畫', desc: '早期產品價值打造', href: '#garage' }] },
+      { heading: '資源', links: [{ label: '歷屆輔導團隊', desc: '600+ 校友新創', href: '#alumni' }, { label: '歷屆加速器合作企業', desc: '產業夥伴列表', href: '#' }, { label: '常見問題', desc: 'FAQ', href: '#' }] },
+    ],
+  },
+  '企業合作': {
+    featured: { label: '企業合作方案', desc: '接軌新創生態圈，賦能企業創新力。為你的組織找到下一個成長動能。', href: 'corporate-partners.html' },
+    cols: [
+      { heading: '合作模式', links: [{ label: '台大創創加速器', desc: '企業垂直加速器', href: 'accelerator.html' }, { label: '創新創業競賽', desc: '共同舉辦賽事', href: 'corporate-partners.html' }] },
+      { heading: '服務', links: [{ label: '創新活動合辦', desc: '客製化工作坊', href: 'corporate-partners.html' }, { label: '服務諮詢', desc: '一對一諮詢申請', href: 'corporate-partners.html#contact' }] },
+    ],
+  },
+  '台大天使會': {
+    featured: { label: '台大天使投資俱樂部', desc: '連結台大校友投資人與潛力新創，成為台灣最具影響力的天使投資社群。', href: 'angels.html' },
+    cols: [
+      { heading: '關於', links: [{ label: '俱樂部介紹', desc: '使命與運作方式', href: 'angels.html' }, { label: '投資組合', desc: '歷屆投資新創', href: 'angels.html#cases' }] },
+      { heading: '加入', links: [{ label: '投資人申請', desc: '校友投資人入會', href: 'angels.html#membership' }, { label: '新創申請', desc: '尋求天使投資', href: 'angels.html#membership' }] },
+    ],
+  },
+  '關於我們': {
+    featured: { label: '關於台大創創中心', desc: '從校園出發，引導每一段創業旅程。了解我們的使命與故事。', href: '#about' },
+    cols: [
+      { heading: '組織', links: [{ label: '關於台大創創中心', desc: '使命、願景、沿革', href: '#about' }, { label: '諮詢委員會', desc: '外部顧問陣容', href: '#' }] },
+      { heading: '人才', links: [{ label: '業師陣容', desc: '150+ 位業界導師', href: '#' }, { label: '執行團隊', desc: '創創內部團隊', href: '#' }] },
+    ],
+  },
+  '最新動態': {
+    featured: { label: '最新消息', desc: '活動公告、計畫徵件、創創大小事，第一時間掌握。', href: '#news' },
+    cols: [
+      { heading: '消息類型', links: [{ label: '最新消息', desc: '全部公告與新聞', href: '#news' }, { label: '最新活動', desc: '近期工作坊與講座', href: '#' }] },
+      { heading: '媒體', links: [{ label: 'TEC Talk Podcast', desc: '每週創業對談節目', href: '#' }, { label: '創創觀點部落格', desc: '產業分析與洞察', href: '#' }] },
+    ],
+  },
+};
+
+const SOCIAL_LINKS = [
+  { name: 'FB', href: 'https://www.facebook.com/NTUTEC/', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> },
+  { name: 'IG', href: '#', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> },
+  { name: 'YT', href: '#', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg> },
+  { name: 'LI', href: '#', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg> },
+];
+
+function MobileDrawer({ onClose }) {
+  const [openKey, setOpenKey] = useState(null);
+  const navKeys = Object.keys(megaMenus);
+
+  return (
+    <div className="mobile-drawer mobile-drawer-overlay" onClick={onClose}>
+      <div className="mobile-drawer-panel" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--rule)' }}>
+          <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC" style={{ height: 30, width: 'auto' }} />
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: 'var(--navy)' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Nav items */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+          {navKeys.map(key => {
+            const menu = megaMenus[key];
+            const isOpen = openKey === key;
+            return (
+              <div key={key}>
+                <button
+                  onClick={() => setOpenKey(isOpen ? null : key)}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '16px 24px', background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: 'var(--sans)', fontSize: 16, fontWeight: 500, color: 'var(--navy)',
+                    borderBottom: '1px solid var(--rule)',
+                  }}>
+                  {key}
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none', flexShrink: 0 }}>
+                    <path d="M1 1l4 4 4-4" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                {isOpen && (
+                  <div style={{ background: 'var(--offwhite)', padding: '8px 0' }}>
+                    <a href={menu.featured.href} style={{
+                      display: 'block', padding: '12px 24px',
+                      borderBottom: '1px solid var(--rule)',
+                    }}>
+                      <div style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 600, color: 'var(--navy)', marginBottom: 2 }}>{menu.featured.label}</div>
+                      <div style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--teal)', fontWeight: 500 }}>MORE DETAIL →</div>
+                    </a>
+                    {menu.cols.flatMap(col => col.links).map((lk, li) => (
+                      <a key={li} href={lk.href || '#'} style={{
+                        display: 'flex', flexDirection: 'column', gap: 2,
+                        padding: '10px 24px', borderBottom: '1px solid rgba(224,224,220,0.5)',
+                      }}>
+                        <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--navy)', fontWeight: 400 }}>{lk.label}</span>
+                        <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>{lk.desc}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Social links */}
+        <div style={{ padding: '24px', borderTop: '1px solid var(--rule)' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 16 }}>Follow Us</div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            {SOCIAL_LINKS.map(s => (
+              <a key={s.name} href={s.href} target="_blank" rel="noreferrer" title={s.name} style={{
+                width: 40, height: 40, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--navy)', border: '1px solid rgba(26,46,74,0.15)',
+              }}>
+                {s.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Nav({ scrolled }) {
+  const [open, setOpen] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const closeTimer = useRef(null);
+  const navKeys = Object.keys(megaMenus);
+
+  const handleEnter = (key) => { clearTimeout(closeTimer.current); setOpen(key); };
+  const handleLeave = () => { closeTimer.current = setTimeout(() => setOpen(null), 120); };
+
+  const bg = scrolled ? 'rgba(250,250,248,0.97)' : 'rgba(20,36,60,0.2)';
+  const borderCol = scrolled ? 'var(--rule)' : 'rgba(255,255,255,0.1)';
+  const textCol = scrolled ? 'var(--navy)' : '#fff';
+
+  return (
+    <>
+    <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, overflow: 'hidden' }}
+      onMouseLeave={handleLeave}>
+      {/* Top bar */}
+      <div style={{
+        background: bg, backdropFilter: 'blur(20px)',
+        borderBottom: open ? '1px solid transparent' : `1px solid ${borderCol}`,
+        transition: 'background 0.4s, border 0.2s',
+        height: 64, display: 'flex', alignItems: 'center',
+        padding: '0 20px 0 20px', justifyContent: 'space-between',
+        maxWidth: '100vw', boxSizing: 'border-box',
+      }}>
+        {/* Logo */}
+        <a href="#" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC 臺大創創中心"
+            style={{ height: 36, width: 'auto', filter: scrolled ? 'none' : 'brightness(0) invert(1)', transition: 'filter 0.4s ease' }} />
+        </a>
+
+        {/* Desktop nav triggers */}
+        <div className="desktop-nav-triggers" style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+          {navKeys.map(key => (
+            <button key={key}
+              onMouseEnter={() => handleEnter(key)}
+              onClick={() => {
+                if (key === '企業合作') window.location.href = 'corporate-partners.html';
+                if (key === '台大天使會') window.location.href = 'angels.html';
+              }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 400,
+                color: open === key ? (scrolled ? 'var(--teal)' : 'var(--mint)') : textCol,
+                padding: '8px 16px', letterSpacing: '0.02em',
+                opacity: open && open !== key ? 0.45 : 1,
+                transition: 'color 0.15s, opacity 0.15s',
+                position: 'relative',
+              }}>
+              {key}
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ marginLeft: 4, opacity: 0.6, transition: 'transform 0.2s', transform: open === key ? 'rotate(180deg)' : 'none' }}>
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {open === key && (
+                <span style={{ position: 'absolute', bottom: -1, left: '50%', transform: 'translateX(-50%)', width: 20, height: 2, background: 'var(--teal)', borderRadius: 1 }} />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Hamburger button (mobile only) */}
+        <button className="hamburger-btn"
+          onClick={() => setMobileOpen(true)}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            padding: 8, color: textCol,
+            flexDirection: 'column', gap: 5, alignItems: 'center', justifyContent: 'center',
+          }}>
+          <span style={{ display: 'block', width: 22, height: 1.5, background: 'currentColor', borderRadius: 2 }} />
+          <span style={{ display: 'block', width: 22, height: 1.5, background: 'currentColor', borderRadius: 2 }} />
+          <span style={{ display: 'block', width: 14, height: 1.5, background: 'currentColor', borderRadius: 2, alignSelf: 'flex-end' }} />
+        </button>
+      </div>
+
+      {/* Desktop Mega panel */}
+      {open && (() => {
+        const menu = megaMenus[open];
+        return (
+          <div onMouseEnter={() => clearTimeout(closeTimer.current)} style={{
+            background: '#fff',
+            borderBottom: '1px solid var(--rule)',
+            boxShadow: '0 16px 48px rgba(26,46,74,0.1)',
+            padding: '0 56px',
+            display: 'grid',
+            gridTemplateColumns: `320px ${menu.cols.map(() => '1fr').join(' ')}`,
+            gap: 0,
+          }}>
+            <div style={{ padding: '40px 48px 40px 0', borderRight: '1px solid var(--rule)' }}>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--teal)', marginBottom: 12, textTransform: 'uppercase' }}>Featured</div>
+              <a href={menu.featured.href} style={{
+                display: 'block',
+                background: 'linear-gradient(135deg, rgba(88,160,160,0.07) 0%, rgba(88,160,160,0.02) 100%)',
+                border: '1px solid rgba(88,160,160,0.15)',
+                borderRadius: 10, padding: '20px 22px',
+                transition: 'border-color 0.15s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor='var(--teal)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor='rgba(88,160,160,0.15)'}>
+                <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: 'var(--navy)', marginBottom: 8, lineHeight: 1.4 }}>{menu.featured.label}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 13.5, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>{menu.featured.desc}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--teal)', marginTop: 14, fontWeight: 500 }}>MORE DETAIL →</div>
+              </a>
+            </div>
+            {menu.cols.map((col, ci) => (
+              <div key={ci} style={{ padding: '40px 40px', borderRight: ci < menu.cols.length - 1 ? '1px solid var(--rule)' : 'none' }}>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--muted)', marginBottom: 20, textTransform: 'uppercase' }}>{col.heading}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  {col.links.map((lk, li) => (
+                    <a key={li} href={lk.href || '#'} style={{ display: 'flex', flexDirection: 'column', gap: 3, padding: '12px 14px', borderRadius: 8, transition: 'background 0.12s' }}
+                    onMouseEnter={e => e.currentTarget.style.background='var(--offwhite)'}
+                    onMouseLeave={e => e.currentTarget.style.background='transparent'}>
+                      <span style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: 'var(--navy)' }}>{lk.label}</span>
+                      <span style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)', fontWeight: 300 }}>{lk.desc}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
+    </nav>
+
+    {/* Mobile drawer */}
+    {mobileOpen && <MobileDrawer onClose={() => setMobileOpen(false)} />}
+    </>
+  );
+}
+
+/* ── NAV ────────────────────────────────────────────── */
+/* ── SOCIAL SIDEBAR ─────────────────────────────────── */
+function SocialSidebar({ scrollY }) {
+  const atBottom = typeof document !== 'undefined' && scrollY + window.innerHeight >= document.body.scrollHeight - 80;
+  return (
+    <div className="desktop-sidebar" style={{
+      position: 'fixed', right: 0, top: 0, bottom: 0,
+      width: 80,
+      background: 'var(--white)',
+      borderLeft: '1px solid rgba(26,46,74,0.1)',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: 16, zIndex: 150,
+    }}>
+      {SOCIAL_LINKS.map((s) => (
+        <a key={s.name} href={s.href} target="_blank" rel="noreferrer" title={s.name} style={{
+          width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'var(--navy)', background: 'transparent', border: '1px solid rgba(26,46,74,0.15)',
+          transition: 'background 0.2s, color 0.2s, transform 0.2s, border-color 0.2s',
+          textDecoration: 'none',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background='var(--teal)'; e.currentTarget.style.color='#fff'; e.currentTarget.style.borderColor='var(--teal)'; e.currentTarget.style.transform='scale(1.1)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='var(--navy)'; e.currentTarget.style.borderColor='rgba(26,46,74,0.15)'; e.currentTarget.style.transform=''; }}>
+          {s.icon}
+        </a>
+      ))}
+      {/* Scroll indicator at bottom */}
+      <div style={{
+        position: 'absolute', bottom: 32,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+        opacity: atBottom ? 0 : 1,
+        transition: 'opacity 0.4s ease',
+        pointerEvents: 'none',
+      }}>
+        <div style={{ width: 1, height: 36, background: 'linear-gradient(to bottom, var(--teal), transparent)', animation: 'scrollLine 1.5s ease infinite alternate', transformOrigin: 'top' }} />
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.14em', color: 'var(--teal)' }}>SCROLL</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── HERO ──────────────────────────────────────────── */
+function Hero({ tweaks, scrollY }) {
+  const isMobile = useIsMobile();
+  const [slide, setSlide] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const slides = [
+    { img: 'uploads/Gemini_Generated_Image_bn62qibn62qibn62.png', label: '台大校園 草地討論' },
+    { img: 'uploads/Gemini_Generated_Image_6yity56yity56yit-clean.png', label: 'Demo Day 現場' },
+    { img: 'uploads/Gemini_Generated_Image_mj9wd6mj9wd6mj9w-clean.png', label: '台大創創 天使加速器活動' },
+  ];
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => { setSlide(s => (s + 1) % slides.length); setVisible(true); }, 600);
+    }, 14000);
+    return () => clearInterval(t);
+  }, []);
+
+  const goTo = (i) => { setVisible(false); setTimeout(() => { setSlide(i); setVisible(true); }, 300); };
+  const prev = () => goTo((slide - 1 + slides.length) % slides.length);
+  const next = () => goTo((slide + 1) % slides.length);
+
+  // Parallax: image moves up as you scroll
+  const parallaxY = scrollY * 0.35;
+
+  return (
+    <section style={{ position: 'relative', height: '100vh', minHeight: 680, overflow: 'hidden', background: '#FAFAF8' }}>
+
+      {/* Full-bleed photo with parallax */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.6s ease',
+        transform: `translateY(${parallaxY}px)`,
+        willChange: 'transform',
+        top: -80, bottom: -80,
+        clipPath: isMobile ? 'none' : 'polygon(0% 29.2%, 32.2% 0%, 100% 0%, 100% 68.4%, 65.3% 100%, 0% 100%)',
+      }}>
+        <img src={slides[slide].img} alt={slides[slide].label} style={{
+          width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top',
+        }} />
+      </div>
+
+      {/* Dark overlay on photo area */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: isMobile
+          ? 'linear-gradient(to bottom, rgba(26,46,74,0.55) 0%, rgba(26,46,74,0.35) 60%, rgba(26,46,74,0.5) 100%)'
+          : 'linear-gradient(to bottom, rgba(26,46,74,0.3) 0%, rgba(26,46,74,0.1) 50%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Mint radial gradient — centered on text area */}
+      <div style={{
+        position: 'absolute',
+        left: isMobile ? '-10%' : '0%',
+        top: isMobile ? '28%' : '20%',
+        width: isMobile ? '100%' : '55%',
+        height: isMobile ? '60%' : '65%',
+        background: 'radial-gradient(ellipse at 20% 60%, rgba(0,216,200,0.32) 0%, rgba(0,196,204,0.16) 40%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* White geometric mask */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 1200 599" preserveAspectRatio="none">
+        <polygon points="0,0 386,0 0,175" fill="#FAFAF8" />
+        <polygon points="1200,599 784,599 1200,410" fill="#FAFAF8" />
+      </svg>
+
+      {/* Text */}
+      <div style={{
+        position: 'absolute',
+        left: isMobile ? '6%' : '8%',
+        right: isMobile ? '6%' : 'auto',
+        top: isMobile ? '38%' : '28%',
+        maxWidth: isMobile ? '100%' : 560,
+        zIndex: 5,
+      }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', color: 'rgba(255,255,255,0.75)', marginBottom: isMobile ? 14 : 20, textTransform: 'uppercase' }}>
+          NTU Entrepreneurship Center
+        </div>
+        {!isMobile && (
+          <div style={{
+            fontFamily: 'var(--mono)', fontSize: 'clamp(28px, 4vw, 56px)',
+            lineHeight: 1, color: '#fff', letterSpacing: '-0.03em',
+            opacity: 0.22, userSelect: 'none', marginBottom: 12,
+          }}>{tweaks.heroEN}</div>
+        )}
+        <h1 style={{
+          fontFamily: 'var(--serif)', fontWeight: 600,
+          fontSize: isMobile ? 'clamp(26px, 7vw, 36px)' : 'clamp(22px, 2.8vw, 40px)',
+          lineHeight: 1.4, color: '#fff',
+          letterSpacing: '0.01em', marginBottom: isMobile ? 12 : 16, marginTop: isMobile ? 0 : -8,
+          textShadow: '0 2px 20px rgba(26,46,74,0.4)',
+        }}>從台大出發。<br/>連結產業。走向市場。</h1>
+        <p style={{
+          fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 16, fontWeight: 300,
+          color: 'rgba(255,255,255,0.82)', lineHeight: 1.8,
+          textShadow: '0 1px 8px rgba(26,46,74,0.3)', marginBottom: 32,
+          maxWidth: isMobile ? 320 : 'none',
+        }}>台大創創中心陪伴每一位創業者，從想法萌芽到規模成長。</p>
+      </div>
+
+      {/* Slide controls */}
+      {isMobile ? (
+        /* Mobile: dots at bottom center */
+        <div style={{
+          position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center', zIndex: 10,
+        }}>
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} style={{
+              width: i === slide ? 24 : 6, height: 6, borderRadius: 3, flexShrink: 0,
+              background: i === slide ? 'var(--mint)' : 'rgba(255,255,255,0.45)',
+              border: 'none', cursor: 'pointer', padding: 0,
+              transition: 'all 0.3s ease',
+              boxShadow: i === slide ? '0 0 8px rgba(0,255,185,0.6)' : 'none',
+            }} />
+          ))}
+        </div>
+      ) : (
+        /* Desktop: vertical controls on right */
+        <div style={{
+          position: 'absolute', top: '50%', right: 96, transform: 'translateY(-50%)',
+          display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center', zIndex: 10,
+        }}>
+          <button onClick={prev} style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}
+          onMouseEnter={e => e.currentTarget.style.background='rgba(0,0,0,0.55)'}
+          onMouseLeave={e => e.currentTarget.style.background='rgba(0,0,0,0.35)'}>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 8l4-4 4 4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} style={{ width: 6, height: i === slide ? 24 : 6, borderRadius: 3, flexShrink: 0, background: i === slide ? 'var(--mint)' : 'rgba(255,255,255,0.35)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s ease', boxShadow: i === slide ? '0 0 8px rgba(0,255,185,0.6)' : 'none' }} />
+          ))}
+          <button onClick={next} style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}
+          onMouseEnter={e => e.currentTarget.style.background='rgba(0,0,0,0.55)'}
+          onMouseLeave={e => e.currentTarget.style.background='rgba(0,0,0,0.35)'}>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+        </div>
+      )}
+
+
+
+    </section>
+  );
+}
+
+/* ── NEWS ───────────────────────────────────────────── */
+function News() {
+  const isMobile = useIsMobile();
+  const articles = [
+    { tag: '活動公告', date: '2026.02.06', title: '恭喜 2026 台大車庫暨創創加速器計畫所有錄取團隊' },
+    { tag: '活動回顧', date: '2025.12.18', title: '2025 台大創創中心 Demo Day 活動回顧' },
+    { tag: '課程回顧', date: '2025.10.23', title: '新創募資的關鍵策略' },
+  ];
+  return (
+    <section style={{ padding: isMobile ? '64px 6% 0' : '120px 10% 0' }}>
+      <Rule />
+      <div style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        padding: isMobile ? '32px 0' : '48px 0',
+        gap: isMobile ? 24 : 0,
+      }}>
+        <div style={{ flexShrink: 0, width: isMobile ? 'auto' : 200 }}>
+          <span className="sec-en">News</span>
+          <div className="sec-title-wrap"><h2 className="sec-title" style={{ fontSize: isMobile ? 24 : 28 }}>最新消息</h2></div>
+        </div>
+        <AnimBlock animation="anim-fadeUp" style={{ width: '100%' }}>
+          <div style={{ flex: 1 }}>
+          {articles.map((a, i) => (
+            <a key={i} href="#" style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              alignItems: isMobile ? 'flex-start' : 'baseline',
+              gap: isMobile ? 8 : 24,
+              padding: isMobile ? '16px 0' : '20px 0',
+              borderBottom: '1px solid var(--rule)',
+              transition: 'opacity 0.15s', color: 'var(--navy)',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity='0.55'}
+            onMouseLeave={e => e.currentTarget.style.opacity='1'}>
+              {isMobile ? (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{
+                      fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 500,
+                      color: 'var(--teal)', background: 'rgba(88,160,160,0.08)',
+                      border: '1px solid rgba(88,160,160,0.2)',
+                      padding: '2px 10px', borderRadius: 100, flexShrink: 0,
+                    }}>{a.tag}</span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>{a.date}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 400, lineHeight: 1.6, flex: 1 }}>{a.title}</span>
+                    <span style={{ color: 'var(--teal)', fontSize: 14, flexShrink: 0, marginTop: 2 }}>→</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--muted)', flexShrink: 0 }}>{a.date}</span>
+                  <span style={{
+                    fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500,
+                    color: 'var(--teal)', background: 'rgba(88,160,160,0.08)',
+                    border: '1px solid rgba(88,160,160,0.2)',
+                    padding: '2px 10px', borderRadius: 100, flexShrink: 0,
+                  }}>{a.tag}</span>
+                  <span style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 400, lineHeight: 1.5 }}>{a.title}</span>
+                  <span style={{ marginLeft: 'auto', flexShrink: 0, color: 'var(--teal)', fontSize: 14 }}>→</span>
+                </>
+              )}
+            </a>
+          ))}
+          <div style={{ marginTop: 24 }}>
+            <a href="#" className="more-detail">MORE DETAIL : 查看全部消息</a>
+          </div>
+        </div>
+        </AnimBlock>
+      </div>
+    </section>
+  );
+}
+
+/* ── ABOUT ──────────────────────────────────────────── */
+function About() {
+  const isMobile = useIsMobile();
+  return (
+    <section id="about" style={{ background: '#00C4CC', padding: isMobile ? '56px 6%' : '88px 10% 88px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: 'linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+      }} />
+
+      <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.15fr', gap: isMobile ? 36 : 72, alignItems: 'center' }}>
+
+        {/* Left: text */}
+        <AnimBlock animation="anim-fadeLeft">
+          <div>
+            <span className="sec-en" style={{ color: 'rgba(26,46,74,0.6)' }}>About Us</span>
+            <div className="sec-title-wrap" style={{ marginBottom: 28 }}>
+              <h2 style={{
+                fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 42,
+                lineHeight: 1.35, letterSpacing: '0.01em', color: '#fff',
+                display: 'inline',
+                background: 'var(--navy)',
+                WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone',
+                padding: '3px 10px',
+              }}>引導創新旅程 的入口平台</h2>
+            </div>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 300, lineHeight: 2, color: 'rgba(26,46,74,0.85)', marginBottom: 48 }}>
+              台大創創中心不只是一個單位，而是陪伴每一位創業者走完整段旅程的夥伴。從校園中的想法萌芽，到產品驗證、資金連結、規模成長，我們在每個關鍵節點提供最適切的資源與陪伴。
+            </p>
+            <a href="#" className="more-detail" style={{ color: 'var(--navy)', borderColor: 'rgba(26,46,74,0.5)' }}>MORE DETAIL : 關於台大創創中心</a>
+          </div>
+        </AnimBlock>
+
+        {/* Right: image */}
+        <AnimBlock animation="anim-fadeRight">
+          <div style={{ position: 'relative' }}>
+            <div style={{ width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderRadius: 4, boxShadow: '0 16px 64px rgba(26,46,74,0.2)' }}>
+              <img src="uploads/Gemini_Generated_Image_qapx3qapx3qapx3q-clean.png" alt="台大創創中心辦公室"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+            </div>
+          </div>
+        </AnimBlock>
+
+      </div>
+    </section>
+  );
+}
+
+/* ── STATS ──────────────────────────────────────────── */
+function useCountUp(target, duration = 1400, started = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!started) return;
+    let start = null;
+    const step = (ts) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(ease * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [started, target, duration]);
+  return count;
+}
+
+function StatItem({ stat, index, started, isMobile, isLast }) {
+  const num = parseInt(stat.value);
+  const suffix = stat.value.replace(/[0-9]/g, '');
+  const counted = useCountUp(num, 1200 + index * 150, started);
+  return (
+    <div style={{
+      padding: isMobile ? '24px 20px' : '36px 48px',
+      borderRight: isMobile ? 'none' : (index < 2 ? '1px solid var(--rule)' : 'none'),
+      borderBottom: isMobile && !isLast ? '1px solid var(--rule)' : 'none',
+      display: 'flex', alignItems: 'center', gap: isMobile ? 16 : 20,
+    }}>
+      <div style={{
+        width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
+        background: 'rgba(88,160,160,0.1)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'transform 0.3s',
+      }}>
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          {index === 0 && <><circle cx="8" cy="7" r="3" stroke="#58A8A0" strokeWidth="1.5"/><circle cx="15" cy="9" r="2.5" stroke="#58A8A0" strokeWidth="1.5"/><path d="M2 18c0-3 2.5-5 6-5s6 2 6 5" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/><path d="M15 14c2.5 0 5 1.5 5 4" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/></>}
+          {index === 1 && <><path d="M4 14c0-1.5 1.2-2.5 3-3l4-1 4 1c1.8.5 3 1.5 3 3v1H4v-1z" stroke="#58A8A0" strokeWidth="1.5" strokeLinejoin="round"/><path d="M8 8a3 3 0 1 0 6 0 3 3 0 0 0-6 0z" stroke="#58A8A0" strokeWidth="1.5"/><path d="M7 11c-2 .5-3 1.5-3 3" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/></>}
+          {index === 2 && <><path d="M11 3v4M3 11h4M15 11h4M11 15v4" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/><circle cx="11" cy="11" r="3" stroke="#58A8A0" strokeWidth="1.5"/></>}
+        </svg>
+      </div>
+      <div>
+        <div style={{
+          fontFamily: 'var(--serif)', fontSize: isMobile ? 36 : 44, fontWeight: 900,
+          color: 'var(--navy)', lineHeight: 1, letterSpacing: '-0.01em',
+          transition: 'color 0.3s',
+        }}>
+          {started ? counted : 0}{suffix}
+        </div>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 15, color: 'var(--navy)', marginTop: 6, fontWeight: 500 }}>{stat.label}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{stat.note}</div>
+      </div>
+    </div>
+  );
+}
+
+function Stats() {
+  const isMobile = useIsMobile();
+  const stats = [
+    { label: '新創輔導團隊', value: '600+', note: 'Startups Supported' },
+    { label: '業師與合作夥伴', value: '150+', note: 'Investors & Partners' },
+    { label: '年深耕創新創業', value: '13+', note: 'Years of Impact' },
+  ];
+  const [started, setStarted] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } }, { threshold: 0.3 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} style={{
+      position: 'relative', zIndex: 10,
+      padding: isMobile ? '0 5%' : '0 6%',
+      marginTop: isMobile ? -64 : -100,
+    }}>
+      <div style={{
+        background: '#fff',
+        borderRadius: 8,
+        boxShadow: '0 8px 48px rgba(26,46,74,0.13)',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : `repeat(3, 1fr) auto`,
+        alignItems: 'center',
+        overflow: 'hidden',
+      }}>
+        {stats.map((s, i) => (
+          <AnimBlock key={i} animation="anim-fadeUp" delay={i * 120}>
+            <StatItem stat={s} index={i} started={started} isMobile={isMobile} isLast={i === stats.length - 1} />
+          </AnimBlock>
+        ))}
+        <div style={{ padding: isMobile ? '20px 20px 24px' : '36px 48px', borderTop: isMobile ? '1px solid var(--rule)' : 'none' }}>
+          <a href="#about" className="more-detail" style={{ whiteSpace: 'nowrap' }}>關於我們</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── PROGRAMS ───────────────────────────────────────── */
+function Programs() {
+  const isMobile = useIsMobile();
+  const programs = [
+    {
+      num: '01', en: 'Incubator', title: '台大車庫孵化器',
+      desc: '專注創造產品價值，規劃驗證商業模式。適合早期創業團隊，在台大的環境中找到產品市場適配。',
+      href: '#garage', img: 'uploads/pasted-1777271214816-0.png',
+    },
+    {
+      num: '02', en: 'Accelerator', title: '台大創創加速器',
+      desc: '新創快速規模化的驗證基地。帶著初步驗證的商業模式，加速進入市場、對接資金與企業夥伴。',
+      href: '#accelerator', img: 'uploads/pasted-1777271947028-0.png',
+    },
+    {
+      num: '03', en: 'Alumni', title: '傑出校友',
+      desc: '台大創創培育的校友遍布各大產業，從台灣出發走向世界。每一位傑出校友都是創業旅程最真實的見證。',
+      href: '#alumni', img: 'uploads/pasted-1777272715669-0.png',
+    },
+  ];
+
+  return (
+    <section style={{ padding: isMobile ? '56px 6%' : '88px 10%' }}>
+      <Rule />
+      <div style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: 'space-between',
+        alignItems: isMobile ? 'flex-start' : 'flex-end',
+        gap: isMobile ? 16 : 0,
+        padding: isMobile ? '28px 0 36px' : '48px 0 56px',
+      }}>
+        <div>
+          <span className="sec-en">Programs</span>
+          <div className="sec-title-wrap"><h2 className="sec-title" style={{ fontSize: isMobile ? 24 : 32 }}>新創輔導計畫</h2></div>
+        </div>
+        <a href="#" className="more-detail" style={{ fontSize: isMobile ? 11 : undefined }}>MORE DETAIL : 計畫總覽</a>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
+        {programs.map((p, i) => (
+          <AnimBlock key={i} animation="anim-fadeUp" delay={i * 100}>
+          <a href={p.href} style={{
+            display: 'block', background: 'var(--white)',
+            padding: isMobile ? '28px 20px' : '48px 40px',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background='var(--offwhite)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background='var(--white)'; }}>
+            {p.img
+              ? <div style={{ position: 'relative', width: '100%', aspectRatio: '3/2', marginBottom: 32 }}>
+                  <div style={{ width: '100%', height: '100%', overflow: 'hidden', borderRadius: 2 }}>
+                    <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', transition: 'transform 0.5s ease' }}
+                      onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
+                      onMouseLeave={e => e.currentTarget.style.transform='scale(1)'} />
+                  </div>
+                  {/* Floating number badge */}
+                  <div style={{
+                    position: 'absolute', bottom: -16, right: 16,
+                    background: '#fff',
+                    boxShadow: '0 8px 32px rgba(26,46,74,0.13), 0 2px 6px rgba(26,46,74,0.06)',
+                    borderRadius: 4,
+                    padding: '10px 16px',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+                    zIndex: 5,
+                  }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 600, color: 'var(--navy)', lineHeight: 1 }}>{p.num}</span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 8, letterSpacing: '0.12em', color: 'var(--teal)', textTransform: 'uppercase' }}>{p.en}</span>
+                  </div>
+                </div>
+              : <ImgPlaceholder label={p.title} aspect="3/2" colors={p.colors} style={{ borderRadius: 2, marginBottom: 32 }} />
+            }
+            <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', marginBottom: 14 }}>
+              <span style={{ fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 12, color: 'var(--teal)', letterSpacing: '0.08em' }}>{p.num}</span>
+              <span style={{ fontFamily: 'var(--sans)', fontWeight: 400, fontSize: 12, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{p.en}</span>
+            </div>
+            <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 20, color: 'var(--navy)', marginBottom: 14, lineHeight: 1.4 }}>{p.title}</h3>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 28 }}>{p.desc}</p>
+            <span className="more-detail" style={{ fontSize: 11.5 }}>MORE DETAIL</span>
+          </a>
+          </AnimBlock>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── ECOSYSTEM / LOGO WALL ──────────────────────────── */
+function Ecosystem() {
+  const isMobile = useIsMobile();
+  const partners = [
+    { name: '國立臺灣大學', img: 'uploads/pasted-1777273692493-0.png', height: 44 },
+    { name: '國立臺灣大學研究發展處', img: 'uploads/pasted-1777273704211-0.png', height: 36 },
+    { name: 'D-School@NTU 台大創新設計學院', img: 'uploads/pasted-1777273712862-0.png', height: 40 },
+    { name: '臺大國際產學聯盟', img: 'uploads/pasted-1777273721679-0.png', height: 36 },
+    { name: '國立臺灣大學創新育成中心', img: 'uploads/pasted-1777273741169-0.png', height: 40 },
+    { name: 'NTU Ventures', img: 'uploads/pasted-1777273752899-0.png', height: 44 },
+  ];
+
+  return (
+    <section id="ecosystem" style={{ padding: isMobile ? '0 6% 56px' : '0 10% 88px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.8fr', minHeight: isMobile ? 'auto' : 480 }}>
+        {/* Left color block */}
+        <div style={{
+          background: '#00C4CC',
+          padding: isMobile ? '48px 24px' : '72px 56px',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'linear-gradient(rgba(88,160,160,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(88,160,160,0.05) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: -80, right: -80,
+            width: 280, height: 280, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(0,216,200,0.08) 0%, transparent 70%)',
+          }} />
+          <div style={{ position: 'relative' }}>
+            <span className="sec-en" style={{ color: 'rgba(26,46,74,0.6)' }}>Ecosystem</span>
+            <div className="sec-title-wrap"><h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 24 : 32, color: 'var(--navy)', lineHeight: 1.35, letterSpacing: '0.02em', marginBottom: 24 }}>創業生態系 合作夥伴</h2></div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.85, color: 'rgba(26,46,74,0.65)', maxWidth: 280 }}>
+              連結產業頂尖企業、政府機構與學研單位，共同打造台灣最完整的創新創業生態系。
+            </p>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <a href="#" className="more-detail" style={{ color: 'var(--navy)', borderColor: 'rgba(26,46,74,0.4)' }}>MORE DETAIL : 歷屆合作夥伴</a>
+          </div>
+        </div>
+
+        {/* Right logo wall */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+          gap: 1,
+          backgroundColor: 'var(--rule)',
+        }}>
+          {partners.map((p, i) => (
+            <div key={i} style={{
+              background: 'var(--white)',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              padding: isMobile ? '24px 16px' : '40px 32px',
+              cursor: 'pointer', transition: 'background 0.15s',
+              minHeight: isMobile ? 100 : 140,
+              overflow: 'hidden',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background='var(--offwhite)'}
+            onMouseLeave={e => e.currentTarget.style.background='var(--white)'}>
+              <img
+                src={p.img}
+                alt={p.name}
+                style={{
+                  height: isMobile ? Math.round(p.height * 0.75) : p.height,
+                  width: 'auto',
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  filter: 'grayscale(20%)',
+                  transition: 'filter 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.filter='none'}
+                onMouseLeave={e => e.currentTarget.style.filter='grayscale(20%)'}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── SILICON VALLEY ─────────────────────────────────── */
+function SiliconValley() {
+  const isMobile = useIsMobile();
+  const [ref, inView] = useInView({ threshold: 0.12 });
+
+  const stats = [
+    { n: '15', unit: '個', label: '錄取名額' },
+    { n: '16', unit: '位', label: '業師 + 諮詢委員' },
+    { n: '10', unit: '週', label: '含 7 週矽谷駐地' },
+  ];
+
+  const details = [
+    { icon: <Icon name="User" size={16} color="currentColor" />, label: '招生對象', value: '臺大大學部、碩博士班在學學生' },
+    { icon: <Icon name="CalendarDays" size={16} color="currentColor" />, label: '課程期間', value: '2026 / 6 / 22 — 8 / 28（含行前 + 矽谷 + 成果）' },
+    { icon: <Icon name="Layers" size={16} color="currentColor" />, label: '主辦單位', value: 'D-School × 創意創業學程 × 台大創創中心' },
+  ];
+
+  return (
+    <section ref={ref} style={{ padding: isMobile ? '0 6% 0' : '0 10% 0', overflow: 'hidden' }}>
+      <Rule />
+      <div style={{ paddingTop: isMobile ? 48 : 72 }}>
+        {/* Top label row */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          flexWrap: 'wrap', gap: 12,
+          justifyContent: 'space-between',
+          marginBottom: 0,
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'none' : 'translateY(16px)',
+          transition: 'opacity 0.6s ease, transform 0.6s ease',
+        }}>
+          <span className="sec-en">Global Innovation</span>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'rgba(0,216,200,0.1)',
+            border: '1px solid rgba(0,216,200,0.35)',
+            borderRadius: 100, padding: '6px 16px',
+          }}>
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--mint)', boxShadow: '0 0 0 3px rgba(0,216,200,0.25)' }} />
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--navy)' }}>
+              2026 暑期招生中 · 4/29 報名開放
+            </span>
+          </div>
+        </div>
+
+        {/* Main card */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 400px',
+          marginTop: 32, marginBottom: isMobile ? 56 : 88,
+          boxShadow: '0 16px 64px rgba(26,46,74,0.10)',
+          borderRadius: 6, overflow: 'hidden',
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'none' : 'translateY(32px)',
+          transition: 'opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s',
+        }}>
+
+          {/* Left: main content */}
+          <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '56px 56px 48px' }}>
+            {/* Heading */}
+            <h2 style={{
+              fontFamily: 'var(--serif)', fontWeight: 600,
+              fontSize: 'clamp(26px, 2.8vw, 42px)',
+              color: 'var(--navy)', lineHeight: 1.3, letterSpacing: '0.02em',
+              marginBottom: 24,
+            }}>
+              把你的創業構想<br/>
+              帶到{' '}
+              <span style={{ background: 'var(--mint)', color: 'var(--navy)', padding: '2px 8px', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
+                矽谷驗證
+              </span>
+            </h2>
+
+            <p style={{
+              fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 15, fontWeight: 300,
+              color: 'var(--muted)', lineHeight: 1.9, marginBottom: isMobile ? 32 : 44,
+              maxWidth: isMobile ? '100%' : 480,
+            }}>
+              10 堂課程，其中 7 週為矽谷沉浸式探索，與 Stanford、Berkeley SkyDeck、Google、Meta 創新生態深度連結。駐地業師 14 位 + 諮詢委員 2 位，補助機票上限 5 萬 + 生活費 10 萬。
+            </p>
+
+            {/* Stats */}
+            <div style={{ display: 'flex', gap: 0, marginBottom: isMobile ? 28 : 48 }}>
+              {stats.map((s, i) => (
+                <div key={i} style={{
+                  paddingRight: isMobile ? 16 : 40,
+                  marginRight: isMobile ? 16 : 40,
+                  borderRight: i < stats.length - 1 ? '1px solid var(--rule)' : 'none',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 32 : 40, fontWeight: 600, color: 'var(--navy)', lineHeight: 1, letterSpacing: '-0.02em' }}>{s.n}</span>
+                    <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--teal)', fontWeight: 500 }}>{s.unit}</span>
+                  </div>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 12.5, color: 'var(--muted)', fontWeight: 300 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTAs */}
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+              <a href="#" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'var(--navy)', color: '#fff',
+                fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, letterSpacing: '0.04em',
+                padding: '12px 28px', borderRadius: 4,
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background='var(--teal)'}
+              onMouseLeave={e => e.currentTarget.style.background='var(--navy)'}>
+                立即申請 →
+              </a>
+              <a href="#" className="more-detail" style={{ fontSize: 12 }}>
+                了解課程詳情
+              </a>
+            </div>
+          </div>
+
+          {/* Right: detail panel */}
+          <div style={{
+            background: '#00C4CC',
+            padding: isMobile ? '32px 24px' : '48px 40px',
+            display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            {/* Subtle grid overlay */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
+              backgroundSize: '32px 32px',
+              pointerEvents: 'none',
+            }} />
+            {/* Radial glow */}
+            <div style={{
+              position: 'absolute', bottom: -60, right: -60,
+              width: 220, height: 220, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(0,216,200,0.15) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+
+            <div style={{ position: 'relative' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 600, letterSpacing: '0.14em', color: 'rgba(26,46,74,0.55)', textTransform: 'uppercase', marginBottom: 8 }}>
+                Silicon Valley Exploration Practicum
+              </div>
+              <div style={{ marginBottom: 36 }}>
+                <span style={{
+                  display: 'inline-block',
+                  background: 'rgba(0,0,0,0.5)',
+                  color: '#fff',
+                  fontFamily: 'var(--sans)', fontSize: 12.5, fontWeight: 400,
+                  padding: '4px 14px', borderRadius: 100,
+                  letterSpacing: '0.02em',
+                }}>國際創新創業探索與實踐 · 3 學分</span>
+              </div>
+
+              {/* Detail items */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+                {details.map((d, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                    <div style={{ color: 'rgba(26,46,74,0.5)', flexShrink: 0, marginTop: 2 }}>{d.icon}</div>
+                    <div>
+                      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'rgba(26,46,74,0.55)', marginBottom: 5, textTransform: 'uppercase' }}>{d.label}</div>
+                      <div style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, color: 'var(--navy)', lineHeight: 1.6 }}>{d.value}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{
+              position: 'relative',
+              marginTop: 36,
+              background: 'rgba(26,46,74,0.1)',
+              border: '1px solid rgba(26,46,74,0.2)',
+              borderRadius: 4, padding: '14px 18px',
+              display: 'flex', alignItems: 'center', gap: 10,
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(26,46,74,0.6)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500, color: 'var(--navy)', letterSpacing: '0.02em' }}>
+                申請截止：2026 年 5 月 18 日（一）
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── FOCUS AREAS ───────────────────────────────────── */
+function FocusAreas() {
+  const areas = [
+    {
+      en: 'AI Software', label: 'AI 軟體', color: '#1A2E4A',
+      img: 'uploads/pasted-1777335738398-0.png',
+      desc: '從基礎模型到垂直應用，涵蓋企業生成式 AI、Agent、資料基礎設施與 SaaS 平台。連結台大各院系研究能量與產業應用場域。',
+      cases: ['MoBagel', '漸強實驗室', 'AmazingTalker'],
+    },
+    {
+      en: 'Biotech & Medical', label: '生技醫療', color: '#1A3A2A',
+      img: 'uploads/pasted-1777335975187-0.png',
+      desc: '醫材、AI 輔助診斷、精準醫療、數位健康與藥物開發。串接台大醫院臨床場域與台大天使會生醫投資網絡。',
+      cases: ['思輔科技', 'Home心', 'AHEAD Medicine'],
+    },
+    {
+      en: 'Deep Tech', label: '硬科技', color: '#2A1A3A',
+      img: 'uploads/pasted-1777335534677-0.png',
+      desc: '半導體、先進製造、材料科學、機器人與物聯網。連結台大各工程研究資源與國內半導體產業鏈，提供硬體開發與量產驗證支援。',
+      cases: ['歐姆佳科技', '3drens', 'Datayoo'],
+    },
+    {
+      en: 'New Business Models', label: '創新商模', color: '#2A2A1A',
+      img: 'uploads/pasted-1777336115536-0.png',
+      desc: '永續、循環經濟、ESG、社會創新與平台經濟。以創新商業模式解決產業痛點，接軌企業垂直加速器出題場域。',
+      cases: ['配客嘉', 'ECOCO', '知識衛星'],
+    },
+  ];
+
+  const isMobile = useIsMobile();
+  const [hovered, setHovered] = useState(null);
+
+  return (
+    <section style={{ padding: isMobile ? '56px 6%' : '88px 8%' }}>
+      <Rule />
+      {isMobile ? (
+        /* Mobile: 標題 + 垂直卡片列表 */
+        <div style={{ paddingTop: 36 }}>
+          <span className="sec-en">Focus Areas</span>
+          <div className="sec-title-wrap" style={{ marginBottom: 24 }}><h2 className="sec-title" style={{ fontSize: 24, lineHeight: 1.4 }}>2026 四大聚焦領域</h2></div>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)', marginBottom: 28 }}>
+            台大創創中心聚焦四大高潛力領域，結合台大深厚的學研資源，連結產業夥伴與投資生態。
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {areas.map((a, i) => (
+              <AnimBlock key={i} animation="anim-fadeUp" delay={i * 60}>
+              <div style={{ borderRadius: 6, overflow: 'hidden', background: a.color }}>
+                <div style={{ display: 'flex', gap: 0 }}>
+                  <div style={{ width: 88, flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
+                    <img src={a.img} alt={a.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    <div style={{ position: 'absolute', inset: 0, background: `${a.color}99` }} />
+                  </div>
+                  <div style={{ flex: 1, padding: '16px 16px' }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>{a.en}</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{a.label}</div>
+                    <p style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.78)', lineHeight: 1.65, marginBottom: 8 }}>{a.desc}</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                      {a.cases.map(c => (
+                        <span key={c} style={{
+                          fontFamily: 'var(--sans)', fontSize: 10, color: '#fff',
+                          background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)',
+                          borderRadius: 3, padding: '2px 7px',
+                        }}>{c}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </AnimBlock>
+            ))}
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <a href="#programs" className="more-detail">MORE DETAIL : 探索計畫</a>
+          </div>
+        </div>
+      ) : (
+        /* Desktop: 2-col grid 原本設計 */
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, paddingTop: 72, alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            {areas.map((a, i) => (
+              <AnimBlock key={i} animation="anim-scaleIn" delay={i * 80}>
+              <div style={{
+                position: 'relative', aspectRatio: '1/1', overflow: 'hidden',
+                cursor: 'pointer', borderRadius: 4,
+              }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}>
+                <img src={a.img} alt={a.label} style={{
+                  width: '100%', height: '100%', objectFit: 'cover',
+                  transition: 'transform 0.5s ease',
+                  transform: hovered === i ? 'scale(1.06)' : 'scale(1)',
+                }} />
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: `linear-gradient(to top, ${a.color}ee 0%, ${a.color}88 50%, ${a.color}44 100%)`,
+                  transition: 'opacity 0.3s',
+                  opacity: hovered === i ? 0.95 : 0.6,
+                }} />
+                <div style={{
+                  position: 'absolute', inset: 0, padding: '16px',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+                  transition: 'opacity 0.3s',
+                  opacity: hovered === i ? 0 : 1,
+                }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.1em', marginBottom: 4 }}>{a.en}</div>
+                  <div style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: '#fff', lineHeight: 1.2 }}>{a.label}</div>
+                </div>
+                <div style={{
+                  position: 'absolute', inset: 0, padding: '20px',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+                  transition: 'opacity 0.3s',
+                  opacity: hovered === i ? 1 : 0,
+                }}>
+                  <div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.12em', marginBottom: 6, textTransform: 'uppercase' }}>{a.en}</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 10, lineHeight: 1.2 }}>{a.label}</div>
+                    <p style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.82)', lineHeight: 1.75 }}>{a.desc}</p>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', marginBottom: 6 }}>代表案例</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                      {a.cases.map(c => (
+                        <span key={c} style={{
+                          fontFamily: 'var(--sans)', fontSize: 11, color: '#fff',
+                          background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)',
+                          borderRadius: 3, padding: '2px 8px',
+                        }}>{c}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </AnimBlock>
+            ))}
+          </div>
+          <AnimBlock animation="anim-fadeRight">
+          <div style={{ paddingLeft: 24 }}>
+            <span className="sec-en">Focus Areas</span>
+            <div className="sec-title-wrap"><h2 className="sec-title" style={{ fontSize: 36, marginBottom: 24, lineHeight: 1.4 }}>2026 四大聚焦領域</h2></div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginBottom: 40 }}>
+              台大創創中心聚焦四大高潛力領域，結合台大深厚的學研資源，連結產業夥伴與投資生態，培育下一世代的領域型創業者。
+            </p>
+            <a href="#programs" className="more-detail">MORE DETAIL : 探索計畫</a>
+          </div>
+          </AnimBlock>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ── JOURNEY / 2026 PROGRAM TIMELINE ───────────────── */
+function Journey() {
+  const isMobile = useIsMobile();
+  const phases = [
+    { month: 'Jan — Feb', num: '01', title: '報名徵件',  desc: '開放新創團隊線上投件，評審委員初步篩選。',             state: 'done'   },
+    { month: 'Feb — Mar', num: '02', title: '審核錄取',  desc: '提案書審查、團隊訪談，遴選最具潛力的創業者。',         state: 'done'   },
+    { month: 'Mar',       num: '03', title: '計畫開幕',  desc: '正式公告錄取名單，召開說明會與開幕典禮。',             state: 'done'   },
+    { month: 'Mar — Jun', num: '04', title: '密集輔導',  desc: '每週業師諮詢、主題工作坊、企業參訪與場域驗證。',       state: 'active' },
+    { month: 'Jun — Jul', num: '05', title: '中期審查',  desc: '商模驗證成果發表，調整後半段輔導策略與方向。',         state: 'future' },
+    { month: 'Aug',       num: '06', title: 'Demo Day',  desc: '公開展示發表，媒合投資人、企業與潛在合作夥伴。',       state: 'future' },
+  ];
+
+  const N = 22; // notch depth px
+
+  const getClip = (i, total) => {
+    const first = i === 0;
+    const last  = i === total - 1;
+    if (first && last) return 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+    if (first) return `polygon(0 0, calc(100% - ${N}px) 0, 100% 50%, calc(100% - ${N}px) 100%, 0 100%)`;
+    if (last)  return `polygon(0 0, 100% 0, 100% 100%, 0 100%, ${N}px 50%)`;
+    return `polygon(0 0, calc(100% - ${N}px) 0, 100% 50%, calc(100% - ${N}px) 100%, 0 100%, ${N}px 50%)`;
+  };
+
+  // Palette — active uses a vibrant teal-cyan with good chroma
+  const palette = {
+    done:   { bg: '#E2E2DE', numCol: '#777774', monthCol: '#888884', titleCol: '#444441', descCol: '#777774' },
+    active: { bg: '#009E98', numCol: 'rgba(255,255,255,0.32)', monthCol: 'rgba(255,255,255,0.58)', titleCol: '#fff', descCol: 'rgba(255,255,255,0.76)' },
+    future: { bg: 'rgba(0,158,152,0.09)', numCol: 'rgba(0,140,134,0.3)', monthCol: 'rgba(0,140,134,0.45)', titleCol: 'rgba(0,100,96,0.6)', descCol: 'rgba(0,120,115,0.38)' },
+  };
+
+  const [visible, setVisible] = useState(false);
+  const journeyRef = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.15 });
+    if (journeyRef.current) obs.observe(journeyRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section style={{ background: '#EEEEED', padding: isMobile ? '56px 0 48px' : '100px 0 88px', overflow: 'hidden' }}>
+      {/* Header */}
+      <div style={{ padding: isMobile ? '0 6%' : '0 10%', marginBottom: isMobile ? 36 : 64 }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 12 : 0 }}>
+          <div>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', display: 'block', marginBottom: 14 }}>
+              2026 Program Journey
+            </span>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: 'var(--navy)', lineHeight: 1.3, letterSpacing: '0.02em' }}>
+              讓好想法，長出{' '}
+              <span style={{ background: 'var(--mint)', color: 'var(--navy)', padding: '2px 8px', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
+                改變世界的力量
+              </span>
+            </h2>
+          </div>
+          {!isMobile && (
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.85, maxWidth: 300, textAlign: 'right' }}>
+              2026 輔導計畫，逾 80 位創業者與業師<br/>齊聚台大，展開十個月的創業加速旅程。
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Steps */}
+      <div ref={journeyRef} style={{ padding: isMobile ? '0 6%' : '0 10%' }}>
+        {isMobile ? (
+          /* Mobile: vertical list */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {phases.map((p, i) => {
+              const pal = palette[p.state];
+              return (
+                <div key={i} style={{
+                  background: pal.bg, borderRadius: 6,
+                  padding: '20px 20px',
+                  display: 'flex', gap: 16, alignItems: 'flex-start',
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'none' : 'translateY(12px)',
+                  transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
+                }}>
+                  <div style={{ flexShrink: 0, textAlign: 'center', width: 36 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 8, letterSpacing: '0.1em', color: pal.monthCol, textTransform: 'uppercase', marginBottom: 2 }}>STEP</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: pal.numCol, lineHeight: 1 }}>{p.num}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em', color: pal.monthCol, marginBottom: 4 }}>{p.month}</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: pal.titleCol, lineHeight: 1.3, marginBottom: 6 }}>{p.title}</div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: pal.descCol, lineHeight: 1.7 }}>{p.desc}</div>
+                    {p.state === 'active' && (
+                      <div style={{ marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.7)' }} />
+                        <span style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.1em' }}>進行中</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* Desktop: horizontal chevron strip */
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {phases.map((p, i) => {
+              const pal = palette[p.state];
+              return (
+                <div key={i} style={{
+                  flex: 1,
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'none' : 'translateX(-20px)',
+                  transition: `opacity 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 85}ms, transform 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 85}ms`,
+                }}>
+                  <div style={{
+                    clipPath: getClip(i, phases.length),
+                    background: pal.bg,
+                    padding: `32px ${i === phases.length - 1 ? 26 : N + 18}px 32px ${i === 0 ? 28 : N + 18}px`,
+                    minHeight: 230,
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                  }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.14em', color: pal.monthCol, textTransform: 'uppercase', marginBottom: 4 }}>STEP</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 38, fontWeight: 600, color: pal.numCol, lineHeight: 1, letterSpacing: '-0.02em', marginBottom: 12 }}>{p.num}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em', color: pal.monthCol, marginBottom: 10 }}>{p.month}</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: pal.titleCol, lineHeight: 1.35, marginBottom: 10 }}>{p.title}</div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: pal.descCol, lineHeight: 1.75 }}>{p.desc}</div>
+                    {p.state === 'active' && (
+                      <div style={{ marginTop: 18, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.55)' }} />
+                        <span style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.72)', letterSpacing: '0.1em' }}>進行中</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ── CORPORATE ──────────────────────────────────────── */
+function Corporate() {
+  const isMobile = useIsMobile();
+  const services = ['台大創創加速器', '創新創業競賽', '共創工作坊', '服務設計諮詢'];
+  return (
+    <section style={{ background: 'var(--navy)', padding: isMobile ? '56px 6%' : '88px 10%' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 40 : 80, alignItems: 'start' }}>
+        <div>
+          <span className="sec-en" style={{ color: 'var(--teal)' }}>Corporate Innovation</span>
+          <div className="sec-title-wrap"><h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 24 : 32, color: '#fff', lineHeight: 1.35, letterSpacing: '0.02em', marginBottom: 24 }}>中大型企業 開放式創新服務</h2></div>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'rgba(255,255,255,0.5)', marginBottom: 44, maxWidth: 380 }}>
+            接軌台灣頂尖大學的創新生態，找到企業下一個成長動能。從垂直加速器到創新活動，我們是企業與新創之間最有價值的橋樑。
+          </p>
+          <a href="#" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500,
+            letterSpacing: '0.06em', color: 'var(--mint)',
+            borderBottom: '1px solid rgba(0,216,200,0.35)', paddingBottom: 3,
+            transition: 'opacity 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity='0.65'}
+          onMouseLeave={e => e.currentTarget.style.opacity='1'}>
+            MORE DETAIL : 企業合作方案 →
+          </a>
+        </div>
+        <div>
+          {services.map((s, i) => (
+            <a key={i} href="#" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '22px 0', borderBottom: '1px solid rgba(255,255,255,0.07)',
+              color: '#fff', transition: 'opacity 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity='0.5'}
+            onMouseLeave={e => e.currentTarget.style.opacity='1'}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
+                <span style={{ fontFamily: 'var(--sans)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.06em' }}>0{i + 1}</span>
+                <span style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 400 }}>{s}</span>
+              </div>
+              <span style={{ color: 'var(--teal)', fontSize: 14 }}>→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── ANGEL ──────────────────────────────────────────── */
+function Angel({ show, scrollY }) {
+  const isMobile = useIsMobile();
+  const ref = useRef(null);
+  const [offsetTop, setOffsetTop] = useState(0);
+  useEffect(() => {
+    if (ref.current) setOffsetTop(ref.current.offsetTop);
+  }, []);
+  const localScroll = Math.max(0, scrollY - offsetTop + 400);
+  const parallax = localScroll * 0.2;
+
+  if (!show) return null;
+
+  if (isMobile) {
+    return (
+      <div id="angel" ref={ref} style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: 220 }}>
+          <img src="uploads/pasted-1777776523112-0.png" alt="天使投資俱樂部"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(26,46,74,0.55)' }} />
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 1200 600" preserveAspectRatio="none">
+            <polygon points="784,0 1200,0 1200,190" fill="#FAFAF8" />
+            <polygon points="0,425 386,600 0,600" fill="#FAFAF8" />
+          </svg>
+        </div>
+        <div style={{ background: '#fff', padding: '32px 6%', boxShadow: '0 -4px 24px rgba(26,46,74,0.08)' }}>
+          <div style={{ width: 28, height: 3, background: 'var(--mint)', borderRadius: 1, marginBottom: 16 }} />
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>
+            Angel Investment Club
+          </span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 26, color: 'var(--navy)', lineHeight: 1.3, marginBottom: 12 }}>
+            天使投資俱樂部
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 24 }}>
+            連結台大校友投資人與潛力新創，成為台灣最具影響力的天使投資社群之一。投資人與創業者均歡迎申請。
+          </p>
+          <a href="#" className="more-detail">MORE DETAIL : 申請加入俱樂部</a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div id="angel" ref={ref} style={{ position: 'relative', height: 600, overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute', left: 0, right: 0, top: -80, bottom: -80,
+        transform: `translateY(${parallax}px)`,
+        willChange: 'transform',
+      }}>
+        <img src="uploads/pasted-1777776523112-0.png" alt="天使投資俱樂部"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(26,46,74,0.55)' }} />
+      </div>
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 6 }} viewBox="0 0 1200 600" preserveAspectRatio="none">
+        <polygon points="784,0 1200,0 1200,190" fill="#FAFAF8" />
+        <polygon points="0,425 386,600 0,600" fill="#FAFAF8" />
+      </svg>
+      <div style={{ position: 'absolute', left: '8%', top: '50%', transform: 'translateY(calc(-50% + 80px))', zIndex: 20 }}>
+        <div style={{ background: '#fff', boxShadow: '0 20px 64px rgba(26,46,74,0.22), 0 4px 16px rgba(26,46,74,0.10)', borderRadius: 8, padding: '44px 48px', maxWidth: 480 }}>
+          <div style={{ width: 32, height: 3, background: 'var(--mint)', borderRadius: 1, marginBottom: 20 }} />
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', display: 'block', marginBottom: 14 }}>
+            Angel Investment Club
+          </span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 34, color: 'var(--navy)', lineHeight: 1.25, letterSpacing: '0.02em', marginBottom: 18 }}>
+            天使投資俱樂部
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 36 }}>
+            連結台大校友投資人與潛力新創，成為台灣最具影響力的天使投資社群之一。投資人與創業者均歡迎申請。
+          </p>
+          <a href="#" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 500, letterSpacing: '0.06em',
+            color: 'var(--navy)', borderBottom: '1px solid var(--navy)', paddingBottom: 3,
+            transition: 'color 0.15s, border-color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color='var(--teal)'; e.currentTarget.style.borderColor='var(--teal)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color='var(--navy)'; e.currentTarget.style.borderColor='var(--navy)'; }}>
+            MORE DETAIL : 申請加入俱樂部 →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── BLOG ───────────────────────────────────────────── */
+function Blog() {
+  const isMobile = useIsMobile();
+  const posts = [
+    { cat: '創創觀點', title: '共創沙盒：當企業遇上新創的化學反應', date: '2025.11', img: 'uploads/Code_Generated_Image (3).jpeg' },
+    { cat: '創辦人學堂', title: '創業第一年，你需要知道的 10 件事', date: '2025.09', img: 'uploads/Code_Generated_Image (1).jpeg' },
+    { cat: '天使投資', title: '台灣天使投資生態系現況分析', date: '2025.08', img: 'uploads/pasted-1777338755527-0.png' },
+    { cat: 'TEC Talk', title: 'Podcast：從 0 到 1 的創業思維', date: '2025.07', img: 'uploads/pasted-1777777228401-0.png' },
+  ];
+  return (
+    <section style={{ padding: isMobile ? '0 6% 56px' : '0 10% 88px' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 12 : 0, padding: isMobile ? '32px 0 28px' : '48px 0 56px' }}>
+        <div>
+          <span className="sec-en">Insights</span>
+          <div className="sec-title-wrap"><h2 className="sec-title" style={{ fontSize: isMobile ? 24 : 32 }}>創創觀點</h2></div>
+        </div>
+        <a href="#" className="more-detail" style={{ fontSize: isMobile ? 11 : undefined }}>MORE DETAIL : 部落格</a>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: 1, background: 'var(--rule)' }}>
+        {posts.map((p, i) => (
+          <a key={i} href="#" style={{
+            display: 'block', background: 'var(--white)', padding: isMobile ? '20px 16px' : '36px 32px',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background='var(--offwhite)'}
+          onMouseLeave={e => e.currentTarget.style.background='var(--white)'}>
+            {p.img
+              ? <div style={{ width: '100%', aspectRatio: '3/2', overflow: 'hidden', borderRadius: 2, marginBottom: 24 }}>
+                  <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              : <ImgPlaceholder aspect="3/2" colors={[['#B8D4CE','#90C0B5'],['#A8C8C4','#78B0AC'],['#B0C8D4','#80A8C0'],['#C0C8D8','#90A0C0']][i]} style={{ borderRadius: 2, marginBottom: 24 }} />
+            }
+            <span style={{
+              fontFamily: 'var(--sans)', fontSize: 10.5, fontWeight: 500,
+              color: 'var(--teal)', background: 'rgba(88,160,160,0.08)',
+              border: '1px solid rgba(88,160,160,0.2)',
+              padding: '2px 10px', borderRadius: 100, display: 'inline-block', marginBottom: 12,
+            }}>{p.cat}</span>
+            <h3 style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.6, marginBottom: 16 }}>{p.title}</h3>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>{p.date}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── ROLE CTA ───────────────────────────────────────── */
+function RoleCTA() {
+  const isMobile = useIsMobile();
+  const roles = [
+    { en: 'Entrepreneur', zh: '創業者', desc: '你有想法，我們有資源與陪伴。從孵化到加速，走完整條創業路。', href: '#programs' },
+    { en: 'Corporate', zh: '企業夥伴', desc: '接軌台大新創生態圈，找到下一個創新動能與合作機會。', href: '#corporate' },
+    { en: 'Investor', zh: '投資人', desc: '與天使投資俱樂部連結，早期布局台灣最有潛力的新創團隊。', href: 'angels.html' },
+  ];
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '56px 6%' : '88px 10%' }}>
+      <Rule style={{ background: '#D8D8D4' }} />
+      <div style={{ paddingTop: isMobile ? 32 : 48, marginBottom: isMobile ? 28 : 56 }}>
+        <span className="sec-en">Find Your Path</span>
+        <div className="sec-title-wrap"><h2 className="sec-title" style={{ fontSize: isMobile ? 24 : 32 }}>你是誰？</h2></div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: '#D8D8D4' }}>
+        {roles.map((r, i) => (
+          <a key={i} href={r.href} style={{
+            display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 20,
+            padding: isMobile ? '28px 20px' : '48px 44px', background: i === 1 ? 'var(--navy)' : 'var(--white)',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => { if (i !== 1) e.currentTarget.style.background='var(--offwhite)'; }}
+          onMouseLeave={e => { if (i !== 1) e.currentTarget.style.background='var(--white)'; }}>
+            <div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 500, letterSpacing: '0.14em', color: i === 1 ? 'var(--teal)' : 'var(--muted)', marginBottom: 8, textTransform: 'uppercase' }}>{r.en}</div>
+              <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 22 : 28, color: i === 1 ? '#fff' : 'var(--navy)', letterSpacing: '0.02em' }}>{r.zh}</h3>
+            </div>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.85, color: i === 1 ? 'rgba(255,255,255,0.5)' : 'var(--muted)', flex: 1 }}>{r.desc}</p>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500,
+              letterSpacing: '0.06em', color: i === 1 ? 'var(--mint)' : 'var(--navy)',
+              borderBottom: `1px solid ${i === 1 ? 'rgba(0,216,200,0.35)' : 'var(--navy)'}`,
+              paddingBottom: 3, width: 'fit-content',
+            }}>MORE DETAIL →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── FOOTER ─────────────────────────────────────────── */
+function Footer() {
+  const isMobile = useIsMobile();
+  const col1 = ['新創輔導計畫總覽', '加速器計畫', '車庫孵化器計畫', '歷屆輔導團隊'];
+  const col2 = ['企業合作方案', '台大創創加速器', '創新創業競賽', '服務諮詢'];
+  const col3 = ['創業路摸思', 'TEC Talk Podcast', '企業外部創新', '實習心得'];
+  const col4 = ['關於台大創創中心', '業師陣容', '執行團隊', '諮詢委員會'];
+  const cols = [['新創團隊', col1], ['中大型企業', col2], ['部落格', col3], ['認識我們', col4]];
+  return (
+    <footer style={{ background: '#111E30', padding: isMobile ? '48px 6% 32px' : '72px 10% 40px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr 1fr 1fr 1fr', gap: isMobile ? 32 : 40, marginBottom: isMobile ? 40 : 64 }}>
+        <div>
+          <div style={{ marginBottom: 20 }}>
+            <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC 臺大創創中心"
+              style={{ height: 40, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.85 }} />
+          </div>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 13.5, fontWeight: 300, lineHeight: 1.9, color: 'rgba(255,255,255,0.35)', marginBottom: 20 }}>
+            From Campus to Impact.<br/>引導創新旅程的入口平台。
+          </p>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.3)', lineHeight: 2 }}>
+            <div>ntutec@ntutec.com</div>
+            <div>台北市中正區思源街 18 號</div>
+            <div>卓越研究大樓 7 樓</div>
+          </div>
+        </div>
+        {cols.map(([group, items]) => (
+          <div key={group}>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginBottom: 18, textTransform: 'uppercase' }}>{group}</div>
+            {items.map(item => (
+              <a key={item} href="#" style={{
+                display: 'block', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300,
+                color: 'rgba(255,255,255,0.45)', marginBottom: 11, transition: 'color 0.12s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color='rgba(255,255,255,0.85)'}
+              onMouseLeave={e => e.currentTarget.style.color='rgba(255,255,255,0.45)'}>
+                {item}
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>© 2026 台大創創中心 NTUTEC. All Rights Reserved.</span>
+        <div style={{ display: 'flex', gap: 20 }}>
+          {['中文 (台灣)', 'English'].map(l => (
+            <a key={l} href="#" style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'rgba(255,255,255,0.3)', transition: 'color 0.12s' }}
+            onMouseEnter={e => e.currentTarget.style.color='rgba(255,255,255,0.7)'}
+            onMouseLeave={e => e.currentTarget.style.color='rgba(255,255,255,0.3)'}>{l}</a>
+          ))}
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ── APP ─────────────────────────────────────────────── */
+function App() {
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const h = () => { setScrolled(window.scrollY > 60); setScrollY(window.scrollY); };
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <Nav scrolled={scrolled} />
+      {!isMobile && <SocialSidebar scrollY={scrollY} />}
+      <div style={{ paddingRight: isMobile ? 0 : 80, maxWidth: '100vw', overflowX: 'hidden' }}>
+        <Hero tweaks={tweaks} scrollY={scrollY} />
+        <Stats />
+        <SiliconValley />
+        <FocusAreas />
+        <Journey />
+        <News />
+        <About />
+        <Programs />
+        <Ecosystem />
+        <Corporate />
+        <Angel show={tweaks.showAngel} scrollY={scrollY} />
+        <Blog />
+        <RoleCTA />
+        <Footer />
+      </div>
+      <TweaksPanel>
+        <TweakSection title="Hero 文案">
+          <TweakText id="heroJP" label="中文主標" />
+          <TweakText id="heroEN" label="英文主標" />
+        </TweakSection>
+        <TweakSection title="色彩">
+          <TweakColor id="accentColor" label="強調色 (Mint)" />
+        </TweakSection>
+        <TweakSection title="區塊">
+          <TweakToggle id="showAngel" label="顯示天使投資俱樂部" />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

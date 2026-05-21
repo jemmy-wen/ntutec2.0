@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台大創創 — 配色探索</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #EBEBEA; font-family: 'DM Sans', sans-serif; }
+    #root { min-height: 100vh; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+const { useState } = React;
+
+/* ─── Palette definitions ─────────────────────────────
+   Each palette redefines only the variable parts:
+   accent  → main highlight / CTA (was --mint #00FFB9)
+   teal    → secondary label / icon color (was #5FA894)
+   eco     → ecosystem block BG (was #00D7DF)
+   ─────────────────────────────────────────────────── */
+const PALETTES = [
+  {
+    id: 'A',
+    name: '翡翠 Jade',
+    note: '折衷核心提案。在螢光綠與 Logo Teal 之間，飽和度降低約一半，明度維持高對比。',
+    accent:  '#00CE9A',   // oklch(0.77 0.17 162) warm jade-green
+    accentBg: 'rgba(0,206,154,0.13)',
+    accentBorder: 'rgba(0,206,154,0.28)',
+    teal:    '#4DA892',   // slightly lighter/warmer than #5FA894
+    eco:     '#00BEBC',   // eco block: teal-cyan
+    ecoText: '#1A2E4A',
+  },
+  {
+    id: 'B',
+    name: '碧玉 Bi-yu',
+    note: 'Hue 往藍移動，降低「植物感」，接近科技品牌常見的青綠。',
+    accent:  '#00C8CC',   // oklch(0.76 0.13 193) teal-cyan
+    accentBg: 'rgba(0,200,204,0.12)',
+    accentBorder: 'rgba(0,200,204,0.28)',
+    teal:    '#4FA0A8',   // blue-leaning teal
+    eco:     '#0ABAC4',
+    ecoText: '#1A2E4A',
+  },
+  {
+    id: 'C',
+    name: '春芽 Seedling',
+    note: '保留螢光綠的活潑感，但明度降至 0.82（原 0.93），在白色背景上不再突兀。',
+    accent:  '#00DFB0',   // oklch(0.82 0.15 165) dimmed mint
+    accentBg: 'rgba(0,223,176,0.12)',
+    accentBorder: 'rgba(0,223,176,0.28)',
+    teal:    '#5FA894',   // logo teal 原色不動
+    eco:     '#00CECE',
+    ecoText: '#1A2E4A',
+  },
+  {
+    id: 'D',
+    name: '玉石 Yu',
+    note: 'Hue 往綠移動，加入更深的礦物感，與深藍海軍色形成高對比。',
+    accent:  '#1AC99A',   // oklch(0.74 0.16 166)
+    accentBg: 'rgba(26,201,154,0.12)',
+    accentBorder: 'rgba(26,201,154,0.26)',
+    teal:    '#3FA08A',   // deeper jade
+    eco:     '#00B8B0',
+    ecoText: '#1A2E4A',
+  },
+  {
+    id: 'E',
+    name: '曙光 Dawn',
+    note: '整體色溫偏冷（cyan），同時將 navy 暖化一點，讓背景與強調色拉開距離。',
+    accent:  '#00D8C8',   // oklch(0.80 0.12 187) cool teal-cyan
+    accentBg: 'rgba(0,216,200,0.11)',
+    accentBorder: 'rgba(0,216,200,0.25)',
+    teal:    '#58A8A0',   // cyan-leaning
+    eco:     '#00C4CC',
+    ecoText: '#1A2E4A',
+  },
+];
+
+const NAVY = '#1A2E4A';
+const WHITE = '#FAFAF8';
+const OFFWHITE = '#F5F5F2';
+const RULE = '#E0E0DC';
+const MUTED = '#888884';
+const MONO = "'Space Mono', monospace";
+const SERIF = "'Noto Serif TC', serif";
+const SANS = "'DM Sans', sans-serif";
+
+/* ── Swatch strip ─────────────────────────────────── */
+function SwatchStrip({ p }) {
+  const swatches = [
+    { color: NAVY,     label: 'Navy', hex: NAVY },
+    { color: p.teal,   label: 'Teal', hex: p.teal },
+    { color: p.accent, label: 'Accent', hex: p.accent },
+    { color: p.eco,    label: 'Eco BG', hex: p.eco },
+    { color: WHITE,    label: 'White', hex: WHITE, border: true },
+    { color: OFFWHITE, label: 'Offwhite', hex: OFFWHITE, border: true },
+    { color: MUTED,    label: 'Muted', hex: MUTED },
+  ];
+  return (
+    <div style={{ display: 'flex', gap: 6, marginBottom: 24 }}>
+      {swatches.map(s => (
+        <div key={s.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center' }}>
+          <div style={{
+            width: '100%', height: 36, borderRadius: 4,
+            background: s.color,
+            border: s.border ? '1px solid #D8D8D5' : 'none',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+          }} />
+          <span style={{ fontFamily: MONO, fontSize: 8.5, color: '#666', letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.3 }}>{s.label}<br/>{s.hex}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── UI Showcase ─────────────────────────────────── */
+function UIShowcase({ p }) {
+  const [hovered, setHovered] = useState(null);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+      {/* Row 1: Section label + highlighted title */}
+      <div style={{ background: WHITE, padding: '24px 28px', borderRadius: 4 }}>
+        <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 500, letterSpacing: '0.14em', color: p.teal, textTransform: 'uppercase', marginBottom: 8 }}>
+          About Us
+        </div>
+        <div style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 26, color: NAVY, lineHeight: 1.45, letterSpacing: '0.02em' }}>
+          引導創新旅程的{' '}
+          <span style={{ background: p.accent, padding: '2px 6px', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
+            入口平台
+          </span>
+        </div>
+        <p style={{ fontFamily: SANS, fontSize: 13, fontWeight: 300, lineHeight: 1.9, color: MUTED, marginTop: 10 }}>
+          台大創創中心陪伴每一位創業者走完整段旅程的夥伴。
+        </p>
+      </div>
+
+      {/* Row 2: Nav active state + tags + CTA */}
+      <div style={{ background: WHITE, padding: '20px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+        {/* Nav item active */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <span style={{ fontFamily: SANS, fontSize: 14, color: p.teal, fontWeight: 500 }}>認識我們</span>
+          <div style={{ width: 20, height: 2, background: p.teal, borderRadius: 1 }} />
+        </div>
+        {/* Tag */}
+        <span style={{
+          fontFamily: SANS, fontSize: 12.5, fontWeight: 500, color: p.teal,
+          background: p.accentBg, border: `1px solid ${p.accentBorder}`,
+          padding: '3px 12px', borderRadius: 100,
+        }}>活動回顧</span>
+        {/* sec-en label */}
+        <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: p.teal, textTransform: 'uppercase' }}>
+          Programs
+        </span>
+        {/* more-detail CTA */}
+        <span style={{
+          fontFamily: MONO, fontSize: 12, fontWeight: 500, letterSpacing: '0.06em',
+          color: NAVY, borderBottom: `1px solid ${NAVY}`, paddingBottom: 2, cursor: 'pointer',
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+        }}>
+          MORE DETAIL →
+        </span>
+      </div>
+
+      {/* Row 3: Stats card */}
+      <div style={{ background: WHITE, padding: '24px 28px', borderRadius: 4, display: 'flex', gap: 0 }}>
+        {[
+          { n: '600+', label: '新創輔導團隊', note: 'Startups Supported' },
+          { n: '150+', label: '業師與夥伴', note: 'Partners' },
+          { n: '13+', label: '年深耕', note: 'Years of Impact' },
+        ].map((s, i) => (
+          <div key={i} style={{
+            flex: 1, display: 'flex', gap: 14, alignItems: 'center',
+            padding: '0 20px', borderRight: i < 2 ? `1px solid ${RULE}` : 'none',
+          }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+              background: p.accentBg,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <div style={{ width: 16, height: 16, borderRadius: '50%', background: p.teal, opacity: 0.6 }} />
+            </div>
+            <div>
+              <div style={{ fontFamily: SERIF, fontSize: 32, fontWeight: 700, color: NAVY, lineHeight: 1 }}>{s.n}</div>
+              <div style={{ fontFamily: SANS, fontSize: 13, color: NAVY, marginTop: 4, fontWeight: 500 }}>{s.label}</div>
+              <div style={{ fontFamily: MONO, fontSize: 9, color: MUTED, marginTop: 2, letterSpacing: '0.06em' }}>{s.note}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Row 4: Ecosystem block preview */}
+      <div style={{
+        background: p.eco,
+        padding: '24px 28px', borderRadius: 4,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <div>
+          <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', color: 'rgba(26,46,74,0.55)', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Ecosystem</span>
+          <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: NAVY, lineHeight: 1.35 }}>創業生態系合作夥伴</div>
+          <p style={{ fontFamily: SANS, fontSize: 13, fontWeight: 300, color: 'rgba(26,46,74,0.6)', marginTop: 8, lineHeight: 1.7 }}>連結企業、政府機構與學研單位</p>
+        </div>
+        <span style={{
+          fontFamily: MONO, fontSize: 11.5, fontWeight: 500, color: NAVY,
+          borderBottom: `1px solid rgba(26,46,74,0.4)`, paddingBottom: 2,
+        }}>MORE DETAIL →</span>
+      </div>
+
+      {/* Row 5: Dark navy block (Corporate / Footer) */}
+      <div style={{ background: NAVY, padding: '24px 28px', borderRadius: 4 }}>
+        <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 600, letterSpacing: '0.14em', color: p.teal, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
+          Corporate Innovation
+        </span>
+        <div style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 600, color: '#fff', lineHeight: 1.35, marginBottom: 12 }}>
+          中大型企業開放式創新服務
+        </div>
+        <span style={{
+          fontFamily: SANS, fontSize: 13, fontWeight: 500, color: p.accent,
+          borderBottom: `1px solid ${p.accent}50`, paddingBottom: 2, display: 'inline-block',
+        }}>MORE DETAIL : 企業合作方案 →</span>
+      </div>
+
+      {/* Row 6: Selection highlight demo */}
+      <div style={{ background: OFFWHITE, padding: '16px 28px', borderRadius: 4, border: `1px solid ${RULE}` }}>
+        <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.1em', color: MUTED, display: 'block', marginBottom: 6 }}>SELECTION / FOCUS</span>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          {/* Nav CTA hover */}
+          <div style={{
+            background: NAVY, color: p.accent,
+            fontFamily: SANS, fontSize: 12.5, fontWeight: 500, letterSpacing: '0.04em',
+            border: `1px solid ${NAVY}`, borderRadius: 4, padding: '7px 16px',
+          }}>天使投資俱樂部</div>
+          {/* Social icon hover */}
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: p.teal, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </div>
+          {/* Carousel dot */}
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div style={{ width: 6, height: 24, borderRadius: 3, background: p.accent }} />
+            <div style={{ width: 6, height: 6, borderRadius: 3, background: 'rgba(255,255,255,0.35)' }} />
+            <div style={{ width: 6, height: 6, borderRadius: 3, background: 'rgba(255,255,255,0.35)' }} />
+          </div>
+          {/* Text selection simulation */}
+          <span style={{ fontFamily: SERIF, fontSize: 14, background: p.accent, color: NAVY, padding: '2px 8px', borderRadius: 2 }}>
+            選取文字效果
+          </span>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+/* ── Palette Card ─────────────────────────────────── */
+function PaletteCard({ p }) {
+  return (
+    <div style={{ padding: '32px', background: OFFWHITE, minHeight: '100%', display: 'flex', flexDirection: 'column', gap: 0 }}>
+      {/* Header */}
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: p.teal, letterSpacing: '0.1em', fontWeight: 700 }}>Option {p.id}</span>
+          <span style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 600, color: NAVY }}>{p.name}</span>
+        </div>
+        <p style={{ fontFamily: SANS, fontSize: 12.5, fontWeight: 300, color: MUTED, lineHeight: 1.7 }}>{p.note}</p>
+      </div>
+
+      {/* Swatches */}
+      <SwatchStrip p={p} />
+
+      {/* UI preview */}
+      <UIShowcase p={p} />
+    </div>
+  );
+}
+
+/* ── App ───────────────────────────────────────────── */
+function App() {
+  return (
+    <DesignCanvas title="台大創創 NTUTEC — 配色方案探索">
+      <DCSection id="compare" title="強調色 × 輔色 × Eco 區塊 — 五種組合比較">
+        {PALETTES.map(p => (
+          <DCArtboard key={p.id} id={p.id} label={`${p.id}. ${p.name}`} width={580} height={900}>
+            <PaletteCard p={p} />
+          </DCArtboard>
+        ))}
+      </DCSection>
+
+      <DCSection id="dark" title="Dark Block 對比（Navy 背景上的強調色表現）">
+        {PALETTES.map(p => (
+          <DCArtboard key={p.id} id={`dark-${p.id}`} label={`${p.id}. ${p.name}`} width={400} height={300}>
+            <div style={{ background: NAVY, padding: 36, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.14em', color: p.teal, textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>Option {p.id} — {p.name}</span>
+                <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: '#fff', lineHeight: 1.4, marginBottom: 14 }}>
+                  中大型企業<br/>開放式創新服務
+                </div>
+                <p style={{ fontFamily: SANS, fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.8 }}>接軌台灣頂尖大學的創新生態</p>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <span style={{ fontFamily: SANS, fontSize: 13, fontWeight: 500, color: p.accent, borderBottom: `1px solid ${p.accent}55`, paddingBottom: 2 }}>MORE DETAIL →</span>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', border: `1px solid ${p.accent}66`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" fill={p.accent}/></svg>
+                </div>
+              </div>
+            </div>
+          </DCArtboard>
+        ))}
+      </DCSection>
+
+      <DCSection id="title" title="Section Title 高亮效果（最常用元素）">
+        {PALETTES.map(p => (
+          <DCArtboard key={p.id} id={`title-${p.id}`} label={`${p.id}. ${p.name}`} width={340} height={220}>
+            <div style={{ background: WHITE, padding: 32, height: '100%' }}>
+              <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: p.teal, textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>Focus Areas</span>
+              <div style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 28, color: NAVY, lineHeight: 1.45, letterSpacing: '0.02em' }}>
+                2026{' '}
+                <span style={{ background: p.accent, padding: '2px 7px', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
+                  四大聚焦
+                </span>
+                {' '}領域
+              </div>
+              <div style={{ marginTop: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
+                <div style={{ width: 28, height: 2, background: p.accent }} />
+                <span style={{ fontFamily: MONO, fontSize: 9, color: p.teal, letterSpacing: '0.1em' }}>accent: {p.accent}</span>
+              </div>
+              <div style={{ marginTop: 6, display: 'flex', gap: 8, alignItems: 'center' }}>
+                <div style={{ width: 28, height: 2, background: p.teal }} />
+                <span style={{ fontFamily: MONO, fontSize: 9, color: MUTED, letterSpacing: '0.1em' }}>teal: {p.teal}</span>
+              </div>
+            </div>
+          </DCArtboard>
+        ))}
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

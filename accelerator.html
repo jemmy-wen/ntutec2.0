@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台大加速器 — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif;
+      --mono: 'Lato', sans-serif;
+      --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--white); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ── helpers ── */
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setV(true); obs.disconnect(); }
+    }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return (
+    <div ref={ref} style={{
+      opacity: v ? 1 : 0,
+      transform: v ? 'none' : 'translateY(28px)',
+      transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+
+const IMG_BASE = 'ntutec-design-handoff/public/images/events/';
+
+/* ════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════ */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
+
+        {/* Photo + overlays, clipped to diagonal hexagon */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `url(${IMG_BASE}opening-2026-classroom.jpg)`,
+            backgroundSize: 'cover', backgroundPosition: '55% 40%', backgroundRepeat: 'no-repeat',
+            opacity: 0.88,
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: isMobile
+              ? 'linear-gradient(to bottom, rgba(26,46,74,0.75) 0%, rgba(26,46,74,0.55) 100%)'
+              : 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.55) 32%, rgba(0,216,200,0.10) 55%, transparent 75%)',
+          }} />
+          {!isMobile && <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to right, rgba(26,46,74,0.45) 0%, transparent 42%)',
+          }} />}
+        </div>
+
+        {/* SVG corner triangles in offwhite */}
+        <svg
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3 }}
+          viewBox="0 0 1200 720" preserveAspectRatio="none"
+        >
+          <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+          <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+        </svg>
+
+        {/* Main content */}
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '100px 6% 56px' : '188px 10% 120px' }}>
+          {isMobile ? (
+            <div>
+              <div style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+                fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500,
+                letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16,
+              }}>NTU Accelerator</div>
+              <h1 style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+                transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+                fontFamily: 'var(--sans)', fontSize: 36, fontWeight: 700,
+                lineHeight: 1.2, color: '#fff', letterSpacing: '0.04em', marginBottom: 20,
+              }}>台大創創<br />加速器計畫</h1>
+              <p style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+                fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300,
+                lineHeight: 1.95, color: 'rgba(255,255,255,0.84)',
+              }}>為期十個月的深度輔導計畫，幫助成長期新創加速邁向下一個里程碑。</p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 64, alignItems: 'center' }}>
+              <div>
+                <div style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                  transition: 'opacity 0.65s 0.1s, transform 0.65s 0.1s',
+                  fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500,
+                  letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 24,
+                }}>NTU Accelerator</div>
+                <h1 style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(24px)',
+                  transition: 'opacity 0.65s 0.2s, transform 0.65s 0.2s',
+                  fontFamily: 'var(--sans)', fontSize: 58, fontWeight: 700,
+                  lineHeight: 1.12, color: '#fff', letterSpacing: '0.04em', marginBottom: 28,
+                }}>台大創創<br />加速器計畫</h1>
+                <p style={{
+                  opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)',
+                  transition: 'opacity 0.65s 0.3s, transform 0.65s 0.3s',
+                  fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300,
+                  lineHeight: 2.05, color: 'rgba(255,255,255,0.84)', maxWidth: 520,
+                }}>為期十個月的深度輔導計畫，幫助成長期新創加速邁向下一個里程碑。</p>
+              </div>
+              <div style={{
+                opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(16px)',
+                transition: 'opacity 0.7s 0.36s, transform 0.7s 0.36s',
+                alignSelf: 'stretch', display: 'flex', flexDirection: 'column',
+                justifyContent: 'flex-end', alignItems: 'flex-end', minHeight: 480,
+              }}>
+                <div style={{ width: 100, height: 1, background: 'linear-gradient(90deg, transparent, var(--mint))', marginBottom: 18 }} />
+                <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 22, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 260 }}>
+                  從台大出發，<br />走向國際舞台。
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA link in offwhite bottom-right triangle (desktop only) */}
+      {!isMobile && (
+        <a href="#apply" style={{
+          position: 'absolute', bottom: 36, right: '4%', zIndex: 5,
+          display: 'inline-flex', alignItems: 'center', gap: 12,
+          fontFamily: 'var(--serif)', fontSize: 16, color: 'var(--navy)',
+          paddingBottom: 8, borderBottom: '1px solid var(--navy)',
+          opacity: loaded ? 1 : 0, transition: 'opacity 0.65s 0.5s',
+        }}>
+          立即申請
+          <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
+            <path d="M0 5h28m0 0l-4-4m4 4l-4 4" stroke="currentColor" strokeWidth="1.2"/>
+          </svg>
+        </a>
+      )}
+
+      {/* Stats card — angels/corporate style */}
+      {isMobile ? (
+        <div style={{ display: 'flex', flexWrap: 'wrap', background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18)', opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s' }}>
+          {[{ num: '10', suffix: '個月', label: '深度輔導期' }, { num: '40', plus: '+', label: '業師顧問' }, { num: '20', label: '錄取隊數' }, { num: '0', suffix: '元', label: '參與費用' }].map((s, i) => (
+            <div key={i} style={{ padding: '20px 24px', flex: '1 1 45%', borderBottom: i < 2 ? '1px solid var(--rule)' : 'none', borderRight: i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
+                <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 32, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
+                {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
+              </div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', letterSpacing: '0.03em' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ position: 'absolute', bottom: 0, left: '10%', zIndex: 10, opacity: loaded ? 1 : 0, transition: 'opacity 0.7s 0.6s' }}>
+          <div style={{ background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18), 0 2px 12px -4px rgba(26,46,74,0.10)', display: 'flex' }}>
+            {[{ num: '10', suffix: '個月', label: '深度輔導期' }, { num: '40', plus: '+', label: '業師顧問' }, { num: '20', label: '錄取隊數' }, { num: '0', suffix: '元', label: '參與費用' }].map((s, i, arr) => (
+              <React.Fragment key={i}>
+                {i > 0 && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
+                <div style={{ padding: '24px 36px' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                    {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
+                    {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
+                  </div>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>{s.label}</div>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   OVERVIEW
+════════════════════════════════════════════════════ */
+function Overview() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '72px 6%' : '120px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0' : '0 10%' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 32 : 0,
+        }}>
+          <AnimUp style={{ paddingRight: isMobile ? 0 : 80, borderRight: isMobile ? 'none' : '1px solid var(--rule)' }}>
+            <span className="sec-en">Overview</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 28 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>計畫概覽</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 2.0, color: 'var(--muted)' }}>
+              台大加速器自 2017 年啟動，專為已完成原型、進入市場驗證階段的成長期新創設計。計畫為期十個月，由 2026 陪跑業師 40+ 位提供一對一深度輔導，背後擁有歷年 80+ 位業師的深厚資料庫，串接企業合作資源、台大天使會與創投網絡。
+            </p>
+          </AnimUp>
+          <AnimUp delay={100} style={{ paddingLeft: isMobile ? 0 : 80 }}>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 2.0, color: 'var(--muted)', marginTop: isMobile ? 0 : 72 }}>
+              無台大身分亦可申請，有台大身分者優先。我們重視技術創新與市場潛力，不限台大背景。2026 梯次進行中（3 月 ～ 12 月）。
+            </p>
+          </AnimUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+/* ════════════════════════════════════════════════════
+   BENEFITS
+════════════════════════════════════════════════════ */
+function Benefits() {
+  const isMobile = useIsMobile();
+  const items = [
+    { num: '01', title: '業師網絡', body: '歷年 80+ 位業師深厚陣容，2026 陪跑 40+ 位，平均逾 20 年產業深耕，涵蓋創投、AI、生技、半導體等領域，一對一深度輔導。', icon: <Icon name="Users" size={28} color="var(--teal)" /> },
+    { num: '02', title: '企業資源', body: '35 家合作企業，涵蓋科技、製造、金融、媒體等多元產業，提供技術驗證場域與潛在客戶資源。', icon: <Icon name="Building2" size={28} color="var(--teal)" /> },
+    { num: '03', title: '募資對接', body: '台大天使會與 150+ 投資人網絡，涵蓋種子輪到 Pre-IPO 的募資機會。Demo Day 直接向投資人 Pitch。', icon: <Icon name="TrendingUp" size={28} color="var(--teal)" /> },
+    { num: '04', title: '虛擬進駐', body: '免費虛擬進駐台大水源校區，享有中心會議室與活動場地使用權，彈性配合創業節奏。', icon: <Icon name="Home" size={28} color="var(--teal)" /> },
+  ];
+
+  return (
+    <section style={{ background: 'var(--mint)', padding: isMobile ? '72px 0' : '100px 0', position: 'relative', overflow: 'hidden' }}>
+      {/* Noise texture overlay */}
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'200\' height=\'200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px', pointerEvents: 'none' }} />
+
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ textAlign: isMobile ? 'left' : 'right', marginBottom: isMobile ? 40 : 72 }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.16em', color: '#fff', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>
+              Program Benefits
+            </span>
+            <h2 style={{ marginBottom: 16 }}>
+              <span style={{
+                fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 40, fontWeight: 600, color: '#fff',
+                background: 'var(--navy)', padding: '4px 14px',
+                boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', lineHeight: 1.55,
+              }}>
+                台大加速器提供的四大資源
+              </span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'rgba(26,46,74,0.72)', fontWeight: 400 }}>
+              業師輔導、企業對接、募資媒合、虛擬進駐，全方位支援成長期新創
+            </p>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? '32px 24px' : 36 }}>
+          {items.map((item, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div>
+                <div style={{ marginBottom: 16 }}>{item.icon}</div>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 19, fontWeight: 600, color: 'var(--navy)', marginBottom: 12, lineHeight: 1.4 }}>{item.title}</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 13.5, fontWeight: 400, lineHeight: 1.9, color: 'rgba(26,46,74,0.75)' }}>{item.body}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   TIMELINE
+════════════════════════════════════════════════════ */
+function Timeline() {
+  const isMobile = useIsMobile();
+  const [openPhase, setOpenPhase] = useState(0);
+  const phases = [
+    { num: '01', title: '診斷與定位', period: '第 1–2 個月', body: '深入了解團隊現況，設定成長目標與里程碑，配對最合適的業師。由中心顧問與創辦人一同盤點核心競爭力與市場定位。' },
+    { num: '02', title: '驗證與迭代', period: '第 3–5 個月', body: '聚焦產品市場契合度驗證，透過客戶訪談與數據分析持續優化商業模式。業師每月至少一次深度 1-on-1 會議。' },
+    { num: '03', title: '規模化準備', period: '第 6–8 個月', body: '建立可規模化的營運架構，深化企業合作關係，準備募資相關材料。協助對接台大天使會與創投網絡。' },
+    { num: '04', title: 'Demo Day & 畢業', period: '第 9–10 個月', body: '向天使投資人與策略夥伴進行路演，完成計畫畢業並取得後續支持資源。Demo Day 為期一日，現場 74+ 位投資人到場（2025 年創歷屆最高）。' },
+  ];
+
+  const accordion = (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {phases.map((p, i) => {
+        const isOpen = openPhase === i;
+        return (
+          <div key={i} style={{ borderBottom: '1px solid var(--rule)' }}>
+            <button
+              onClick={() => setOpenPhase(isOpen ? -1 : i)}
+              style={{
+                width: '100%', background: 'none', border: 'none', cursor: 'pointer',
+                padding: '24px 0', display: 'flex', alignItems: 'center', gap: 20, textAlign: 'left',
+              }}>
+              <span style={{
+                fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600,
+                fontSize: 28, color: isOpen ? 'var(--teal)' : 'rgba(26,46,74,0.25)',
+                lineHeight: 1, flexShrink: 0, transition: 'color 0.2s', minWidth: 40,
+              }}>{p.num}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 700, color: 'var(--navy)', lineHeight: 1.4 }}>{p.title}</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginTop: 4 }}>{p.period}</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', color: 'var(--navy)' }}>
+                <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {isOpen && (
+              <div style={{ paddingBottom: 24, paddingLeft: 60 }}>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 300, lineHeight: 1.95, color: 'var(--muted)' }}>{p.body}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '72px 6%' : '120px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0' : '0 10%' }}>
+        <AnimUp style={{ marginBottom: isMobile ? 48 : 72 }}>
+          <span className="sec-en">Timeline</span>
+          <h2 style={{ display: 'inline-block' }}>
+            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 38 }}>計畫時程</span>
+          </h2>
+        </AnimUp>
+
+        {isMobile ? (
+          <AnimUp>{accordion}</AnimUp>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+            <AnimUp>
+              <div style={{ borderRadius: 4, overflow: 'hidden', height: 520 }}>
+                <img src={IMG_BASE + 'opening-2026-coaching.jpg'} alt="一對一業師輔導"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+              </div>
+            </AnimUp>
+            <AnimUp delay={80}>{accordion}</AnimUp>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   CRITERIA
+════════════════════════════════════════════════════ */
+function Criteria() {
+  const isMobile = useIsMobile();
+  const items = [
+    '不限台大身分；有台大在校生、校友或教職員背景者優先錄取',
+    '已完成 MVP 或原型開發，具有初期用戶或營收',
+    '團隊至少 2 人，全職投入創業',
+    '具有明確的市場機會與成長潛力',
+    '願意接受十個月的系統化輔導',
+    '產業不限，但需具備技術或模式創新',
+  ];
+
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '72px 6%' : '120px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ textAlign: isMobile ? 'left' : 'right', marginBottom: isMobile ? 48 : 64 }}>
+            <span className="sec-en" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end', display: 'flex' }}>Eligibility Criteria</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 20 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 38 }}>申請條件</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.9, maxWidth: 480, marginLeft: isMobile ? 0 : 'auto' }}>
+              無台大身分亦可申請，有台大身分者優先。
+            </p>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 20 : '20px 80px' }}>
+          {items.map((item, i) => (
+            <AnimUp key={i} delay={i * 60}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '20px 0', borderBottom: '1px solid var(--rule)' }}>
+                <div style={{
+                  flexShrink: 0, width: 8, height: 8, borderRadius: '50%',
+                  background: 'var(--teal)', marginTop: 7,
+                }} />
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.85, color: 'var(--text)' }}>{item}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+
+        <AnimUp delay={200} style={{ marginTop: 40 }}>
+          <a href="index.html#faq" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            fontFamily: 'var(--mono)', fontSize: 11.5, fontWeight: 500,
+            letterSpacing: '0.06em', color: 'var(--navy)',
+            borderBottom: '1px solid var(--navy)', paddingBottom: 4,
+            transition: 'color 0.15s, border-color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color='var(--teal)'; e.currentTarget.style.borderColor='var(--teal)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color='var(--navy)'; e.currentTarget.style.borderColor='var(--navy)'; }}>
+            申請條件有疑問？查看常見問題 →
+          </a>
+        </AnimUp>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   ALUMNI
+════════════════════════════════════════════════════ */
+function Alumni() {
+  const isMobile = useIsMobile();
+  const cases = [
+    {
+      img: IMG_BASE + 'opening-2026-pitching.jpg',
+      badge: 'A 輪募資',
+      name: 'AmazingTalker',
+      category: '線上語言家教平台',
+      body: 'A 輪募資 NT$4.3 億（US$15.5M），年營收突破 NT$10 億，用戶遍及 190+ 國家。',
+    },
+    {
+      img: IMG_BASE + 'opening-2026-mentoring.jpg',
+      badge: '台大天使會投資',
+      name: 'MoBagel 行動貝果',
+      category: 'AutoML / 企業 AI 數據平台',
+      body: '累計募資 US$21M+，服務 3,000+ 品牌（含 Fortune 500），2026 Q1 獲台大天使會投資。',
+    },
+    {
+      img: IMG_BASE + 'opening-2026-coaching.jpg',
+      badge: 'Pre-A 輪募資',
+      name: '配客嘉 PackAge+',
+      category: '電商循環包裝生態系',
+      body: 'Pre-A 輪 NT$5,200 萬（國發基金、中信、彰銀），合作 200+ 企業，拓展東南亞。',
+    },
+    {
+      img: IMG_BASE + 'opening-2026-biggroup.jpg',
+      badge: '規模化成長',
+      name: '知識衛星 SAT.',
+      category: '精品大師線上課程',
+      body: '2024 年營業額突破 NT$7 億，2025 高峰會 1,500 人參與、32 位老師。',
+    },
+  ];
+
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '72px 6%' : '120px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0' : '0 10%' }}>
+        <AnimUp>
+          <div style={{ marginBottom: isMobile ? 40 : 56 }}>
+            <span className="sec-en">Alumni Highlights</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 16 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 38 }}>歷屆台大加速器校友</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'var(--muted)' }}>
+              部分列舉。歷年輔導逾 600 支新創團隊，涵蓋 AI、EdTech、FinTech、生技等多元領域。
+            </p>
+          </div>
+        </AnimUp>
+
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
+          {cases.map((c, i) => (
+            <AnimUp key={i} delay={i * 80}>
+              <div style={{
+                background: '#fff', borderRadius: 4, overflow: 'hidden',
+                boxShadow: '0 8px 24px -8px rgba(26,46,74,0.12)',
+                display: 'flex', flexDirection: 'column',
+              }}>
+                <div style={{ height: 220, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                  <img src={c.img} alt={c.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block',
+                      transition: 'transform 1.2s cubic-bezier(0.22,1,0.36,1)' }}
+                    onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
+                    onMouseLeave={e => e.currentTarget.style.transform=''} />
+                  <div style={{ position: 'absolute', top: 16, left: 16 }}>
+                    <span style={{
+                      background: 'var(--mint)', color: 'var(--navy)',
+                      fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 600,
+                      padding: '4px 12px', borderRadius: 14,
+                    }}>{c.badge}</span>
+                  </div>
+                </div>
+                <div style={{ padding: '24px 28px 32px', flex: 1 }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginBottom: 8 }}>{c.category}</div>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 700, color: 'var(--navy)', marginBottom: 12, lineHeight: 1.4 }}>{c.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{c.body}</p>
+                </div>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   BATCH SCHEDULE
+════════════════════════════════════════════════════ */
+function BatchSchedule() {
+  const isMobile = useIsMobile();
+  const milestones = [
+    { active: true,  title: '2026 年度梯次（進行中）', desc: '2026 年 3 月 ～ 12 月 · 年度梯次進行中' },
+    { active: false, title: '2027 梯次申請期',          desc: '2026 年 12 月 ～ 2027 年 1 月 · 開放線上申請' },
+    { active: false, title: '2027 梯次公布結果',         desc: '2027 年 2 月 · 入選團隊名單公告' },
+    { active: false, title: '2027 梯次正式開始',         desc: '2027 年 3 月 ～ 12 月 · 為期十個月' },
+  ];
+
+  const scheduleList = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      {milestones.map((m, i) => (
+        <div key={i} style={{ display: 'flex', gap: 20, paddingBottom: i < milestones.length - 1 ? 32 : 0, position: 'relative' }}>
+          {/* Vertical line */}
+          {i < milestones.length - 1 && (
+            <div style={{ position: 'absolute', left: 7, top: 16, bottom: 0, width: 1, background: 'var(--rule)' }} />
+          )}
+          <div style={{ flexShrink: 0, width: 16, height: 16, borderRadius: '50%', background: m.active ? 'var(--teal)' : 'var(--rule)', border: m.active ? '3px solid rgba(88,168,160,0.3)' : '2px solid var(--rule)', marginTop: 3, position: 'relative', zIndex: 1 }} />
+          <div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 700, color: m.active ? 'var(--navy)' : 'var(--muted)', marginBottom: 4, lineHeight: 1.4 }}>{m.title}</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: m.active ? 'var(--teal)' : 'var(--muted)', letterSpacing: '0.06em' }}>{m.desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '72px 6%' : '120px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0' : '0 10%' }}>
+        {isMobile ? (
+          <>
+            <AnimUp style={{ marginBottom: 48 }}>
+              <span className="sec-en">Batch Schedule</span>
+              <h2 style={{ display: 'inline-block', marginBottom: 16 }}>
+                <span className="sec-title-hl" style={{ fontSize: 28 }}>梯次時程</span>
+              </h2>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>
+                加速器每年僅開放一次，採年度梯次制。現行梯次進行中，2027 梯次預計 2026 年 12 月開放申請。
+              </p>
+            </AnimUp>
+            <AnimUp>{scheduleList}</AnimUp>
+          </>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+            <AnimUp>
+              <span className="sec-en">Batch Schedule</span>
+              <h2 style={{ display: 'inline-block', marginBottom: 24 }}>
+                <span className="sec-title-hl" style={{ fontSize: 38 }}>梯次時程</span>
+              </h2>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.95, color: 'var(--muted)' }}>
+                加速器每年僅開放一次，採年度梯次制。現行梯次進行中，2027 梯次預計 2026 年 12 月開放申請。
+              </p>
+            </AnimUp>
+            <AnimUp delay={100} style={{ paddingTop: 16 }}>{scheduleList}</AnimUp>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   CTA
+════════════════════════════════════════════════════ */
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section id="apply" style={{ padding: isMobile ? '0 6% 72px' : '0 10% 120px', maxWidth: 1280, margin: '0 auto' }}>
+      <AnimUp>
+        <div style={{
+          position: 'relative', overflow: 'hidden',
+          background: 'linear-gradient(130deg, rgba(7,18,38,0.88), rgba(26,46,74,0.95)), url(' + IMG_BASE + 'opening-2026-biggroup.jpg) center/cover',
+          width: '100%',
+          padding: isMobile ? '48px 28px' : '64px 80px', boxSizing: 'border-box',
+          borderRadius: 4,
+          border: '1px solid rgba(0,216,200,0.15)',
+          minHeight: isMobile ? 'auto' : 282,
+          display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
+          justifyContent: 'space-between',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? 32 : 48,
+        }}>
+          {/* Grid line decoration */}
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.3,
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 72px, rgba(0,216,200,0.07) 72px, rgba(0,216,200,0.07) 73px), repeating-linear-gradient(90deg, transparent, transparent 72px, rgba(0,216,200,0.07) 72px, rgba(0,216,200,0.07) 73px)' }} />
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '35%', background: 'radial-gradient(ellipse at 80% 50%, rgba(0,216,200,0.10), transparent 65%)', pointerEvents: 'none' }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 14 }}>
+              Join the Program
+            </div>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', lineHeight: 1.35, marginBottom: 10 }}>
+              有興趣加入 2027 梯次？
+            </h2>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.72)', maxWidth: 480 }}>
+              提前登記你的團隊，2026 年 12 月正式申請開放時，我們將第一時間通知你。
+            </p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, flexShrink: 0, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+            <a href="#" style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '14px 28px', background: 'var(--mint)',
+              fontFamily: 'var(--sans)', fontSize: 14.5, fontWeight: 600, color: 'var(--navy)',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background='#00bfb8'}
+            onMouseLeave={e => e.currentTarget.style.background='var(--mint)'}>
+              預約梯次通知 →
+            </a>
+            <a href="corporate-partners.html" style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '14px 28px', border: '1px solid rgba(255,255,255,0.5)',
+              fontFamily: 'var(--sans)', fontSize: 14.5, color: '#fff',
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor='#fff'; e.currentTarget.style.background='rgba(255,255,255,0.1)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.5)'; e.currentTarget.style.background='transparent'; }}>
+              企業合作方案
+            </a>
+          </div>
+        </div>
+      </AnimUp>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════
+   PAGE
+════════════════════════════════════════════════════ */
+function Page() {
+  const isMobile = useIsMobile();
+  return (
+    <div style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <SharedNav activeKey="輔導計畫" />
+      <SharedSocialSidebar />
+      <div style={{ paddingRight: isMobile ? 0 : 80 }}>
+        <Hero />
+        <Overview />
+        <Benefits />
+        <Timeline />
+        <Criteria />
+        <Alumni />
+        <BatchSchedule />
+        <CTA />
+        <SharedFooter />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

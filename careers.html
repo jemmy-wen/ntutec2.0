@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加入我們 Careers — 台大創創中心 NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif; --mono: 'Lato', sans-serif; --sans: 'Lato', 'Noto Sans TC', sans-serif;
+      --italic: 'Cormorant Garamond', Georgia, serif;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--mint); color: var(--navy); }
+    .sec-en { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .sec-title-hl {
+      font-family: var(--serif); font-weight: 600; line-height: 1.4;
+      color: var(--navy); display: inline;
+      background: var(--mint);
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      padding: 4px 10px;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx?v=2"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function useInView(opts = {}) {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold: opts.threshold || 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+function AnimUp({ children, delay = 0, style = {} }) {
+  const [ref, v] = useInView();
+  return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? 'none' : 'translateY(28px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`, ...style }}>{children}</div>;
+}
+
+const whyJoin = [
+  { label: '01', title: '深度接觸創業生態系', desc: '每天與新創創辦人、天使投資人和業師互動，學習課堂學不到的實戰知識。' },
+  { label: '02', title: '實際參與高影響力工作', desc: '不是打雜的實習——你的工作直接影響輔導計畫的品質、天使例會的準備和對外溝通。' },
+  { label: '03', title: '台大資源與人脈', desc: '深入台大創業社群，連結校內外優秀校友與產業資源，建立長期職涯人脈。' },
+  { label: '04', title: '多元角色學習機會', desc: '從事業發展、行銷、研究到投資評估，依你的興趣和能力發展跨域能力。' },
+];
+
+const testimonials = [
+  { quote: '主管直接告訴我：「你不可以把這裡當工讀生，要真正在工作中有收穫。」進來一個單位，離開變成故鄉——這八個字精準描述了我在台大創創中心的實習。', author: '葉思宏', role: '2022 秋季實習生｜事業發展暨行銷部門' },
+  { quote: '在這裡不只是執行任務，而是不斷被要求思考：「為什麼要提這個案例？這個方法帶來什麼價值？」這種批判性思維是我帶走的最重要資產。', author: '林君燕', role: '2023 春季實習生｜事業發展暨行銷部門' },
+  { quote: '你能在這裡感受到真實的團隊文化，而不只是打雜。從客戶痛點到服務價值，每個思考都在鍛鍊商業邏輯。', author: '施奕丞', role: '2022 秋季實習生｜事業發展暨行銷部門' },
+  { quote: '會計系學生在行銷部門做企業創新文案、電子報與社群策略，工作節奏快、挑戰大，但也因此累積了跨域能力，成為我職涯最有價值的半年。', author: '許安聆', role: '2022 秋 + 2023 春季實習生｜事業發展暨行銷部門' },
+];
+
+const positions = [
+  {
+    badge: '工讀生',
+    featured: false,
+    count: '1–2 位',
+    title: '行政工讀生',
+    desc: '協助中心全體經理進行日常行政支援，包含文件整理、活動佈場協助、會議記錄與資料庫維護。適合希望深入了解新創生態系、對創業領域有熱忱的在學學生。',
+    requirements: ['每週 10–15 小時，可配合課堂時間', '台大水源校區卓越研究大樓 7F', '歡迎各系所在學學生投遞'],
+    email: 'ntutec@ntutec.com?subject=應徵工讀生',
+  },
+  {
+    badge: '全職／兼職',
+    featured: true,
+    count: '1–2 位',
+    title: '輔導專員',
+    desc: '協助加速器與台大車庫輔導計畫的全流程執行，包含課程規劃與場務、業師媒合排程、新創團隊追蹤，以及活動籌辦與對外溝通，直接支援輔導經理與營運經理。',
+    requirements: ['1–2 年專案執行或新創相關經驗佳', '具強溝通與多工管理能力', '應屆畢業生亦歡迎投遞'],
+    email: 'ntutec@ntutec.com?subject=應徵輔導專員',
+  },
+  {
+    badge: '全職',
+    featured: false,
+    count: '1 位',
+    title: '投資經理（非生醫領域）',
+    desc: '負責台大天使會的案源開發與評估，聚焦 AI／軟體、硬科技、先進製造與創新商模等領域。主責投資案篩選、盡職調查、天使例會報告準備及投資人關係維護。',
+    requirements: ['2 年以上創投、顧問或新創工作經驗', '具獨立完成案件評估報告之能力', '生醫領域以外之產業背景優先'],
+    email: 'ntutec@ntutec.com?subject=應徵投資經理',
+  },
+];
+
+/* ── Hero ── */
+function Hero() {
+  const [loaded, setLoaded] = useState(false);
+  const isMobile = useIsMobile();
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const hexClip = 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)';
+
+  return (
+    <section style={{ position: 'relative', background: 'var(--navy)', overflow: 'hidden', minHeight: isMobile ? 'auto' : '82vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, clipPath: isMobile ? 'none' : hexClip, overflow: 'hidden' }}>
+        <img src="ntutec-design-handoff/public/images/events/opening-2026-networking.jpg" alt="加入台大創創中心"
+          style={{ width: '100%', height: isMobile ? 220 : '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.4 }} />
+      </div>
+      {!isMobile && <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} viewBox="0 0 1200 720" preserveAspectRatio="none">
+        <polygon points="0,0 324,0 0,160" fill="#F7F5F1" />
+        <polygon points="1200,720 876,720 1200,560" fill="#F7F5F1" />
+      </svg>}
+      <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(26,46,74,0.85) 0%, rgba(26,46,74,0.55) 100%)', zIndex: 1 }} />
+      <div style={{ position: 'relative', zIndex: 3, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '48px 24px 40px' : '0 7% 64px' }}>
+        <span className="sec-en" style={{ color: 'var(--mint)', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s 0.1s' }}>Careers & Internships</span>
+        <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 36 : 58, lineHeight: 1.25, color: '#fff', maxWidth: 560, opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(20px)', transition: 'opacity 0.6s 0.2s, transform 0.6s 0.2s', marginBottom: 20 }}>加入我們</h1>
+        <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: isMobile ? 15 : 18, color: 'rgba(255,255,255,0.82)', maxWidth: 520, lineHeight: 1.7, marginBottom: 36, opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.35s' }}>
+          無論是全職工作或學期實習，在台大創創中心你將接觸到最前沿的新創生態系，與頂尖創業者和投資人共事。
+        </p>
+        <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.6s 0.45s' }}>
+          <a href="mailto:ntutec@ntutec.com" style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 14, padding: '14px 32px', borderRadius: 2 }}>
+            登記下一梯次招募通知
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── WhyJoin Accordion ── */
+function WhyItem({ label, title, desc }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderTop: '1px solid var(--rule)' }}>
+      <button onClick={() => setOpen(!open)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '20px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', letterSpacing: '0.14em' }}>{label}</span>
+          <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 17, color: 'var(--navy)' }}>{title}</span>
+        </div>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 18, color: open ? 'var(--teal)' : 'var(--muted)', flexShrink: 0 }}>{open ? '−' : '+'}</span>
+      </button>
+      {open && <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, paddingBottom: 20 }}>{desc}</p>}
+    </div>
+  );
+}
+
+function WhyJoin() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 64, alignItems: 'flex-start' }}>
+        <AnimUp style={{ flexShrink: 0, maxWidth: 340 }}>
+          <span className="sec-en">Why Join Us</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)', lineHeight: 1.3 }}>
+            <span className="sec-title-hl">為什麼加入台大創創中心</span>
+          </h2>
+        </AnimUp>
+        <div style={{ flex: 1 }}>
+          {whyJoin.map(item => <WhyItem key={item.label} {...item} />)}
+          <div style={{ borderTop: '1px solid var(--rule)' }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Internship Testimonials ── */
+function Internship() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 64, alignItems: 'flex-start' }}>
+        <AnimUp style={{ flexShrink: 0, maxWidth: 340 }}>
+          <span className="sec-en">Internship Program</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)', marginBottom: 16 }}>
+            <span className="sec-title-hl">實習計畫</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, marginTop: 20 }}>每學期招募實習生，加入事業發展暨行銷部門，深度參與中心日常運營。</p>
+          <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              ['招募時間', '依學期滾動開放，正式開放時以 Email 通知'],
+              ['實習時數', '每週 2–3 天，可配合課堂時間彈性調整'],
+              ['工作地點', '台北市中正區思源街 18 號，台大水源校區卓越研究大樓 7 樓'],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', gap: 12, fontSize: 13 }}>
+                <span style={{ fontWeight: 600, color: 'var(--navy)', flexShrink: 0 }}>{k}</span>
+                <span style={{ color: 'var(--muted)' }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </AnimUp>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {testimonials.map((t, i) => (
+            <AnimUp key={t.author} delay={i * 60}>
+              <div style={{ borderTop: i === 0 ? 'none' : '1px solid var(--rule)', padding: i === 0 ? '0 0 28px' : '28px 0' }}>
+                <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, fontStyle: 'italic' }}>「{t.quote}」</p>
+                <p style={{ fontFamily: 'var(--sans)', fontWeight: 600, fontSize: 14, color: 'var(--navy)', marginTop: 12 }}>{t.author}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)' }}>{t.role}</p>
+              </div>
+            </AnimUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Open Positions ── */
+function Positions() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: '#fff', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <AnimUp>
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="sec-en">Open Positions</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: 'var(--navy)', marginBottom: 12 }}>
+            <span className="sec-title-hl">常態開放職缺</span>
+          </h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'var(--muted)', marginTop: 20 }}>以下職缺長期徵才，歡迎隨時投遞。我們將於收到履歷後 5 個工作日內回覆。</p>
+        </div>
+      </AnimUp>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
+        {positions.map((pos, i) => (
+          <AnimUp key={pos.title} delay={i * 80}>
+            <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '40px', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <span style={{ background: pos.featured ? 'var(--teal)' : '#e8f7f5', color: pos.featured ? '#fff' : 'var(--teal)', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, padding: '4px 12px', borderRadius: 2, letterSpacing: '0.08em' }}>{pos.badge}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{pos.count}</span>
+              </div>
+              <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 20, color: 'var(--navy)', marginBottom: 12 }}>{pos.title}</h3>
+              <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, flex: 1, marginBottom: 20 }}>{pos.desc}</p>
+              <ul style={{ listStyle: 'none', marginBottom: 28, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {pos.requirements.map(r => (
+                  <li key={r} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--muted)' }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--teal)', flexShrink: 0, marginTop: 5 }} />
+                    {r}
+                  </li>
+                ))}
+              </ul>
+              <a href={`mailto:${pos.email}`} style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 2, fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 14, background: pos.featured ? 'var(--teal)' : 'transparent', color: pos.featured ? '#fff' : 'var(--navy)', border: pos.featured ? 'none' : '1px solid var(--rule)' }}>
+                投遞履歷
+              </a>
+            </div>
+          </AnimUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── CTA ── */
+function CTA() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{ background: 'var(--offwhite)', padding: isMobile ? '48px 24px' : '80px 7%' }}>
+      <AnimUp>
+        <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '40px 28px' : '64px 72px', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.14em', textTransform: 'uppercase', display: 'block', marginBottom: 16 }}>Join Us</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: '#fff', marginBottom: 16 }}>準備好了嗎？</h2>
+          <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 15, color: 'rgba(255,255,255,0.70)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 32px' }}>
+            歡迎直接寄履歷給我們，說明你感興趣的職位。若目前沒有合適的開缺，我們會留存你的資料，優先通知下一次招募。
+          </p>
+          <a href="mailto:ntutec@ntutec.com?subject=職涯詢問" style={{ display: 'inline-block', background: 'var(--teal)', color: '#fff', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: 15, padding: '16px 40px', borderRadius: 2 }}>
+            寄送履歷
+          </a>
+        </div>
+      </AnimUp>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <React.Fragment>
+      <SharedNav activeKey="關於我們" />
+      <SharedSocialSidebar />
+      <Hero />
+      <WhyJoin />
+      <Internship />
+      <Positions />
+      <CTA />
+      <SharedFooter />
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
