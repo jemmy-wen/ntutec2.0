@@ -250,7 +250,9 @@ function Process() {
     { step: '04', title: '成果驗收', desc: '期末評估成果達成率，提交完整報告並規劃後續擴大部署策略。' },
   ];
   return (
-    <section style={{ background: 'var(--navy)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+    <section style={{ position: 'relative', overflow: 'hidden', background: 'var(--navy)', padding: isMobile ? '56px 24px' : '96px 7%' }}>
+      <img src="images/events/opening-2026-01.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.12, pointerEvents: 'none' }} />
+      <div style={{ position: 'relative', zIndex: 1 }}>
       <AnimUp>
         <span className="sec-en" style={{ color: 'var(--mint)' }}>Process</span>
         <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 28 : 40, color: '#fff', marginBottom: 56 }}>
@@ -268,6 +270,7 @@ function Process() {
           </AnimUp>
         ))}
       </div>
+      </div>
     </section>
   );
 }
@@ -278,7 +281,8 @@ function CTA() {
   return (
     <section style={{ background: 'var(--offwhite)', padding: isMobile ? '48px 24px' : '80px 7%' }}>
       <AnimUp>
-        <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '40px 28px' : '64px 72px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32 }}>
+        <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '40px 28px' : '64px 72px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 32 }}>
+            <img src="images/events/opening-2026-networking.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, pointerEvents: 'none' }} />
           <div>
             <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.14em', textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>Get in Touch</span>
             <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: '#fff', marginBottom: 12 }}>洽詢諮詢服務</h2>

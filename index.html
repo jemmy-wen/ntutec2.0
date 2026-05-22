@@ -1540,8 +1540,9 @@ function Corporate() {
   const isMobile = useIsMobile();
   const services = ['台大創創加速器', '創新創業競賽', '共創工作坊', '服務設計諮詢'];
   return (
-    <section style={{ background: 'var(--navy)', padding: isMobile ? '56px 6%' : '88px 10%' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 40 : 80, alignItems: 'start' }}>
+    <section style={{ position: 'relative', overflow: 'hidden', background: 'var(--navy)', padding: isMobile ? '56px 6%' : '88px 10%' }}>
+      <img src="images/events/opening-2026-05.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, pointerEvents: 'none' }} />
+      <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 40 : 80, alignItems: 'start' }}>
         <div>
           <span className="sec-en" style={{ color: 'var(--teal)' }}>Corporate Innovation</span>
           <div className="sec-title-wrap"><h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 24 : 32, color: '#fff', lineHeight: 1.35, letterSpacing: '0.02em', marginBottom: 24 }}>中大型企業 開放式創新服務</h2></div>

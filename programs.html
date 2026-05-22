@@ -159,8 +159,9 @@ function TwoPrograms() {
 function Methodology() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--navy)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+    <section style={{ position: 'relative', overflow: 'hidden', padding: isMobile ? '72px 0' : '120px 0', background: 'var(--navy)' }}>
+      <img src="images/events/opening-2026-coaching.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.12, pointerEvents: 'none' }} />
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
         <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
           <span className="sec-en" style={{ color: 'rgba(255,255,255,0.5)' }}>Methodology</span>
           <h2 style={{ display: 'inline-block' }}>
@@ -250,7 +251,8 @@ function CTA() {
     <section style={{ padding: isMobile ? '48px 6%' : '80px 10%', background: 'var(--offwhite)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <AnimUp>
-          <div style={{ background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', textAlign: 'center' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--navy)', borderRadius: 4, padding: isMobile ? '48px 32px' : '72px 80px', textAlign: 'center' }}>
+            <img src="images/events/opening-2026-02.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, pointerEvents: 'none' }} />
             <h2 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 26 : 34, fontWeight: 600, color: '#fff', marginBottom: 16 }}>不確定適合哪個計畫？</h2>
             <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, maxWidth: 400, margin: '0 auto 32px' }}>查看常見問題，或直接與我們聯繫，讓我們協助你找到最適合的成長路徑。</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>

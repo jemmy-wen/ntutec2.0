@@ -152,8 +152,9 @@ function TwoTracks() {
 function ApplicationFlow() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--navy)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
+    <section style={{ position: 'relative', overflow: 'hidden', padding: isMobile ? '72px 0' : '120px 0', background: 'var(--navy)' }}>
+      <img src="images/events/opening-2026-pitching.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.12, pointerEvents: 'none' }} />
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
         <AnimUp style={{ marginBottom: isMobile ? 48 : 64, textAlign: 'center' }}>
           <span className="sec-en" style={{ color: 'rgba(255,255,255,0.5)', justifyContent: 'center', display: 'flex' }}>Process</span>
           <h2 style={{ display: 'inline-block' }}>
