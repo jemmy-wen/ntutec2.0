@@ -145,7 +145,7 @@ function SharedMobileDrawer({ open, onClose }) {
         {/* Header */}
         <div style={{ padding: '20px 24px', borderBottom: '1px solid #E0E0DC', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
           <a href="index.html">
-            <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC" style={{ height: 28, width: 'auto' }} />
+            <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC" style={{ height: 28, width: 'auto' }} />
           </a>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: '#1A2E4A' }}>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -251,7 +251,7 @@ function SharedNav({ activeKey, alwaysSolid = false }) {
           boxSizing: 'border-box',
         }}>
           <a href="index.html" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, textDecoration: 'none' }}>
-            <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC 臺大創創中心"
+            <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC 臺大創創中心"
               style={{ height: 36, width: 'auto', filter: solid ? 'none' : 'brightness(0) invert(1)', transition: 'filter 0.35s' }} />
           </a>
 
@@ -390,7 +390,7 @@ function SharedFooter() {
       }}>
         {/* Brand col */}
         <div style={{ gridColumn: isMobile ? '1 / -1' : 'auto' }}>
-          <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC" style={{ height: 36, filter: 'brightness(0) invert(1)', opacity: 0.85, marginBottom: 20 }} />
+          <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC" style={{ height: 36, filter: 'brightness(0) invert(1)', opacity: 0.85, marginBottom: 20 }} />
           <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 2 }}>
             <div>ntutec@ntutec.com</div>
             <div>台北市中正區思源街 18 號</div>
