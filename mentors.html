@@ -163,8 +163,8 @@ function CategoryOverview() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {CATEGORIES.map((cat, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: '#fff', padding: '32px 24px', textAlign: 'center' }}>
+            <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
+              <div style={{ background: '#fff', padding: '32px 24px', textAlign: 'center', height: '100%' }}>
                 <p style={{ fontFamily: 'var(--sans)', fontSize: 32, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.count}</p>
                 <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.title}</p>
                 <p style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginBottom: 12 }}>{cat.en}</p>
