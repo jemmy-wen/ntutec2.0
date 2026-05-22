@@ -121,7 +121,7 @@ function Hero() {
           {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
           <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', flex: isMobile ? '1 1 45%' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 6 }}>
-              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+              <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
               {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--teal)', marginLeft: 2 }}>{s.suffix}</span>}
             </div>
             <div style={{ fontFamily: 'var(--sans)', fontSize: 11.5, color: 'var(--muted)', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>{s.label}</div>
@@ -160,7 +160,7 @@ function Hero() {
               </div>
               <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? 'none' : 'translateY(16px)', transition: 'opacity 0.7s 0.36s, transform 0.7s 0.36s', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end', minHeight: 480 }}>
                 <div style={{ width: 100, height: 1, background: 'linear-gradient(90deg, transparent, var(--mint))', marginBottom: 18 }} />
-                <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 22, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 260 }}>從概念到 MVP，<br />陪你走過最關鍵的第一步。</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 22, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 260 }}>從概念到 MVP，<br />陪你走過最關鍵的第一步。</div>
               </div>
             </div>
           )}

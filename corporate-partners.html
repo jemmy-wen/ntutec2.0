@@ -94,7 +94,7 @@ function Hero() {
           {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
           <div style={{ padding: isMobile ? '18px 20px' : '24px 36px', flex: isMobile ? '1 1 45%' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none', borderBottom: isMobile && i < 2 ? '1px solid var(--rule)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 28 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+              <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: isMobile ? 28 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
               {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
               {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
             </div>
@@ -205,7 +205,7 @@ function Hero() {
                 justifyContent: 'flex-end', alignItems: 'flex-end', minHeight: 500,
               }}>
                 <div style={{ width: 100, height: 1, background: 'linear-gradient(90deg, transparent, var(--mint))', marginBottom: 18 }} />
-                <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontSize: 23, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 280 }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 23, color: 'rgba(255,255,255,0.72)', textAlign: 'right', lineHeight: 1.65, maxWidth: 280 }}>
                   從台大出發，<br />與企業共創未來。
                 </div>
               </div>
@@ -653,7 +653,7 @@ function FeaturedCases() {
           </AnimUp>
           <AnimUp delay={100}>
             <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, lineHeight: 1.75, color: 'var(--navy)', maxWidth: 420, paddingBottom: isMobile ? 0 : 12 }}>
-              累計 27 期、35 家企業夥伴的深度共創實績<span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', color: 'var(--mint)' }}>—</span>涵蓋科技、媒體、金融等多元產業。
+              累計 27 期、35 家企業夥伴的深度共創實績<span style={{ fontFamily: 'var(--mono)', color: 'var(--mint)' }}>—</span>涵蓋科技、媒體、金融等多元產業。
             </p>
           </AnimUp>
         </div>

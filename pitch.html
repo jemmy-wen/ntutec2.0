@@ -103,7 +103,7 @@ function Hero() {
           {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
           <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', flex: isMobile ? '1 1 45%' : 'none', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-              <span style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)' }}>{s.num}</span>
+              <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: isMobile ? 28 : 36, color: 'var(--navy)' }}>{s.num}</span>
               {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 16, color: 'var(--teal)' }}>{s.plus}</span>}
               {s.suffix && <span style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 13, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
             </div>
