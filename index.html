@@ -268,7 +268,7 @@ function MobileDrawer({ onClose }) {
       <div className="mobile-drawer-panel" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--rule)' }}>
-          <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC" style={{ height: 30, width: 'auto' }} />
+          <img src="images/ntutec-logo.png" alt="NTUTEC" style={{ height: 30, width: 'auto' }} />
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: 'var(--navy)' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -363,12 +363,12 @@ function Nav({ scrolled }) {
         borderBottom: open ? '1px solid transparent' : `1px solid ${borderCol}`,
         transition: 'background 0.4s, border 0.2s',
         height: 64, display: 'flex', alignItems: 'center',
-        padding: '0 20px 0 20px', justifyContent: 'space-between',
+        padding: '0 56px', justifyContent: 'space-between',
         maxWidth: '100vw', boxSizing: 'border-box',
       }}>
         {/* Logo */}
         <a href="#" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC 臺大創創中心"
+          <img src="images/ntutec-logo.png" alt="NTUTEC 臺大創創中心"
             style={{ height: 36, width: 'auto', filter: scrolled ? 'none' : 'brightness(0) invert(1)', transition: 'filter 0.4s ease' }} />
         </a>
 
@@ -1771,7 +1771,7 @@ function Footer() {
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr 1fr 1fr 1fr', gap: isMobile ? 32 : 40, marginBottom: isMobile ? 40 : 64 }}>
         <div>
           <div style={{ marginBottom: 20 }}>
-            <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC 臺大創創中心"
+            <img src="images/ntutec-logo.png" alt="NTUTEC 臺大創創中心"
               style={{ height: 40, width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.85 }} />
           </div>
           <p style={{ fontFamily: 'var(--sans)', fontSize: 13.5, fontWeight: 300, lineHeight: 1.9, color: 'rgba(255,255,255,0.35)', marginBottom: 20 }}>
