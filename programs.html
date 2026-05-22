@@ -231,8 +231,8 @@ function AppTimeline() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {TIMELINE_ITEMS.map((t, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: '#fff', padding: isMobile ? '24px 16px' : '40px 28px', textAlign: 'center' }}>
+            <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
+              <div style={{ background: '#fff', padding: isMobile ? '24px 16px' : '40px 28px', textAlign: 'center', height: '100%' }}>
                 <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, color: 'var(--teal)', marginBottom: 16, lineHeight: 1.5 }}>{t.period}</p>
                 <h4 style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>{t.label}</h4>
                 <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>{t.desc}</p>

@@ -242,7 +242,7 @@ function Eligibility() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(5, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {ELIGIBILITY.map((item, i) => (
-            <AnimUp key={i} delay={i * 60}>
+            <AnimUp key={i} delay={i * 60} style={{ height: '100%' }}>
               <div style={{ background: '#fff', padding: isMobile ? '24px 20px' : '36px 28px', height: '100%' }}>
                 <div style={{ fontFamily: 'var(--mono)', fontSize: 26, fontWeight: 700, color: 'var(--rule)', marginBottom: 16, lineHeight: 1 }}>0{i + 1}</div>
                 <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{item}</p>
@@ -271,7 +271,7 @@ function AlumniSection() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {ALUMNI.map((a, i) => (
-            <AnimUp key={i} delay={i * 80}>
+            <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
               <div style={{ background: '#fff', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div style={{ width: '100%', aspectRatio: '3/2', overflow: 'hidden' }}>
                   <img src={a.img} alt={a.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

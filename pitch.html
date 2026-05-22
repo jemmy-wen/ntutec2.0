@@ -238,8 +238,8 @@ function AfterSubmit() {
         return (
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
             {afterSubmit.map((s, i) => (
-              <AnimUp key={s.step} delay={i * 80}>
-                <div style={{ background: 'var(--offwhite)' }}>
+              <AnimUp key={s.step} delay={i * 80} style={{ height: '100%' }}>
+                <div style={{ background: 'var(--offwhite)', height: '100%' }}>
                   <div style={{ height: 200, overflow: 'hidden' }}>
                     <img src={STEP_IMGS[i]} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   </div>

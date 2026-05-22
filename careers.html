@@ -230,7 +230,7 @@ function Positions() {
       </AnimUp>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
         {positions.map((pos, i) => (
-          <AnimUp key={pos.title} delay={i * 80}>
+          <AnimUp key={pos.title} delay={i * 80} style={{ height: '100%' }}>
             <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '40px', display: 'flex', flexDirection: 'column', height: '100%' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <span style={{ background: pos.featured ? 'var(--teal)' : '#e8f7f5', color: pos.featured ? '#fff' : 'var(--teal)', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, padding: '4px 12px', borderRadius: 2, letterSpacing: '0.08em' }}>{pos.badge}</span>

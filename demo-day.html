@@ -117,8 +117,8 @@ function Stats2025() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)', marginBottom: isMobile ? 0 : 80 }}>
           {STATS_2025.map((s, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: '#fff', padding: isMobile ? '24px 20px' : '40px 32px', textAlign: 'center' }}>
+            <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
+              <div style={{ background: '#fff', padding: isMobile ? '24px 20px' : '40px 32px', textAlign: 'center', height: '100%' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 2, marginBottom: 8 }}>
                   <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 32 : 44, color: 'var(--navy)' }}>{s.value}</span>
                   <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 16, color: 'var(--teal)', marginLeft: 3 }}>{s.unit}</span>
@@ -252,8 +252,8 @@ function ThreeWayCTA() {
         </AnimUp>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {CTAS.map((c, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 40px' }}>
+            <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
+              <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 40px', height: '100%' }}>
                 <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 16 }}>{c.label}</p>
                 <h3 style={{ fontFamily: 'var(--serif)', fontSize: 22, fontWeight: 600, color: 'var(--navy)', marginBottom: 16 }}>{c.title}</h3>
                 <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginBottom: 32 }}>{c.desc}</p>

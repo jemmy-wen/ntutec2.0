@@ -928,9 +928,9 @@ function Programs() {
 
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 1, background: 'var(--rule)' }}>
         {programs.map((p, i) => (
-          <AnimBlock key={i} animation="anim-fadeUp" delay={i * 100}>
+          <AnimBlock key={i} animation="anim-fadeUp" delay={i * 100} style={{ height: '100%' }}>
           <a href={p.href} style={{
-            display: 'block', background: 'var(--white)',
+            display: 'block', background: 'var(--white)', height: '100%',
             padding: isMobile ? '28px 20px' : '48px 40px',
             transition: 'background 0.2s',
           }}
