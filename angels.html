@@ -276,9 +276,7 @@ function CaseCard({ data, delay }) {
     <AnimUp delay={delay} style={{ height: '100%' }}>
       <div style={{
         background: '#fff',
-        borderRadius: 4,
         overflow: 'hidden',
-        boxShadow: '0 8px 18px -6px rgba(0,0,0,0.12), 0 12px 42px -4px rgba(0,0,0,0.12)',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
@@ -345,7 +343,7 @@ function CaseCard({ data, delay }) {
 function RecentInvestments() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
         <AnimUp>
           <div style={{ marginBottom: isMobile ? 36 : 56 }}>
@@ -356,7 +354,7 @@ function RecentInvestments() {
           </div>
         </AnimUp>
 
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 24, alignItems: 'stretch' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 1, background: 'var(--rule)', alignItems: 'stretch' }}>
           {CASES.map((c, i) => <CaseCard key={i} data={c} delay={i * 80} />)}
         </div>
       </div>
