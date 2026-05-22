@@ -220,17 +220,22 @@ function TrackRecord() {
         </AnimUp>
         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24 }}>
           {[
-            { industry: '科技媒體', company: '聯合報系', batch: 'Batch 2022', desc: '孵育 AI 新聞摘要新創，完成 POC 並獲集團採用。' },
-            { industry: '金融保險', company: '富邦金控', batch: 'Batch 2023', desc: '共創數位保險服務，協助三組新創完成銀行場域驗證。' },
-            { industry: '零售通路', company: '全家便利商店', batch: 'Batch 2023', desc: '結合 AIoT 技術優化門市運營，完成 50 店 PoC。' },
-            { industry: '能源製造', company: '台灣電力', batch: 'Batch 2024', desc: '協助電網數位轉型，孵育三組能源管理新創團隊。' },
+            { industry: '科技媒體', company: '聯合報系', batch: 'Batch 2022', desc: '孵育 AI 新聞摘要新創，完成 POC 並獲集團採用。', img: 'Uploads/fig-case-udn.png' },
+            { industry: '金融保險', company: '富邦金控', batch: 'Batch 2023', desc: '共創數位保險服務，協助三組新創完成銀行場域驗證。', img: 'images/events/demo-day-2025-booth2.jpg' },
+            { industry: '零售通路', company: '全家便利商店', batch: 'Batch 2023', desc: '結合 AIoT 技術優化門市運營，完成 50 店 PoC。', img: 'Uploads/fig-case-coop.png' },
+            { industry: '能源製造', company: '台灣電力', batch: 'Batch 2024', desc: '協助電網數位轉型，孵育三組能源管理新創團隊。', img: 'images/events/opening-2026-02.jpg' },
           ].map((c, i) => (
             <AnimUp key={c.company} delay={i * 60}>
-              <div style={{ background: '#fff', padding: 28, borderRadius: 2 }}>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{c.industry}</span>
-                <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--navy)', margin: '8px 0 4px' }}>{c.company}</h4>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{c.batch}</span>
-                <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.65, marginTop: 12 }}>{c.desc}</p>
+              <div style={{ background: '#fff', borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{ height: 160, overflow: 'hidden' }}>
+                  <img src={c.img} alt={c.company} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <div style={{ padding: 28 }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{c.industry}</span>
+                  <h4 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--navy)', margin: '8px 0 4px' }}>{c.company}</h4>
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>{c.batch}</span>
+                  <p style={{ fontFamily: 'var(--sans)', fontWeight: 300, fontSize: 14, color: 'var(--muted)', lineHeight: 1.65, marginTop: 12 }}>{c.desc}</p>
+                </div>
               </div>
             </AnimUp>
           ))}

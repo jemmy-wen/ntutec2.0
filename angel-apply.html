@@ -131,6 +131,17 @@ const ELIGIBILITY = [
   '繳納年度會費（個人會員 NT$50,000/年；企業會員 NT$100,000/年）',
 ];
 
+const ELIGIBILITY_ICONS = [
+  // 燈泡 — 有興趣
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="13" r="7" stroke="var(--teal)" strokeWidth="1.6"/><path d="M13 20h6M14 23h4" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round"/><path d="M16 6V4M22.5 9.5l1.5-1.5M25 16h2M9.5 9.5 8 8M7 16H5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round"/></svg>,
+  // 握手 — 認同使命
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 18l5-5 3 3 5-5 3 3 5-5 3 3" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 13l-5 5 2 2 5-5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M23 11l5 5-2 2-5-5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  // 月曆 — 願意參與
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="5" y="8" width="22" height="18" rx="2" stroke="var(--teal)" strokeWidth="1.6"/><path d="M5 13h22M11 6v4M21 6v4" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round"/><path d="M10 18h2M15 18h2M20 18h2M10 22h2M15 22h2" stroke="var(--mint)" strokeWidth="1.6" strokeLinecap="round"/></svg>,
+  // 硬幣 — 繳納年費
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="var(--teal)" strokeWidth="1.6"/><path d="M16 10v2M16 20v2M13 13.5c0-1 1-2 3-2s3 1 3 2-2 2-3 2-3 1-3 2 1 2 3 2 3-1 3-2" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+];
+
 function Eligibility() {
   const isMobile = useIsMobile();
   return (
@@ -144,12 +155,17 @@ function Eligibility() {
             </h2>
           </div>
         </AnimUp>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 720 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {ELIGIBILITY.map((item, i) => (
             <AnimUp key={i} delay={i * 70}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '20px 24px', background: 'var(--offwhite)', borderLeft: '3px solid var(--mint)' }}>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 500, color: 'var(--teal)', marginTop: 2, flexShrink: 0 }}>0{i + 1}</span>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: 'var(--text)' }}>{item}</p>
+              <div style={{ background: '#fff', padding: isMobile ? '28px 20px' : '40px 36px', display: 'flex', flexDirection: 'column', gap: 20, height: '100%' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(88,168,160,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {ELIGIBILITY_ICONS[i]}
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, color: 'var(--rule)', marginBottom: 12, letterSpacing: '0.1em' }}>0{i + 1}</div>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 400, lineHeight: 1.85, color: 'var(--text)' }}>{item}</p>
+                </div>
               </div>
             </AnimUp>
           ))}
@@ -171,30 +187,41 @@ const FEATURES = [
 function MemberFeatures() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--mint)' }}>
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--mint)', overflow: 'hidden' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
-        <AnimUp>
-          <div style={{ marginBottom: isMobile ? 40 : 64 }}>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--navy)', textTransform: 'uppercase', display: 'block', marginBottom: 12, opacity: 0.7 }}>Member Access</span>
-            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: 'var(--navy)', lineHeight: 1.4 }}>入會後，你可以做什麼</h2>
-          </div>
-        </AnimUp>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {FEATURES.map((f, i) => (
-            <AnimUp key={i} delay={i * 70}>
-              <div style={{
-                display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
-                gap: isMobile ? 16 : 40,
-                padding: isMobile ? '20px 0' : '24px 0',
-                borderBottom: i < FEATURES.length - 1 ? '1px solid rgba(26,46,74,0.15)' : 'none',
-                flexDirection: isMobile ? 'column' : 'row',
-              }}>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, color: 'rgba(26,46,74,0.5)', flexShrink: 0, width: isMobile ? 'auto' : 60 }}>0{i + 1}</span>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 17 : 20, fontWeight: 600, color: 'var(--navy)', flexShrink: 0, width: isMobile ? 'auto' : 220 }}>{f.title}</h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(26,46,74,0.75)' }}>{f.body}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 48 : 80, alignItems: 'center' }}>
+          <div>
+            <AnimUp>
+              <div style={{ marginBottom: isMobile ? 36 : 48 }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--navy)', textTransform: 'uppercase', display: 'block', marginBottom: 12, opacity: 0.7 }}>Member Access</span>
+                <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: isMobile ? 26 : 36, color: 'var(--navy)', lineHeight: 1.4 }}>入會後，你可以做什麼</h2>
               </div>
             </AnimUp>
-          ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {FEATURES.map((f, i) => (
+                <AnimUp key={i} delay={i * 70}>
+                  <div style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 24,
+                    padding: '20px 0',
+                    borderBottom: i < FEATURES.length - 1 ? '1px solid rgba(26,46,74,0.15)' : 'none',
+                  }}>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, color: 'rgba(26,46,74,0.45)', flexShrink: 0, paddingTop: 3, width: 28 }}>0{i + 1}</span>
+                    <div>
+                      <h3 style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{f.title}</h3>
+                      <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(26,46,74,0.75)' }}>{f.body}</p>
+                    </div>
+                  </div>
+                </AnimUp>
+              ))}
+            </div>
+          </div>
+          {!isMobile && (
+            <AnimUp delay={120}>
+              <div style={{ borderRadius: 4, overflow: 'hidden', height: 520 }}>
+                <img src="images/events/opening-2026-pitching.jpg" alt="天使例會" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              </div>
+            </AnimUp>
+          )}
         </div>
       </div>
     </section>
@@ -221,53 +248,66 @@ function Application() {
             </h2>
           </div>
         </AnimUp>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24, marginBottom: 40 }}>
-          {/* Individual */}
-          <AnimUp>
-            <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, border: '1px solid var(--rule)', height: '100%' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--navy)', marginBottom: 8 }}>個人會員</div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 32, fontWeight: 400, color: 'var(--navy)', lineHeight: 1, marginBottom: 8 }}>
-                NT$50,000
-                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'var(--muted)', marginLeft: 6 }}>/年</span>
-              </div>
-              <div style={{ borderTop: '1px solid var(--rule)', marginTop: 28, paddingTop: 28 }}>
-                <a href="https://forms.gle/zgjGP7RW7sgG911YA" target="_blank" rel="noopener" style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  padding: '14px 28px', background: 'var(--navy)',
-                  fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, color: 'var(--mint)',
-                  transition: 'background 0.2s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = '#243d5e'}
-                onMouseLeave={e => e.currentTarget.style.background = 'var(--navy)'}>
-                  個人申請表單 →
-                </a>
-              </div>
+        {(() => {
+          const CheckIcon = ({ light }) => (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+              <circle cx="8" cy="8" r="7" stroke={light ? 'rgba(0,216,200,0.5)' : 'rgba(88,168,160,0.5)'} strokeWidth="1"/>
+              <path d="M5 8l2 2 4-4" stroke={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          );
+          const indFeatures = ['每月精選新創資訊卡片', '完整 DD 備忘錄與盡調資料', '月會出席與記名投票權', '40+ 天使投資人社群交流', '投後 Portfolio 追蹤更新', '月會後新創實地參訪'];
+          const corpFeatures = ['可指派 3 位代表出席', '包含所有個人會員權益', '優先企業參訪安排', '企業品牌曝光與共投機會', '專屬案源推薦通道', '年度投資趨勢報告'];
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24, marginBottom: 40 }}>
+              {/* Individual */}
+              <AnimUp>
+                <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: 'var(--navy)', marginBottom: 6 }}>個人會員</div>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)', marginBottom: 24 }}>天使投資人 · 企業高階主管</div>
+                  <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 44, color: 'var(--navy)', lineHeight: 1, marginBottom: 32 }}>
+                    NT$50,000 <span style={{ fontSize: 15, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'var(--muted)' }}>/年</span>
+                  </div>
+                  <div style={{ borderTop: '1px solid var(--rule)', paddingTop: 28, flex: 1 }}>
+                    {indFeatures.map((f, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+                        <CheckIcon light={false} />
+                        <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.65, color: 'var(--text)' }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a href="https://forms.gle/zgjGP7RW7sgG911YA" target="_blank" rel="noopener" style={{ display: 'block', textAlign: 'center', background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 600, padding: '16px 28px', marginTop: 32, borderRadius: 4, transition: 'background 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.background='#243d5e'}
+                  onMouseLeave={e => e.currentTarget.style.background='var(--navy)'}>
+                    個人申請表單 →
+                  </a>
+                </div>
+              </AnimUp>
+              {/* Corporate */}
+              <AnimUp delay={120}>
+                <div style={{ background: '#0d0d0d', border: '2px solid var(--mint)', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 6 }}>企業會員</div>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 24 }}>CVC · 創投 · 金融機構 · 企業集團</div>
+                  <div style={{ fontFamily: 'var(--italic)', fontStyle: 'italic', fontWeight: 600, fontSize: 44, color: '#fff', lineHeight: 1, marginBottom: 32 }}>
+                    NT$100,000 <span style={{ fontSize: 15, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'rgba(255,255,255,0.5)' }}>/年</span>
+                  </div>
+                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 28, flex: 1 }}>
+                    {corpFeatures.map((f, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+                        <CheckIcon light={true} />
+                        <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.65, color: 'rgba(255,255,255,0.82)' }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a href="https://forms.gle/n38sNQznLG62ypyK9" target="_blank" rel="noopener" style={{ display: 'block', textAlign: 'center', background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 600, padding: '16px 28px', marginTop: 32, borderRadius: 4, transition: 'background 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.background='#00bfb8'}
+                  onMouseLeave={e => e.currentTarget.style.background='var(--mint)'}>
+                    企業申請表單 →
+                  </a>
+                </div>
+              </AnimUp>
             </div>
-          </AnimUp>
-          {/* Corporate */}
-          <AnimUp delay={100}>
-            <div style={{ background: '#0d0d0d', padding: isMobile ? '32px 24px' : '48px 44px', borderRadius: 4, border: '2px solid var(--mint)', height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 8 }}>企業會員</div>
-              <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>可指派 3 位代表</div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 32, fontWeight: 400, color: '#fff', lineHeight: 1, marginBottom: 8 }}>
-                NT$100,000
-                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', marginLeft: 6 }}>/年</span>
-              </div>
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', marginTop: 28, paddingTop: 28, flex: 1, display: 'flex', alignItems: 'flex-end' }}>
-                <a href="https://forms.gle/n38sNQznLG62ypyK9" target="_blank" rel="noopener" style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  padding: '14px 28px', background: 'var(--mint)',
-                  fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, color: 'var(--navy)',
-                  transition: 'background 0.2s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = '#00bfb8'}
-                onMouseLeave={e => e.currentTarget.style.background = 'var(--mint)'}>
-                  企業申請表單 →
-                </a>
-              </div>
-            </div>
-          </AnimUp>
-        </div>
+          );
+        })()}
         <AnimUp delay={150}>
           <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 32 }}>
             申請審核通過後，中心將引導您完成年費繳納流程（台大捐款平台）。
