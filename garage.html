@@ -65,10 +65,10 @@ const BENEFITS = [
 ];
 
 const ALUMNI = [
-  { name: 'MoBagel 行動貝果', sector: 'AutoML / 企業 AI', highlight: '累計募資 US$21M+，服務 3,000+ 品牌（含 Fortune 500），2026 Q1 獲台大天使會投資。' },
-  { name: '方格子 vocus', sector: '華文內容訂閱平台', highlight: '月均 200 萬不重複造訪、會員 72 萬、創作者 2 萬+。' },
-  { name: '3drens 三維人', sector: '車聯網 × IoT × 大數據', highlight: '募得近 NT$1 億（台杉、活水、廣信領投），客戶含 yoxi、PChome。' },
-  { name: 'Hotcake 夯客', sector: '美業預約與會員系統', highlight: 'Pre-A 輪 US$1M+，商家續訂率 98%，2025 拓展日泰。' },
+  { name: 'MoBagel 行動貝果', sector: 'AutoML / 企業 AI', highlight: '累計募資 US$21M+，服務 3,000+ 品牌（含 Fortune 500），2026 Q1 獲台大天使會投資。', img: 'images/events/opening-2026-coaching.jpg' },
+  { name: '方格子 vocus', sector: '華文內容訂閱平台', highlight: '月均 200 萬不重複造訪、會員 72 萬、創作者 2 萬+。', img: 'images/events/opening-2026-audience.jpg' },
+  { name: '3drens 三維人', sector: '車聯網 × IoT × 大數據', highlight: '募得近 NT$1 億（台杉、活水、廣信領投），客戶含 yoxi、PChome。', img: 'images/events/opening-2026-networking.jpg' },
+  { name: 'Hotcake 夯客', sector: '美業預約與會員系統', highlight: 'Pre-A 輪 US$1M+，商家續訂率 98%，2025 拓展日泰。', img: 'images/events/demo-day-2025-02.jpg' },
 ];
 
 const ELIGIBILITY = [
@@ -136,7 +136,7 @@ function Hero() {
       <section style={{ position: 'relative', background: 'var(--offwhite)', overflow: 'hidden', minHeight: isMobile ? 480 : 720 }}>
         <div style={{ position: 'absolute', inset: 0, clipPath: isMobile ? 'none' : 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'var(--navy)' }} />
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(images/events/opening-2026-classroom.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 60%', backgroundRepeat: 'no-repeat', opacity: 0.82 }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(images/events/demo-day-2025-booth1.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 60%', backgroundRepeat: 'no-repeat', opacity: 0.82 }} />
           <div style={{ position: 'absolute', inset: 0, background: isMobile ? 'linear-gradient(to bottom, rgba(26,46,74,0.75) 0%, rgba(26,46,74,0.55) 100%)' : 'linear-gradient(to top right, rgba(26,46,74,0.90) 0%, rgba(88,168,160,0.55) 32%, rgba(0,216,200,0.10) 55%, transparent 75%)' }} />
           {!isMobile && <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(26,46,74,0.45) 0%, transparent 42%)' }} />}
         </div>
@@ -240,12 +240,12 @@ function Eligibility() {
             <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>誰可以申請？</span>
           </h2>
         </AnimUp>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(5, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {ELIGIBILITY.map((item, i) => (
             <AnimUp key={i} delay={i * 60}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '20px 24px', background: 'var(--offwhite)', borderRadius: 4 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--teal)', flexShrink: 0, marginTop: 6 }} />
-                <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{item}</p>
+              <div style={{ background: '#fff', padding: isMobile ? '24px 20px' : '36px 28px', height: '100%' }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 26, fontWeight: 700, color: 'var(--rule)', marginBottom: 16, lineHeight: 1 }}>0{i + 1}</div>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{item}</p>
               </div>
             </AnimUp>
           ))}
@@ -258,21 +258,29 @@ function Eligibility() {
 function AlumniSection() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--teal)' }}>
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
-        <AnimUp style={{ marginBottom: isMobile ? 36 : 56, textAlign: isMobile ? 'left' : 'right' }}>
-          <span className="sec-en" style={{ color: 'rgba(255,255,255,0.65)', display: 'flex', justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>Alumni Highlights</span>
-          <h2 style={{ display: 'inline-block' }}>
-            <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, lineHeight: 1.4, color: '#fff', display: 'inline', background: 'var(--navy)', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', padding: '4px 10px', fontSize: isMobile ? 28 : 36 }}>歷屆校友（列舉）</span>
-          </h2>
+        <AnimUp style={{ marginBottom: isMobile ? 36 : 56, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexDirection: isMobile ? 'column' : 'row', gap: 16 }}>
+          <div>
+            <span className="sec-en">Alumni Highlights</span>
+            <h2 style={{ display: 'inline-block' }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>歷屆校友（列舉）</span>
+            </h2>
+          </div>
+          <a href="alumni.html" className="more-detail" style={{ fontSize: 11.5 }}>MORE DETAIL : 成功校友</a>
         </AnimUp>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {ALUMNI.map((a, i) => (
             <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: 'rgba(255,255,255,0.12)', padding: '28px 32px', borderRadius: 4, backdropFilter: 'blur(8px)' }}>
-                <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', marginBottom: 10 }}>{a.sector}</p>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>{a.name}</h3>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(255,255,255,0.8)' }}>{a.highlight}</p>
+              <div style={{ background: '#fff', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <div style={{ width: '100%', aspectRatio: '3/2', overflow: 'hidden' }}>
+                  <img src={a.img} alt={a.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ padding: isMobile ? '20px 20px' : '28px 28px', flex: 1 }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 10.5, fontWeight: 500, color: 'var(--teal)', background: 'rgba(88,160,160,0.08)', border: '1px solid rgba(88,160,160,0.2)', padding: '2px 10px', borderRadius: 100, display: 'inline-block', marginBottom: 12 }}>{a.sector}</span>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--navy)', marginBottom: 8, lineHeight: 1.4 }}>{a.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, lineHeight: 1.8, color: 'var(--muted)' }}>{a.highlight}</p>
+                </div>
               </div>
             </AnimUp>
           ))}
@@ -285,28 +293,34 @@ function AlumniSection() {
 function BatchSchedule() {
   const isMobile = useIsMobile();
   return (
-    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
+    <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: '#fff' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
-        <AnimUp style={{ marginBottom: isMobile ? 36 : 56 }}>
-          <span className="sec-en">Batch Schedule</span>
-          <h2 style={{ display: 'inline-block' }}>
-            <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>梯次時程</span>
-          </h2>
-        </AnimUp>
-        <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 300, lineHeight: 2, color: 'var(--muted)', marginBottom: 40 }}>車庫採年度梯次制，每年 3 月進駐至 12 月結束。2027 梯次預計 2026 年 12 月開放申請。</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {SCHEDULE.map((item, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '24px 0', borderTop: '1px solid var(--rule)' }}>
-                <div style={{ width: 12, height: 12, borderRadius: '50%', background: item.active ? 'var(--teal)' : 'var(--rule)', flexShrink: 0, marginTop: 4 }} />
-                <div>
-                  <p style={{ fontFamily: 'var(--serif)', fontWeight: item.active ? 600 : 400, fontSize: 16, color: item.active ? 'var(--text)' : 'var(--muted)', marginBottom: 4 }}>{item.label}</p>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)' }}>{item.desc}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr', gap: isMobile ? 40 : 80, alignItems: 'start' }}>
+          <AnimUp>
+            <span className="sec-en">Batch Schedule</span>
+            <h2 style={{ display: 'inline-block', marginBottom: 20 }}>
+              <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>梯次時程</span>
+            </h2>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>車庫採年度梯次制，每年 3 月進駐至 12 月結束。2027 梯次預計 2026 年 12 月開放申請。</p>
+          </AnimUp>
+          <div>
+            {SCHEDULE.map((item, i) => (
+              <AnimUp key={i} delay={i * 80}>
+                <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr', gap: 20, padding: '28px 0', borderTop: '1px solid var(--rule)', alignItems: 'start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5 }}>
+                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: item.active ? 'var(--teal)' : 'var(--rule)', flexShrink: 0 }} />
+                    {i < SCHEDULE.length - 1 && <div style={{ width: 1, flex: 1, background: 'var(--rule)', marginTop: 8, minHeight: 24 }} />}
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: 'var(--serif)', fontWeight: item.active ? 600 : 500, fontSize: 16, color: item.active ? 'var(--text)' : 'var(--muted)', marginBottom: 6, lineHeight: 1.4 }}>{item.label}</p>
+                    <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
+                    {item.active && <span style={{ display: 'inline-block', marginTop: 10, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--teal)', background: 'rgba(88,168,160,0.1)', padding: '2px 10px', borderRadius: 2 }}>進行中</span>}
+                  </div>
                 </div>
-              </div>
-            </AnimUp>
-          ))}
-          <div style={{ borderTop: '1px solid var(--rule)' }} />
+              </AnimUp>
+            ))}
+            <div style={{ borderTop: '1px solid var(--rule)' }} />
+          </div>
         </div>
       </div>
     </section>
