@@ -145,7 +145,7 @@ function SharedMobileDrawer({ open, onClose }) {
         {/* Header */}
         <div style={{ padding: '20px 24px', borderBottom: '1px solid #E0E0DC', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
           <a href="index.html">
-            <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC" style={{ height: 28, width: 'auto' }} />
+            <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC" style={{ height: 44, width: 'auto' }} />
           </a>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: '#1A2E4A' }}>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -252,7 +252,7 @@ function SharedNav({ activeKey, alwaysSolid = false }) {
         }}>
           <a href="index.html" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, textDecoration: 'none' }}>
             <img src="images/ntutec-logo-horizontal-zh.png" alt="NTUTEC 臺大創創中心"
-              style={{ height: 36, width: 'auto', filter: solid ? 'none' : 'brightness(0) invert(1)', transition: 'filter 0.35s' }} />
+              style={{ height: 48, width: 'auto', filter: solid ? 'none' : 'brightness(0) invert(1)', transition: 'filter 0.35s' }} />
           </a>
 
           {/* Desktop links */}
