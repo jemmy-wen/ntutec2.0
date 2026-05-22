@@ -50,8 +50,8 @@ function AnimUp({ children, delay = 0, style = {} }) {
 }
 
 const LEADERSHIP = [
-  { initials: '莊', name: '莊裕澤', title: '中心主任', en: 'Director', bio: '台大資訊管理學系暨研究所專任教授，具多年新創育成經驗。主任代表校方監督中心營運，負責對校層級的治理、財務、人事與組織規章。' },
-  { initials: '林', name: '林文欽 Vincent', title: '執行長 CEO', en: 'Chief Executive Officer', bio: '前騰訊副總經理、京東商城副總裁，台大 EMBA。負責中心日常營運、策略方向與投資決策，主導台大天使會與新創輔導整體規劃。' },
+  { initials: '莊', name: '莊裕澤', title: '中心主任', en: 'Director', img: 'images/team/chuang-yuze.jpg', bio: '台大資訊管理學系暨研究所專任教授，具多年新創育成經驗。主任代表校方監督中心營運，負責對校層級的治理、財務、人事與組織規章。' },
+  { initials: '林', name: '林文欽 Vincent', title: '執行長 CEO', en: 'Chief Executive Officer', img: 'images/team/vincent-lin.png', bio: '前騰訊副總經理、京東商城副總裁，台大 EMBA。負責中心日常營運、策略方向與投資決策，主導台大天使會與新創輔導整體規劃。' },
 ];
 
 const TEAM = [
@@ -99,23 +99,22 @@ function LeadershipSection() {
             <span className="sec-title-hl" style={{ fontSize: isMobile ? 28 : 36 }}>中心領導</span>
           </h2>
         </AnimUp>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 1, background: 'var(--rule)' }}>
           {LEADERSHIP.map((m, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 24, padding: '32px 0', borderTop: '1px solid var(--rule)' }}>
-                <div style={{ width: 64, height: 80, borderRadius: 4, background: 'linear-gradient(135deg, var(--teal), var(--navy))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: '#fff' }}>{m.initials}</span>
+            <AnimUp key={i} delay={i * 100}>
+              <div style={{ background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ height: isMobile ? 280 : 380, overflow: 'hidden', background: 'var(--offwhite)' }}>
+                  <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
                 </div>
-                <div>
-                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.16em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 6 }}>{m.en}</p>
-                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{m.name}</h3>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>{m.title}</p>
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', maxWidth: 640 }}>{m.bio}</p>
+                <div style={{ padding: isMobile ? '28px 24px' : '40px 44px' }}>
+                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 500, letterSpacing: '0.16em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 8 }}>{m.en || m.title}</p>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 22 : 28, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{m.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>{m.title}</p>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.95, color: 'var(--muted)' }}>{m.bio}</p>
                 </div>
               </div>
             </AnimUp>
           ))}
-          <div style={{ borderTop: '1px solid var(--rule)' }} />
         </div>
       </div>
     </section>
@@ -134,20 +133,27 @@ function CoreTeam() {
           </h2>
           <p style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginTop: 20, maxWidth: 440, marginLeft: 'auto' }}>四位經理依四大聚焦領域分工，分別帶領 AI 軟體、生技醫療、硬科技與創新商模輔導小組。</p>
         </AnimUp>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 1, background: 'var(--rule)' }}>
           {TEAM.map((m, i) => (
-            <AnimUp key={i} delay={i * 80}>
-              <div style={{ background: '#fff', padding: '28px 28px', borderRadius: 4, display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(88,168,160,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 600, color: 'var(--teal)' }}>{m.initials}</span>
+            <AnimUp key={i} delay={i * 70}>
+              <div style={{ background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                {/* Photo placeholder */}
+                <div style={{ aspectRatio: '3/4', background: 'linear-gradient(160deg, var(--offwhite) 0%, #e8e5e0 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, overflow: 'hidden' }}>
+                  {m.img
+                    ? <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                    : <>
+                        <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(88,168,160,0.15)', border: '1.5px dashed var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 600, color: 'var(--teal)' }}>{m.initials}</span>
+                        </div>
+                        <span style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Photo TBD</span>
+                      </>
+                  }
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
-                    <h3 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>{m.name}</h3>
-                    <span style={{ background: 'rgba(88,168,160,0.12)', color: 'var(--teal)', fontFamily: 'var(--sans)', fontSize: 11, fontWeight: 500, padding: '2px 10px', borderRadius: 10, whiteSpace: 'nowrap' }}>{m.focus}</span>
-                  </div>
-                  <p style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>{m.title} · {m.en}</p>
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{m.bio}</p>
+                <div style={{ padding: isMobile ? '20px 18px' : '28px 24px' }}>
+                  <span style={{ display: 'inline-block', background: 'rgba(88,168,160,0.10)', color: 'var(--teal)', fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 500, padding: '2px 10px', borderRadius: 10, marginBottom: 12 }}>{m.focus}</span>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 14 : 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 2, lineHeight: 1.4 }}>{m.name}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>{m.title}</p>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 12, fontWeight: 300, lineHeight: 1.85, color: 'var(--muted)' }}>{m.bio}</p>
                 </div>
               </div>
             </AnimUp>
