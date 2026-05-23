@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Kit — NTUTEC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1A2E4A; --teal: #58A8A0; --mint: #00D8C8;
+      --white: #FAFAF8; --offwhite: #F7F5F1; --rule: #E0E0DC;
+      --text: #1A1A18; --muted: #6C727B;
+      --serif: 'Noto Sans TC', sans-serif;
+      --sans: 'DM Sans', 'Noto Sans TC', sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--offwhite); color: var(--text); }
+    ::selection { background: var(--mint); color: var(--navy); }
+    * { box-sizing: border-box; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ── Swatch ── */
+function Swatch({ token, hex, usage, dark }) {
+  const [copied, setCopied] = useState(false);
+  function copy() {
+    navigator.clipboard.writeText(hex);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  }
+  return (
+    <div onClick={copy} style={{ cursor: 'pointer', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--rule)' }}>
+      <div style={{ background: hex, height: 80 }} />
+      <div style={{ background: '#fff', padding: '12px 14px' }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--navy)', marginBottom: 4 }}>{token}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: copied ? 'var(--teal)' : 'var(--muted)', marginBottom: 6 }}>{copied ? 'Copied!' : hex}</div>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.6 }}>{usage}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Section wrapper ── */
+function Section({ title, label, children, bg = '#fff' }) {
+  return (
+    <section style={{ background: bg, padding: '72px 0', borderBottom: '1px solid var(--rule)' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 48px' }}>
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 10 }}>{label}</div>
+          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: 'var(--navy)' }}>{title}</h2>
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+/* ── Token row ── */
+function TokenRow({ name, value, note }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr 1fr', gap: 16, padding: '14px 0', borderBottom: '1px solid var(--rule)', alignItems: 'center' }}>
+      <code style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--navy)', background: 'rgba(88,168,160,0.1)', padding: '2px 8px', borderRadius: 3 }}>{name}</code>
+      <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>{value}</span>
+      <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)' }}>{note}</span>
+    </div>
+  );
+}
+
+/* ── Main App ── */
+function App() {
+  return (
+    <div style={{ minHeight: '100vh' }}>
+
+      {/* Header */}
+      <div style={{ background: 'var(--navy)', padding: '48px', borderBottom: '4px solid var(--teal)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16 }}>NTUTEC</div>
+          <h1 style={{ fontFamily: 'var(--serif)', fontSize: 48, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Design Kit</h1>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, maxWidth: 560 }}>
+            台大創創中心設計規範。所有頁面的唯一設計來源，新增頁面時請遵循此規範。
+          </p>
+          {/* Quick jump */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
+            {['色彩','字型','Spacing','按鈕','卡片','Hero','格線','動畫'].map(s => (
+              <a key={s} href={`#${s}`} style={{
+                fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.7)',
+                border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 20,
+                textDecoration: 'none', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}>
+                {s}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── 1. 色彩 ── */}
+      <span id="色彩" />
+      <Section title="色彩系統" label="01 · Colors">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 40 }}>
+          <Swatch token="--navy" hex="#1A2E4A" usage="主色、標題、深色背景、primary 按鈕" />
+          <Swatch token="--teal" hex="#58A8A0" usage="次強調、icon、hover、底線、active nav" />
+          <Swatch token="--mint" hex="#00D8C8" usage="主強調、CTA 按鈕、selection 高亮" />
+          <Swatch token="--white" hex="#FAFAF8" usage="頁面底色（暖調）" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 40 }}>
+          <Swatch token="--offwhite" hex="#F7F5F1" usage="次要區塊背景" />
+          <Swatch token="--rule" hex="#E0E0DC" usage="分隔線" />
+          <Swatch token="--text" hex="#1A1A18" usage="內文正文" />
+          <Swatch token="--muted" hex="#6C727B" usage="輔助說明文字、subtitle" />
+        </div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', marginBottom: 16, letterSpacing: '0.1em', textTransform: 'uppercase' }}>特殊用途</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          <Swatch token="eco accent" hex="#00C4CC" usage="Ecosystem / eco 強調區塊" />
+          <Swatch token="partner bg" hex="#EEEEED" usage="淺灰夥伴 section" />
+          <Swatch token="card white" hex="#ffffff" usage="亮白卡片" />
+          <Swatch token="dark CTA" hex="#1A2E4A" usage="深色 CTA section（同 navy）" />
+        </div>
+      </Section>
+
+      {/* ── 2. 字型 ── */}
+      <span id="字型" />
+      <Section title="字型系統" label="02 · Typography" bg="var(--offwhite)">
+
+        {/* Tokens */}
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>CSS Tokens</div>
+          <div style={{ background: '#fff', borderRadius: 4, border: '1px solid var(--rule)', padding: '0 24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '120px 260px 1fr', gap: 16, padding: '12px 0', borderBottom: '1px solid var(--rule)' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Token</span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>字型</span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>用途</span>
+            </div>
+            <TokenRow name="--serif" value="'Noto Sans TC', sans-serif" note="主標題、卡片標題、品牌感內文（黑體）" />
+            <TokenRow name="--sans" value="'DM Sans', 'Noto Sans TC', sans-serif" note="內文、UI 元素、說明文字、按鈕標籤" />
+            <TokenRow name="--mono" value="'Space Mono', monospace" note="Section label、技術感標記、數字" />
+          </div>
+        </div>
+
+        {/* Type scale */}
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Type Scale</div>
+          <div style={{ background: '#fff', borderRadius: 4, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+            {[
+              { label: 'H1 Hero', sample: '台大創創中心', spec: '--serif / 58–64px desktop, 36–40px mobile / weight 600 / letter-spacing 0.04em', font: 'var(--serif)', size: 56, weight: 600 },
+              { label: 'H2 Section', sample: '近期投資案例', spec: '--serif / 32–40px desktop, 26–28px mobile / weight 600', font: 'var(--serif)', size: 36, weight: 600 },
+              { label: 'H3 Card', sample: 'AmazingTalker 完成 A 輪融資', spec: '--serif / 18–24px / weight 600', font: 'var(--serif)', size: 20, weight: 600 },
+              { label: 'Body', sample: '台大創創中心致力打造台灣最具影響力的創業生態系，連結學術研究與市場驗證。', spec: '--sans / 14–15px / weight 300 / line-height 1.9–2.0 / color --muted', font: 'var(--sans)', size: 15, weight: 300 },
+              { label: 'Section Label', sample: 'RECENT INVESTMENTS', spec: '--mono / 10–11px / weight 500 / letter-spacing 0.14em / uppercase / color --teal', font: 'var(--mono)', size: 11, weight: 500, extra: { letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--teal)' } },
+              { label: 'Tag / Chip', sample: '計畫公告', spec: '--mono / 11–12px / weight 500 / letter-spacing 0.06em', font: 'var(--mono)', size: 11, weight: 500, extra: { letterSpacing: '0.06em' } },
+            ].map((t, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: i < 5 ? '1px solid var(--rule)' : 'none' }}>
+                <div style={{ padding: '20px 24px', borderRight: '1px solid var(--rule)', background: 'var(--offwhite)' }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--navy)', marginBottom: 4 }}>{t.label}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', lineHeight: 1.6 }}>{t.spec}</div>
+                </div>
+                <div style={{ padding: '20px 32px', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ fontFamily: t.font, fontSize: t.size, fontWeight: t.weight, color: 'var(--navy)', lineHeight: 1.4, ...t.extra }}>{t.sample}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Weight rules */}
+        <div style={{ background: 'var(--navy)', borderRadius: 4, padding: '32px 36px' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Weight 規則</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+            {[
+              { w: '600', label: 'SemiBold', roles: 'H1 / H2 / H3 / 按鈕' },
+              { w: '300–400', label: 'Light / Regular', roles: '內文 body' },
+              { w: '500', label: 'Medium', roles: 'Section label / UI 元素' },
+            ].map((item, i) => (
+              <div key={i}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 32, fontWeight: 700, color: 'var(--mint)', lineHeight: 1, marginBottom: 6 }}>{item.w}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500, color: '#fff', marginBottom: 4 }}>{item.label}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.55)' }}>{item.roles}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 24, padding: '16px 20px', background: 'rgba(255,255,255,0.07)', borderRadius: 4, borderLeft: '3px solid var(--mint)' }}>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.75)' }}>
+              ⚠ 不使用 weight 700 或 900，避免中文字形黏連。
+            </span>
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 3. Spacing ── */}
+      <span id="Spacing" />
+      <Section title="Spacing 系統" label="03 · Spacing">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          {/* Section padding */}
+          <div style={{ border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ background: 'var(--navy)', padding: '16px 24px' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Section 垂直 Padding</span>
+            </div>
+            <div style={{ padding: '24px' }}>
+              {[
+                { device: '桌面', value: '120px 0', note: 'padding: isMobile ? \'72px 0\' : \'120px 0\'' },
+                { device: '手機', value: '72px 0', note: '' },
+              ].map((r, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: i === 0 ? '1px solid var(--rule)' : 'none' }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, color: 'var(--navy)' }}>{r.device}</span>
+                  <code style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--teal)' }}>{r.value}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Horizontal padding */}
+          <div style={{ border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ background: 'var(--navy)', padding: '16px 24px' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>水平 Padding（內容區）</span>
+            </div>
+            <div style={{ padding: '24px' }}>
+              {[
+                { device: '桌面', value: '0 10%' },
+                { device: '手機', value: '0 6%' },
+              ].map((r, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: i === 0 ? '1px solid var(--rule)' : 'none' }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, color: 'var(--navy)' }}>{r.device}</span>
+                  <code style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--teal)' }}>{r.value}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Font scale table */}
+        <div style={{ marginTop: 24, border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+          <div style={{ background: 'var(--navy)', padding: '16px 24px' }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>字型大小縮放</span>
+          </div>
+          <div style={{ padding: '0 24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, padding: '12px 0', borderBottom: '1px solid var(--rule)' }}>
+              {['角色', '桌面', '手機'].map(h => <span key={h} style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)' }}>{h}</span>)}
+            </div>
+            {[
+              ['H1 Hero', '58–64px', '36–40px'],
+              ['H2 Section', '34–40px', '26–28px'],
+              ['H3 Card', '20–24px', '17–19px'],
+              ['Section Label', '10–11px', '10–11px（不變）'],
+            ].map((row, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, padding: '14px 0', borderBottom: i < 3 ? '1px solid var(--rule)' : 'none' }}>
+                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--navy)', fontWeight: 500 }}>{row[0]}</span>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--teal)' }}>{row[1]}</code>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--muted)' }}>{row[2]}</code>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 4. 按鈕 ── */}
+      <span id="按鈕" />
+      <Section title="按鈕元件" label="04 · Buttons" bg="var(--offwhite)">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+
+          {/* Primary */}
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>Primary</div>
+            <button style={{ background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, padding: '12px 28px', border: 'none', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}>
+              立即申請 →
+            </button>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.8 }}>
+              bg: <span style={{ color: 'var(--navy)' }}>--navy</span><br />
+              color: <span style={{ color: 'var(--teal)' }}>--mint</span><br />
+              font: --sans weight 600
+            </div>
+          </div>
+
+          {/* Secondary */}
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>Secondary（外框）</div>
+            <button style={{ background: 'transparent', color: 'var(--navy)', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, padding: '12px 28px', border: '1px solid rgba(26,46,74,0.25)', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--teal)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--teal)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--navy)'; e.currentTarget.style.borderColor = 'rgba(26,46,74,0.25)'; }}>
+              瞭解更多
+            </button>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.8 }}>
+              bg: transparent<br />
+              border: 1px solid rgba(navy, 0.15)<br />
+              hover → bg: --teal / color: #fff
+            </div>
+          </div>
+
+          {/* CTA Filled */}
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>CTA Filled（強調）</div>
+            <button style={{ background: 'var(--mint)', color: 'var(--navy)', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, padding: '12px 28px', border: 'none', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}
+              onMouseEnter={e => e.currentTarget.style.background = '#00bfb8'}
+              onMouseLeave={e => e.currentTarget.style.background = 'var(--mint)'}>
+              加入天使會
+            </button>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.8 }}>
+              bg: <span style={{ color: 'var(--teal)' }}>--mint</span><br />
+              color: --navy<br />
+              hover → bg: #00bfb8
+            </div>
+          </div>
+
+          {/* Ghost */}
+          <div style={{ background: 'var(--navy)', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>Ghost（深色背景用）</div>
+            <button style={{ background: 'transparent', color: '#fff', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, padding: '12px 28px', border: '1px solid rgba(255,255,255,0.5)', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}>
+              下載簡報
+            </button>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.5)', lineHeight: 1.8 }}>
+              bg: transparent<br />
+              border: rgba(#fff, 0.5)<br />
+              hover → bg: rgba(#fff, 0.1)
+            </div>
+          </div>
+
+          {/* Text link */}
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px', gridColumn: '1 / -1' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>More Detail 文字連結</div>
+            <div style={{ display: 'flex', gap: 48, alignItems: 'center' }}>
+              <a href="#" style={{ fontFamily: 'var(--mono)', fontSize: 12.5, letterSpacing: '0.06em', color: 'var(--navy)', borderBottom: '1px solid var(--navy)', paddingBottom: 2, textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--teal)'; e.currentTarget.style.borderBottomColor = 'var(--teal)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--navy)'; e.currentTarget.style.borderBottomColor = 'var(--navy)'; }}>
+                瞭解更多 →
+              </a>
+              <a href="#" style={{ fontFamily: 'var(--mono)', fontSize: 12.5, letterSpacing: '0.06em', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.5)', paddingBottom: 2, textDecoration: 'none', background: 'var(--navy)', padding: '4px 12px 6px' }}>
+                深色版 →
+              </a>
+            </div>
+            <div style={{ marginTop: 20, fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.8 }}>
+              font: --mono / 12.5px / letter-spacing 0.06em<br />
+              border-bottom: 1px solid --navy → hover: --teal
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 5. 卡片 ── */}
+      <span id="卡片" />
+      <Section title="卡片元件" label="05 · Cards">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 40 }}>
+
+          {/* News card */}
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>消息 / 文章卡</div>
+            <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ height: 160, background: 'linear-gradient(135deg, rgba(88,168,160,0.15), rgba(26,46,74,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--teal)' }}>IMAGE 16:9</span>
+              </div>
+              <div style={{ padding: '20px 20px 24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)' }}>2026 年 3 月 1 日</span>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 10, background: 'var(--navy)', color: '#fff', padding: '2px 8px', borderRadius: 20 }}>計畫公告</span>
+                </div>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.5, marginBottom: 8 }}>2026 台大加速器 20 組新創正式入選</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.85 }}>本屆共計 20 組優質新創通過層層審核，涵蓋 AI、生技、硬科技等領域。</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mentor card */}
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>業師 / 人物卡</div>
+            <div style={{ background: 'var(--offwhite)', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ background: 'linear-gradient(135deg, rgba(88,168,160,0.15), rgba(26,46,74,0.08))', height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <span style={{ fontFamily: 'var(--serif)', fontSize: 48, fontWeight: 600, color: 'rgba(88,168,160,0.3)' }}>王</span>
+                <span style={{ position: 'absolute', top: 8, left: 8, background: 'var(--teal)', color: '#fff', fontFamily: 'var(--mono)', fontSize: 9, padding: '2px 8px', borderRadius: 10 }}>2026 新任</span>
+              </div>
+              <div style={{ padding: '16px 16px 20px' }}>
+                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 6 }}>王俊傑</h3>
+                <p style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>前大潤發 CTO；前蘇寧零售技術研究院院長</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats card */}
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>數據 Stats 卡</div>
+            <div style={{ background: '#fff', boxShadow: '0 12px 56px -8px rgba(26,46,74,0.18)', borderRadius: 4, overflow: 'hidden', padding: '28px 32px' }}>
+              <div style={{ display: 'flex', gap: 0 }}>
+                {[
+                  { num: '13', unit: '年', label: '深耕台大生態系' },
+                  { num: '500+', unit: '', label: '輔導新創團隊' },
+                  { num: '74', unit: '位', label: '年度投資人到場' },
+                ].map((s, i) => (
+                  <div key={i} style={{ flex: 1, paddingLeft: i > 0 ? 20 : 0, borderLeft: i > 0 ? '1px solid var(--rule)' : 'none', marginLeft: i > 0 ? 20 : 0 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 28, fontWeight: 700, color: 'var(--navy)', lineHeight: 1, marginBottom: 4 }}>
+                      {s.num}<span style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--teal)', marginLeft: 2 }}>{s.unit}</span>
+                    </div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)' }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Investment case card */}
+        <div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>投資案例卡（3 欄 no-gap grid）</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'var(--rule)' }}>
+            {[
+              { quarter: '2025 Q4', category: '生技醫療 · AI 診斷', company: 'AHEAD Medicine 先勁智能', body: 'AI 醫療輔助診斷平台，協助醫師縮短 X 光片判讀時間，獲台大天使會投資。' },
+              { quarter: '2026 Q1', category: 'AI · 數據分析', company: 'MoBagel 行動貝果', body: 'AI/數據分析平台，累計募資 US$21M+，服務 3,000+ 品牌，2026 Q1 接受台大天使會投資。' },
+              { quarter: '2025 Q4', category: '硬科技 · 手術導航', company: '思輔科技 SAVFE', body: '微創手術導航技術，2025 國家新創獎，亞東醫院場域驗證，2026 Q1 獲台大天使會投資。' },
+            ].map((c, i) => (
+              <div key={i} style={{ background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ height: 180, background: 'linear-gradient(135deg, rgba(88,168,160,0.12), rgba(26,46,74,0.06))', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--teal)' }}>IMAGE</span>
+                </div>
+                <div style={{ padding: '20px 24px 24px', flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 10, background: 'var(--teal)', color: '#fff', padding: '2px 8px', borderRadius: 14 }}>{c.quarter}</span>
+                    <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--teal)' }}>{c.category}</span>
+                  </div>
+                  <h3 style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 10 }}>{c.company}</h3>
+                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{c.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 6. Hero ── */}
+      <span id="Hero" />
+      <Section title="Hero Section 規格" label="06 · Hero" bg="var(--offwhite)">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ background: 'var(--navy)', padding: '16px 24px' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>三層視覺結構</span>
+            </div>
+            <div style={{ padding: '24px' }}>
+              {[
+                { n: '1', title: '底色', desc: 'var(--navy) 打底，圖片未載入時的 fallback' },
+                { n: '2', title: '背景圖', desc: 'background-size: cover，opacity 0.88–0.90' },
+                { n: '3', title: '漸層疊加', desc: '左下 rgba(navy,0.90) → 右上消失（斜向）+ 可選 radial mint 暈光' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: 16, padding: '14px 0', borderBottom: i < 2 ? '1px solid var(--rule)' : 'none', alignItems: 'flex-start' }}>
+                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--mono)', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.n}</div>
+                  <div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{item.title}</div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ background: 'var(--navy)', padding: '16px 24px' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--mint)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>切角 clip-path</span>
+            </div>
+            <div style={{ padding: '24px' }}>
+              <div style={{ background: 'var(--offwhite)', borderRadius: 4, padding: '16px', marginBottom: 16 }}>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--navy)', lineHeight: 1.8, display: 'block' }}>
+                  clip-path: polygon(<br />
+                  &nbsp;&nbsp;0% 22%,<br />
+                  &nbsp;&nbsp;27% 0%,<br />
+                  &nbsp;&nbsp;100% 0%,<br />
+                  &nbsp;&nbsp;100% 78%,<br />
+                  &nbsp;&nbsp;73% 100%,<br />
+                  &nbsp;&nbsp;0% 100%<br />
+                  )
+                </code>
+              </div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.8 }}>
+                SVG 白色三角形（左上 + 右下）製造切角錯覺。<br />
+                手機：clip-path 移除，SVG 三角形保留。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats card spec */}
+        <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '24px 28px' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Stats 懸浮卡規格</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
+            {[
+              { label: '桌面', value: 'position: absolute; bottom: 0; left: 10%' },
+              { label: '手機', value: 'inline block，直接接在 section 下方' },
+              { label: 'Shadow', value: '0 12px 56px -8px rgba(26,46,74,0.18)' },
+            ].map((item, i) => (
+              <div key={i} style={{ padding: '0 24px 0 0', borderRight: i < 2 ? '1px solid var(--rule)' : 'none', marginRight: i < 2 ? 24 : 0 }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--navy)', marginBottom: 6 }}>{item.label}</div>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>{item.value}</code>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 7. 格線 ── */}
+      <span id="格線" />
+      <Section title="格線系統" label="07 · Grid">
+        <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden', marginBottom: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, padding: '12px 24px', borderBottom: '1px solid var(--rule)', background: 'var(--offwhite)' }}>
+            {['版型', '桌面', '手機'].map(h => <span key={h} style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)' }}>{h}</span>)}
+          </div>
+          <div style={{ padding: '0 24px' }}>
+            {[
+              ['三欄卡片', 'repeat(3, 1fr)', '1fr'],
+              ['兩欄卡片', '1fr 1fr', '1fr'],
+              ['四欄 icon grid', 'repeat(4, 1fr)', 'repeat(2, 1fr)'],
+              ['Hero 雙欄', '1.15fr 1fr', '單欄（右欄隱藏）'],
+              ['Footer', '1.3fr repeat(4, 1fr)', '1fr 1fr（brand span 全寬）'],
+            ].map((row, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, padding: '14px 0', borderBottom: i < 4 ? '1px solid var(--rule)' : 'none', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--navy)', fontWeight: 500 }}>{row[0]}</span>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--teal)' }}>{row[1]}</code>
+                <code style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>{row[2]}</code>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Gap */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          {[
+            { label: 'gap（桌面）', values: ['24px', '32px', '40px', '48px'] },
+            { label: 'gap（手機）', values: ['16px', '20px', '24px', '32px'] },
+          ].map((g, i) => (
+            <div key={i} style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '24px 28px' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>{g.label}</div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
+                {g.values.map((v, j) => (
+                  <div key={j} style={{ textAlign: 'center' }}>
+                    <div style={{ width: parseInt(v) * 1.5, height: parseInt(v) * 1.5, background: 'rgba(88,168,160,0.2)', border: '1px dashed var(--teal)', borderRadius: 2, marginBottom: 6 }} />
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)' }}>{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ── 8. 動畫 ── */}
+      <span id="動畫" />
+      <Section title="動畫系統" label="08 · Animation" bg="var(--offwhite)">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          {[
+            {
+              title: 'AnimUp（Scroll 進場）',
+              items: [
+                'IntersectionObserver threshold: 0.12',
+                'opacity 0 → 1',
+                'translateY(28px) → 0',
+                'duration: 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+                '多元素 delay: +70–100ms 遞增',
+              ]
+            },
+            {
+              title: 'Hero 進場',
+              items: [
+                'setTimeout 80ms 觸發',
+                '各元素依序 opacity 0 → 1',
+                'delay: 0.1s → 0.2s → 0.3s → 0.36s',
+                'translateY 配合進場',
+              ]
+            },
+            {
+              title: 'Stats Counter（index.html）',
+              items: [
+                'IntersectionObserver threshold: 0.3',
+                'requestAnimationFrame easeOut',
+                'duration: 1200 + index × 150 ms',
+                '滾動至目標數值',
+              ]
+            },
+          ].map((card, i) => (
+            <div key={i} style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '24px 28px' }}>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 600, color: 'var(--navy)', marginBottom: 16 }}>{card.title}</div>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {card.items.map((item, j) => (
+                  <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--teal)', flexShrink: 0, marginTop: 6 }} />
+                    <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Hover rules */}
+        <div style={{ marginTop: 16, background: 'var(--navy)', borderRadius: 4, padding: '24px 28px', display: 'flex', gap: 24, alignItems: 'center' }}>
+          <div style={{ width: 4, height: 48, background: 'var(--mint)', borderRadius: 2, flexShrink: 0 }} />
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.8)', lineHeight: 1.8 }}>
+            Hover 效果是桌面加分層，手機不可依賴。手機上「最終態」應直接顯示（例：卡片 overlay 文字永遠可見）。
+          </p>
+        </div>
+      </Section>
+
+      {/* Footer */}
+      <div style={{ background: 'var(--navy)', padding: '32px 48px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>NTUTEC Design Kit — Internal Use Only</span>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>design.md ← Single Source of Truth</span>
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
