@@ -58,7 +58,7 @@ function Section({ title, label, children, bg = '#fff' }) {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 48px' }}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 10 }}>{label}</div>
-          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: 'var(--navy)' }}>{title}</h2>
+          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 34, fontWeight: 600, color: 'var(--navy)' }}>{title}</h2>
         </div>
         {children}
       </div>
@@ -77,33 +77,453 @@ function TokenRow({ name, value, note }) {
   );
 }
 
+/* ── Hatch pattern for wireframe image placeholders ── */
+function HatchRect({ width = '100%', height = '100%', style = {} }) {
+  const id = 'hatch-' + Math.random().toString(36).slice(2, 7);
+  return (
+    <svg width={width} height={height} style={{ display: 'block', ...style }}>
+      <defs>
+        <pattern id={id} patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="10" stroke="#C8C8C4" strokeWidth="1" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#${id})`} />
+    </svg>
+  );
+}
+
+/* ── Wireframe label pill ── */
+function WFLabel({ children, color = 'var(--teal)', top, left, right, bottom, transform }) {
+  return (
+    <div style={{
+      position: 'absolute', top, left, right, bottom, transform,
+      background: color, color: '#fff',
+      fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700,
+      letterSpacing: '0.08em', textTransform: 'uppercase',
+      padding: '3px 8px', borderRadius: 3, whiteSpace: 'nowrap', zIndex: 10,
+      pointerEvents: 'none',
+    }}>{children}</div>
+  );
+}
+
+/* ── Rule 1: Stats 數據方塊 Wireframe ── */
+function WFRule1() {
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>1</div>
+        <div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--navy)', marginBottom: 2 }}>Stats 數據方塊</div>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)' }}>每頁 Hero 底部必須有一組數據卡，以負 margin 疊壓在下方 section 之上</div>
+        </div>
+      </div>
+
+      {/* Wireframe */}
+      <div style={{ position: 'relative', background: '#fff', border: '1px solid var(--rule)', borderRadius: 6, overflow: 'visible', marginBottom: 16 }}>
+        {/* Hero block */}
+        <div style={{ position: 'relative', height: 160, overflow: 'hidden', borderRadius: '6px 6px 0 0' }}>
+          <HatchRect height="160" style={{ position: 'absolute', inset: 0 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(26,46,74,0.72)' }} />
+          <WFLabel top={12} left={12}>Hero Section</WFLabel>
+          {/* Nav bar hint */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 28, background: 'rgba(26,46,74,0.5)', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 8 }}>
+            <div style={{ width: 36, height: 6, borderRadius: 2, background: 'rgba(255,255,255,0.4)' }} />
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 6 }}>
+              {[40,36,44,36].map((w,i) => <div key={i} style={{ width: w, height: 5, borderRadius: 2, background: 'rgba(255,255,255,0.25)' }} />)}
+            </div>
+          </div>
+          {/* Hero title lines */}
+          <div style={{ position: 'absolute', bottom: 36, left: 20, right: '40%' }}>
+            <div style={{ height: 10, borderRadius: 2, background: 'rgba(255,255,255,0.7)', marginBottom: 8, width: '80%' }} />
+            <div style={{ height: 7, borderRadius: 2, background: 'rgba(255,255,255,0.35)', width: '60%' }} />
+          </div>
+        </div>
+
+        {/* Stats card — overlapping */}
+        <div style={{
+          position: 'absolute', bottom: -32, left: 24, right: 24,
+          background: '#fff', border: '2px solid var(--teal)', borderRadius: 4,
+          boxShadow: '0 8px 32px -4px rgba(26,46,74,0.22)',
+          padding: '12px 20px', display: 'flex', gap: 0, zIndex: 5,
+        }}>
+          <WFLabel bottom='calc(100% + 6px)' left={0} color="var(--teal)">Stats 卡（absolute · bottom: 0 · z-index 10）</WFLabel>
+          {[['13', '年', '深耕台大'], ['500+', '', '輔導新創'], ['74', '位', '年度投資人']].map(([n, u, l], i) => (
+            <div key={i} style={{ flex: 1, paddingLeft: i > 0 ? 16 : 0, borderLeft: i > 0 ? '1px solid var(--rule)' : 'none', marginLeft: i > 0 ? 16 : 0 }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', lineHeight: 1 }}>
+                {n}<span style={{ fontSize: 10, color: 'var(--teal)', marginLeft: 1 }}>{u}</span>
+              </div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 300, color: 'var(--muted)', marginTop: 3 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Next section */}
+        <div style={{ height: 60, background: 'var(--offwhite)', borderRadius: '0 0 6px 6px', paddingTop: 44, paddingLeft: 20 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--muted)', letterSpacing: '0.08em' }}>NEXT SECTION（margin-top 需預留 Stats 卡高度）</div>
+        </div>
+      </div>
+
+      {/* Annotation */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        {[
+          { label: '桌面', note: 'position: absolute; bottom: 0; left: 10%；Stats 卡以 z-index 10 疊出 hero 範圍' },
+          { label: '手機', note: 'absolute 移除，Stats 卡以 inline flow 接在 Hero 正下方' },
+        ].map((a, i) => (
+          <div key={i} style={{ background: 'var(--offwhite)', borderRadius: 4, padding: '12px 14px', borderLeft: `3px solid ${i === 0 ? 'var(--teal)' : 'var(--muted)'}` }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, color: 'var(--navy)', marginBottom: 4 }}>{a.label}</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>{a.note}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Rule 2: Hero SVG 切角 Wireframe ── */
+function WFRule2() {
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>2</div>
+        <div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--navy)', marginBottom: 2 }}>Hero 圖片 SVG 切角排版</div>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)' }}>Hero 圖片區塊以 clip-path hexagon 裁切，再用兩個 SVG 白色三角形製造切角錯覺</div>
+        </div>
+      </div>
+
+      {/* Wireframe */}
+      <div style={{ position: 'relative', background: '#fff', border: '1px solid var(--rule)', borderRadius: 6, padding: 24, marginBottom: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
+
+          {/* Left: clip-path shape demo */}
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>整體圖片區塊 · clip-path</div>
+            <div style={{ position: 'relative' }}>
+              <svg viewBox="0 0 300 180" style={{ width: '100%', display: 'block' }}>
+                {/* Page background */}
+                <rect width="300" height="180" fill="#F7F5F1" />
+                {/* Clip-path shape fill (image placeholder) */}
+                <clipPath id="hero-clip">
+                  <polygon points="0,40 81,0 300,0 300,140 219,180 0,180" />
+                </clipPath>
+                <g clipPath="url(#hero-clip)">
+                  {/* Hatch fill */}
+                  <defs>
+                    <pattern id="h2" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                      <line x1="0" y1="0" x2="0" y2="8" stroke="#B0CAC8" strokeWidth="0.8" />
+                    </pattern>
+                  </defs>
+                  <rect width="300" height="180" fill="url(#h2)" />
+                  <rect width="300" height="180" fill="rgba(26,46,74,0.55)" />
+                </g>
+                {/* clip-path outline */}
+                <polygon points="0,40 81,0 300,0 300,140 219,180 0,180" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeDasharray="4 3" />
+                {/* SVG white triangles */}
+                <polygon points="0,0 81,0 0,40" fill="#F7F5F1" opacity="0.95" />
+                <polygon points="300,180 219,180 300,140" fill="#F7F5F1" opacity="0.95" />
+                {/* Labels */}
+                <text x="8" y="13" fontFamily="monospace" fontSize="7" fill="var(--teal)" fontWeight="700">SVG △ 左上</text>
+                <text x="185" y="176" fontFamily="monospace" fontSize="7" fill="var(--teal)" fontWeight="700">SVG △ 右下</text>
+                <text x="110" y="88" fontFamily="monospace" fontSize="8" fill="rgba(255,255,255,0.9)" fontWeight="700" textAnchor="middle">IMAGE AREA</text>
+                <text x="110" y="100" fontFamily="monospace" fontSize="6.5" fill="rgba(255,255,255,0.6)" textAnchor="middle">clip-path: polygon(…)</text>
+              </svg>
+            </div>
+          </div>
+
+          {/* Right: two-layer explanation */}
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>兩層疊加原理</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                { n: 'L1', color: 'var(--navy)', label: 'clip-path 裁切整個 Hero 區塊', sub: 'polygon(0% 22%, 27% 0%, 100% 0%, 100% 78%, 73% 100%, 0% 100%)' },
+                { n: 'L2', color: 'var(--teal)', label: 'SVG 白色三角形覆蓋兩角', sub: '左上角 + 右下角各一個，fill 色對應頁面底色（#F7F5F1 或 #FAFAF8）' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: 12, padding: '14px', background: 'var(--offwhite)', borderRadius: 4, borderLeft: `3px solid ${item.color}` }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: item.color, color: '#fff', fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.n}</div>
+                  <div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{item.label}</div>
+                    <code style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', lineHeight: 1.7, display: 'block' }}>{item.sub}</code>
+                  </div>
+                </div>
+              ))}
+              <div style={{ padding: '12px 14px', background: 'rgba(0,216,200,0.08)', borderRadius: 4, border: '1px solid rgba(0,216,200,0.3)' }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, color: 'var(--teal)', letterSpacing: '0.08em', marginBottom: 4 }}>手機降級</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>clip-path 移除（isMobile ? 'none' : 'polygon(…)'）；SVG 三角形保留，自動縮放不影響排版</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Rule 3: 底部 Banner Wireframe ── */
+function WFRule3() {
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--navy)', color: 'var(--mint)', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>3</div>
+        <div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 600, color: 'var(--navy)', marginBottom: 2 }}>底部 Banner</div>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)' }}>每頁最末尾有一個深色 CTA Banner，前一 section 的視覺元素以疊圖效果咬入 Banner 上緣</div>
+        </div>
+      </div>
+
+      {/* Wireframe */}
+      <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 6, overflow: 'hidden', marginBottom: 16 }}>
+        {/* Content section above */}
+        <div style={{ position: 'relative', padding: '24px 28px 0', background: 'var(--offwhite)' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--muted)', letterSpacing: '0.08em', marginBottom: 14 }}>CONTENT SECTION（最後一個 section）</div>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', paddingBottom: 0 }}>
+            {[0,1,2].map(i => (
+              <div key={i} style={{ flex: 1, background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{ height: 64, background: 'rgba(88,168,160,0.1)', position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', border: '1px dashed var(--teal)' }} />
+                  </div>
+                </div>
+                <div style={{ padding: '10px 12px' }}>
+                  <div style={{ height: 6, background: 'var(--rule)', borderRadius: 2, marginBottom: 6, width: '70%' }} />
+                  <div style={{ height: 5, background: 'var(--rule)', borderRadius: 2, width: '50%' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Overlap zone */}
+        <div style={{ position: 'relative', height: 0 }}>
+          {/* Bleed card */}
+          <div style={{
+            position: 'absolute', left: '50%', transform: 'translateX(-50%)',
+            top: -28, zIndex: 5,
+            background: '#fff', border: '2px solid var(--mint)', borderRadius: 4,
+            padding: '8px 28px', whiteSpace: 'nowrap',
+            boxShadow: '0 6px 24px -4px rgba(26,46,74,0.2)',
+            display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--mint)' }} />
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--navy)', fontWeight: 700, letterSpacing: '0.08em' }}>疊壓元素（margin-top: -Xpx / z-index）</span>
+          </div>
+        </div>
+
+        {/* Banner */}
+        <div style={{ background: 'var(--navy)', padding: '52px 28px 32px', position: 'relative' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--teal)', letterSpacing: '0.1em', marginBottom: 10 }}>CTA BANNER · background: --navy</div>
+          {/* dot grid decoration */}
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.07, backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '18px 18px', pointerEvents: 'none' }} />
+          <div style={{ height: 10, background: 'rgba(255,255,255,0.5)', borderRadius: 2, marginBottom: 10, width: '45%' }} />
+          <div style={{ height: 7, background: 'rgba(255,255,255,0.2)', borderRadius: 2, marginBottom: 20, width: '60%' }} />
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ height: 30, width: 100, background: 'var(--mint)', borderRadius: 4, opacity: 0.9 }} />
+            <div style={{ height: 30, width: 80, border: '1px solid rgba(255,255,255,0.4)', borderRadius: 4 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Annotations */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+        {[
+          { label: '疊壓技巧', note: 'margin-top: 負值 + z-index，讓前一 section 的元素咬入 Banner 上緣' },
+          { label: 'Banner 背景', note: 'background: var(--navy)；dot grid 裝飾（radial-gradient，opacity 0.08）' },
+          { label: 'CTA 按鈕組', note: 'Primary（--mint 底色）+ Ghost（白色外框）並排' },
+        ].map((a, i) => (
+          <div key={i} style={{ background: 'var(--offwhite)', borderRadius: 4, padding: '12px 14px', borderLeft: '3px solid var(--navy)' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, color: 'var(--navy)', marginBottom: 4 }}>{a.label}</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.7 }}>{a.note}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Page Architecture Tab ── */
+function PageArchitectureTab() {
+  return (
+    <div style={{ background: 'var(--offwhite)', minHeight: '100vh' }}>
+      {/* Full-page overview wireframe */}
+      <div style={{ padding: '48px 0', borderBottom: '1px solid var(--rule)', background: '#fff' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 48px' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 28 }}>全頁結構總覽</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 48, alignItems: 'start' }}>
+
+            {/* Page mockup */}
+            <div style={{ position: 'relative' }}>
+              <svg viewBox="0 0 320 520" style={{ width: '100%', display: 'block', filter: 'drop-shadow(0 8px 32px rgba(26,46,74,0.12))' }}>
+                {/* Page bg */}
+                <rect width="320" height="520" fill="#F7F5F1" rx="6" />
+
+                {/* Nav */}
+                <rect width="320" height="28" fill="#1A2E4A" rx="0" />
+                <rect x="12" y="10" width="40" height="8" rx="2" fill="rgba(255,255,255,0.5)" />
+                {[100,140,180,220].map((x,i) => <rect key={i} x={x} y="12" width="28" height="5" rx="2" fill="rgba(255,255,255,0.25)" />)}
+
+                {/* Hero with clip-path */}
+                <defs>
+                  <clipPath id="ov-clip"><polygon points="0,28 86,28 0,95" /><polygon points="320,392 234,392 320,325" /></clipPath>
+                  <clipPath id="hero-ov">
+                    <polygon points="0,56 86,28 320,28 320,250 234,278 0,278" />
+                  </clipPath>
+                  <pattern id="ov-hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="8" stroke="#8ABAB8" strokeWidth="0.7" />
+                  </pattern>
+                </defs>
+                <g clipPath="url(#hero-ov)">
+                  <rect x="0" y="28" width="320" height="250" fill="url(#ov-hatch)" />
+                  <rect x="0" y="28" width="320" height="250" fill="rgba(26,46,74,0.6)" />
+                </g>
+                <polygon points="0,28 86,28 0,95" fill="#F7F5F1" />
+                <polygon points="320,278 234,278 320,215" fill="#F7F5F1" />
+                <polygon points="0,56 86,28 320,28 320,250 234,278 0,278" fill="none" stroke="rgba(88,168,160,0.6)" strokeWidth="1" strokeDasharray="4 2" />
+
+                {/* Hero text lines */}
+                <rect x="20" y="120" width="130" height="10" rx="2" fill="rgba(255,255,255,0.8)" />
+                <rect x="20" y="136" width="100" height="7" rx="2" fill="rgba(255,255,255,0.4)" />
+                <rect x="20" y="155" width="60" height="18" rx="2" fill="rgba(0,216,200,0.8)" />
+
+                {/* ① Stats card overlapping */}
+                <rect x="20" y="254" width="280" height="48" rx="3" fill="white" stroke="#58A8A0" strokeWidth="1.5" />
+                <rect x="20" y="254" width="280" height="48" rx="3" fill="none" stroke="#58A8A0" strokeWidth="1.5" />
+                {[0,1,2].map(i => (
+                  <g key={i}>
+                    <rect x={40 + i*90} y="264" width="28" height="8" rx="2" fill="#1A2E4A" opacity="0.7" />
+                    <rect x={40 + i*90} y="278" width="36" height="5" rx="2" fill="#C0C0BC" />
+                    {i > 0 && <line x1={30 + i*90} y1="262" x2={30 + i*90} y2="292" stroke="#E0E0DC" strokeWidth="1" />}
+                  </g>
+                ))}
+                {/* ① Label */}
+                <rect x="20" y="240" width="134" height="13" rx="3" fill="#58A8A0" />
+                <text x="27" y="250" fontFamily="monospace" fontSize="7" fill="white" fontWeight="700">① Stats 數據方塊</text>
+
+                {/* Section content */}
+                <rect x="0" y="302" width="320" height="80" fill="white" />
+                {[0,1,2].map(i => (
+                  <g key={i}>
+                    <rect x={20 + i*100} y="316" width="88" height="52" rx="3" fill="#F7F5F1" stroke="#E0E0DC" strokeWidth="1" />
+                    <rect x={28 + i*100} y="326" width="50" height="6" rx="2" fill="#C0C0BC" />
+                    <rect x={28 + i*100} y="338" width="60" height="5" rx="2" fill="#DCDCDA" />
+                    <rect x={28 + i*100} y="349" width="44" height="5" rx="2" fill="#DCDCDA" />
+                  </g>
+                ))}
+
+                {/* ③ Banner */}
+                <rect x="0" y="382" width="320" height="132" rx="0" fill="#1A2E4A" />
+                {/* dot grid */}
+                {Array.from({length: 7}, (_,row) => Array.from({length: 12}, (_,col) => (
+                  <circle key={`${row}-${col}`} cx={14 + col*26} cy={396 + row*20} r="1" fill="white" opacity="0.06" />
+                )))}
+                {/* ③ bleed card */}
+                <rect x="96" y="368" width="128" height="24" rx="3" fill="white" stroke="#00D8C8" strokeWidth="1.5" />
+                <rect x="104" y="375" width="80" height="5" rx="2" fill="#1A2E4A" opacity="0.5" />
+                <rect x="96" y="368" width="128" height="24" rx="3" fill="none" stroke="#00D8C8" strokeWidth="1.5" />
+                <rect x="96" y="354" width="100" height="13" rx="3" fill="#00D8C8" />
+                <text x="102" y="364" fontFamily="monospace" fontSize="7" fill="#1A2E4A" fontWeight="700">③ 底部 Banner</text>
+
+                <rect x="20" y="420" width="100" height="8" rx="2" fill="rgba(255,255,255,0.6)" />
+                <rect x="20" y="434" width="140" height="5" rx="2" fill="rgba(255,255,255,0.25)" />
+                <rect x="20" y="450" width="52" height="20" rx="2" fill="#00D8C8" opacity="0.85" />
+                <rect x="80" y="450" width="44" height="20" rx="2" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+
+                {/* Boundary line labels */}
+                <line x1="300" y1="28" x2="316" y2="28" stroke="#E0E0DC" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="300" y1="302" x2="316" y2="302" stroke="#E0E0DC" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="300" y1="382" x2="316" y2="382" stroke="#E0E0DC" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="300" y1="514" x2="316" y2="514" stroke="#E0E0DC" strokeWidth="1" strokeDasharray="2 2" />
+                <line x1="314" y1="28" x2="314" y2="302" stroke="#E0E0DC" strokeWidth="1" />
+                <line x1="314" y1="302" x2="314" y2="382" stroke="#E0E0DC" strokeWidth="1" />
+                <line x1="314" y1="382" x2="314" y2="514" stroke="#E0E0DC" strokeWidth="1" />
+              </svg>
+            </div>
+
+            {/* Right: rule legend */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 8 }}>
+              {[
+                { n: '①', color: 'var(--teal)', label: 'Stats 數據方塊', desc: '以 absolute 定位疊壓在 Hero 底部，視覺上讓數字「浮出」頁面，是每頁 Hero 的必要元素。' },
+                { n: '②', color: 'var(--navy)', label: 'Hero SVG 切角排版', desc: 'Hero 圖片以 clip-path hexagon 裁切，搭配兩個 SVG 白色三角形覆蓋，形成品牌感的切角視覺。' },
+                { n: '③', color: 'var(--mint)', label: '底部 Banner 疊圖', desc: '頁面末尾的深色 CTA Banner，前一個 section 的元素以負 margin 咬入 Banner 上緣，製造連貫深度感。' },
+              ].map((r, i) => (
+                <div key={i} style={{ display: 'flex', gap: 16, padding: '20px 24px', background: '#fff', borderRadius: 6, border: '1px solid var(--rule)', borderLeft: `4px solid ${r.color}` }}>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: r.color, color: r.color === 'var(--mint)' ? 'var(--navy)' : '#fff', fontFamily: 'var(--mono)', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{r.n}</div>
+                  <div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: 'var(--navy)', marginBottom: 6 }}>{r.label}</div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, color: 'var(--muted)', lineHeight: 1.8 }}>{r.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Three rule detail sections */}
+      {[WFRule1, WFRule2, WFRule3].map((Rule, i) => (
+        <div key={i} id={`wf-rule-${i+1}`} style={{ padding: '48px 0', borderBottom: '1px solid var(--rule)', background: i % 2 === 0 ? '#fff' : 'var(--offwhite)' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 48px' }}>
+            <Rule />
+          </div>
+        </div>
+      ))}
+
+      {/* Footer */}
+      <div style={{ background: 'var(--navy)', padding: '32px 48px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>NTUTEC Design Kit — Internal Use Only</span>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>design.md ← Single Source of Truth</span>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main App ── */
 function App() {
+  const [tab, setTab] = React.useState('tokens');
   return (
     <div style={{ minHeight: '100vh' }}>
 
       {/* Header */}
-      <div style={{ background: 'var(--navy)', padding: '48px', borderBottom: '4px solid var(--teal)' }}>
+      <div style={{ background: 'var(--navy)', padding: '48px 48px 0', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16 }}>NTUTEC</div>
           <h1 style={{ fontFamily: 'var(--serif)', fontSize: 48, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Design Kit</h1>
           <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, maxWidth: 560 }}>
             台大創創中心設計規範。所有頁面的唯一設計來源，新增頁面時請遵循此規範。
           </p>
-          {/* Quick jump */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
-            {['色彩','字型','Spacing','按鈕','卡片','Hero','格線','動畫'].map(s => (
-              <a key={s} href={`#${s}`} style={{
-                fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.7)',
-                border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 20,
-                textDecoration: 'none', transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}>
-                {s}
-              </a>
+          {/* Tabs */}
+          <div style={{ display: 'flex', gap: 0, marginTop: 36, borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
+            {[
+              { key: 'tokens', label: 'Design Tokens' },
+              { key: 'architecture', label: '頁面架構' },
+            ].map(t => (
+              <button key={t.key} onClick={() => setTab(t.key)} style={{
+                fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 500, letterSpacing: '0.06em',
+                color: tab === t.key ? '#fff' : 'rgba(255,255,255,0.45)',
+                background: 'transparent', border: 'none', padding: '12px 24px', cursor: 'pointer',
+                borderBottom: tab === t.key ? '2px solid var(--mint)' : '2px solid transparent',
+                marginBottom: -1, transition: 'color 0.2s',
+              }}>{t.label}</button>
             ))}
           </div>
+        </div>
+      </div>
+
+      {tab === 'architecture' && <PageArchitectureTab />}
+
+      {tab === 'tokens' && <div>
+      {/* Quick jump */}
+      <div style={{ background: 'var(--navy)', padding: '0 48px 20px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {['色彩','字型','Spacing','按鈕','卡片','Hero','格線','動畫'].map(s => (
+            <a key={s} href={`#${s}`} style={{
+              fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.7)',
+              border: '1px solid rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: 20,
+              textDecoration: 'none', transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}>
+              {s}
+            </a>
+          ))}
         </div>
       </div>
 
@@ -286,9 +706,9 @@ function App() {
           {/* Secondary */}
           <div style={{ background: '#fff', border: '1px solid var(--rule)', borderRadius: 4, padding: '32px' }}>
             <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>Secondary（外框）</div>
-            <button style={{ background: 'transparent', color: 'var(--navy)', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, padding: '12px 28px', border: '1px solid rgba(26,46,74,0.25)', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}
+            <button style={{ background: 'transparent', color: 'var(--navy)', fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, padding: '12px 28px', border: '1px solid rgba(26,46,74,0.15)', borderRadius: 4, cursor: 'pointer', marginBottom: 24 }}
               onMouseEnter={e => { e.currentTarget.style.background = 'var(--teal)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--teal)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--navy)'; e.currentTarget.style.borderColor = 'rgba(26,46,74,0.25)'; }}>
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--navy)'; e.currentTarget.style.borderColor = 'rgba(26,46,74,0.15)'; }}>
               瞭解更多
             </button>
             <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.8 }}>
@@ -398,7 +818,7 @@ function App() {
                   { num: '74', unit: '位', label: '年度投資人到場' },
                 ].map((s, i) => (
                   <div key={i} style={{ flex: 1, paddingLeft: i > 0 ? 20 : 0, borderLeft: i > 0 ? '1px solid var(--rule)' : 'none', marginLeft: i > 0 ? 20 : 0 }}>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 28, fontWeight: 700, color: 'var(--navy)', lineHeight: 1, marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 28, fontWeight: 600, color: 'var(--navy)', lineHeight: 1, marginBottom: 4 }}>
                       {s.num}<span style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--teal)', marginLeft: 2 }}>{s.unit}</span>
                     </div>
                     <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 300, color: 'var(--muted)' }}>{s.label}</div>
@@ -427,8 +847,8 @@ function App() {
                     <span style={{ fontFamily: 'var(--mono)', fontSize: 10, background: 'var(--teal)', color: '#fff', padding: '2px 8px', borderRadius: 14 }}>{c.quarter}</span>
                     <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--teal)' }}>{c.category}</span>
                   </div>
-                  <h3 style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 10 }}>{c.company}</h3>
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{c.body}</p>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: 'var(--navy)', lineHeight: 1.4, marginBottom: 10 }}>{c.company}</h3>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)' }}>{c.body}</p>
                 </div>
               </div>
             ))}
@@ -606,11 +1026,12 @@ function App() {
         </div>
       </Section>
 
-      {/* Footer */}
+      {/* Tokens Footer */}
       <div style={{ background: 'var(--navy)', padding: '32px 48px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>NTUTEC Design Kit — Internal Use Only</span>
         <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>design.md ← Single Source of Truth</span>
       </div>
+      </div>}
 
     </div>
   );
