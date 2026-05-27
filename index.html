@@ -1060,186 +1060,175 @@ function Ecosystem() {
 }
 
 /* ── SILICON VALLEY ─────────────────────────────────── */
-function SiliconValley() {
+function FindYourPath() {
   const isMobile = useIsMobile();
-  const [ref, inView] = useInView({ threshold: 0.12 });
+  const [ref, inView] = useInView({ threshold: 0.08 });
+  const [hovered, setHovered] = React.useState(null);
 
-  const stats = [
-    { n: '15', unit: '個', label: '錄取名額' },
-    { n: '16', unit: '位', label: '業師 + 諮詢委員' },
-    { n: '10', unit: '週', label: '含 7 週矽谷駐地' },
+  const SMALL = 148;
+  const BIG   = 308;
+  const GAP   = 12;
+
+  // left col:  [0]=small, [2]=big, [4]=small
+  // right col: [1]=big,   [3]=small, [5]=small
+  const leftEntries  = [0, 2, 4];
+  const rightEntries = [1, 3, 5];
+  const leftHeights  = [SMALL, BIG, SMALL];
+  const rightHeights = [BIG, SMALL, SMALL];
+
+  const entries = [
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 12 2z"/><path d="M9 21h6"/><path d="M9 18h6"/></svg>,
+      desc: '我有想法、原型或校內創業團隊',
+      title: '台大車庫',
+      href: 'garage.html',
+      img: 'images/events/demo-day-2025-booth1.jpg',
+      pos: '50% 35%',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><polyline points="12 6 12 12 16 14"/></svg>,
+      desc: '我已有 MVP、用戶、PoC 或初期營收',
+      title: '台大加速器',
+      href: 'accelerator.html',
+      img: 'images/events/opening-2026-05.jpg',
+      pos: '45% 25%',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+      desc: '我正在募資或想讓投資人看見',
+      title: '投遞 Pitch',
+      href: 'pitch.html',
+      img: 'images/events/opening-2026-mentor-session.jpg',
+      pos: '50% 30%',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M12 12v3"/><path d="M8 12h8"/></svg>,
+      desc: '我是企業，想找新創或台大技術合作',
+      title: '企業合作',
+      href: 'corporate-partners.html',
+      img: 'images/events/demo-day-2025-03.jpg',
+      pos: '50% 30%',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>,
+      desc: '我是投資人，想認識早期案源',
+      title: '台大天使會',
+      href: 'angels.html',
+      img: 'images/events/opening-2026-pitching.jpg',
+      pos: '45% 40%',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+      desc: '我不確定該找哪個窗口',
+      title: '合作與資源需求',
+      href: 'consulting.html',
+      img: 'images/events/demo-day-2025-01.jpg',
+      pos: '50% 20%',
+    },
   ];
 
-  const details = [
-    { icon: <Icon name="User" size={16} color="currentColor" />, label: '招生對象', value: '臺大大學部、碩博士班在學學生' },
-    { icon: <Icon name="CalendarDays" size={16} color="currentColor" />, label: '課程期間', value: '2026 / 6 / 22 — 8 / 28（含行前 + 矽谷 + 成果）' },
-    { icon: <Icon name="Layers" size={16} color="currentColor" />, label: '主辦單位', value: 'D-School × 創意創業學程 × 台大創創中心' },
-  ];
-
-  return (
-    <section ref={ref} style={{ padding: isMobile ? '0 6% 0' : '0 10% 0', overflow: 'hidden' }}>
-      <Rule />
-      <div style={{ paddingTop: isMobile ? 48 : 72 }}>
-        {/* Top label row */}
-        <div style={{
-          display: 'flex', alignItems: 'center',
-          flexWrap: 'wrap', gap: 12,
-          justifyContent: 'space-between',
-          marginBottom: 0,
+  function renderCard(idx, height, isBig) {
+    const e = entries[idx];
+    const active = hovered === idx;
+    const dark = isBig;
+    const delay = idx * 60;
+    const lift = active ? (isBig ? '0 12px 40px rgba(26,46,74,0.18)' : '0 8px 32px rgba(88,168,160,0.28)') : '0 2px 20px rgba(26,46,74,0.09)';
+    return (
+      <a key={idx} href={e.href}
+        onMouseEnter={() => setHovered(idx)}
+        onMouseLeave={() => setHovered(null)}
+        style={{
+          position: 'relative', overflow: 'hidden',
+          display: 'flex', flexDirection: 'column', justifyContent: isBig ? 'flex-end' : 'center',
+          height, borderRadius: 16, textDecoration: 'none',
+          background: dark ? 'var(--teal)' : '#fff',
+          boxShadow: lift,
+          transform: !inView ? 'translateY(22px)' : active ? 'translateY(-3px)' : 'none',
           opacity: inView ? 1 : 0,
-          transform: inView ? 'none' : 'translateY(16px)',
-          transition: 'opacity 0.6s ease, transform 0.6s ease',
+          transition: `background 0.22s, box-shadow 0.22s, transform 0.22s, opacity 0.6s ${delay}ms cubic-bezier(0.22,1,0.36,1)`,
         }}>
-          <span className="sec-en">Global Innovation</span>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'rgba(0,216,200,0.1)',
-            border: '1px solid rgba(0,216,200,0.35)',
-            borderRadius: 100, padding: '6px 16px',
-          }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--mint)', boxShadow: '0 0 0 3px rgba(0,216,200,0.25)' }} />
-            <span style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--navy)' }}>
-              2026 暑期招生中 · 4/29 報名開放
-            </span>
-          </div>
+
+        {/* ── Image with diagonal clip ── */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0,
+          width: isBig ? '65%' : '52%', height: '100%',
+          clipPath: 'polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%)',
+          zIndex: 1,
+        }}>
+          <img src={e.img} alt="" style={{
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: e.pos, display: 'block',
+          }} />
         </div>
 
-        {/* Main card */}
+        {/* ── Gradient ON TOP of image ── */}
         <div style={{
-          display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 400px',
-          marginTop: 32, marginBottom: isMobile ? 56 : 88,
-          boxShadow: '0 16px 64px rgba(26,46,74,0.10)',
-          borderRadius: 6, overflow: 'hidden',
-          opacity: inView ? 1 : 0,
-          transform: inView ? 'none' : 'translateY(32px)',
-          transition: 'opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s',
+          position: 'absolute', top: 0, right: 0,
+          width: isBig ? '72%' : '58%', height: '100%', zIndex: 2,
+          background: isBig
+            ? `linear-gradient(to right, var(--teal) 0%, rgba(88,168,160,0.7) 35%, transparent 65%)`
+            : `linear-gradient(to right, #fff 0%, rgba(255,255,255,0.8) 28%, transparent 58%)`,
+          transition: 'background 0.22s',
+        }} />
+
+        {/* ── Text ── */}
+        <div style={{
+          position: 'relative', zIndex: 3,
+          padding: isBig ? '0 32px 28px' : '0 24px',
+          maxWidth: isBig ? '52%' : '58%',
         }}>
-
-          {/* Left: main content */}
-          <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '56px 56px 48px' }}>
-            {/* Heading */}
-            <h2 style={{
-              fontFamily: 'var(--serif)', fontWeight: 600,
-              fontSize: 'clamp(26px, 2.8vw, 42px)',
-              color: 'var(--navy)', lineHeight: 1.3, letterSpacing: '0.02em',
-              marginBottom: 24,
-            }}>
-              把你的創業構想<br/>
-              帶到{' '}
-              <span style={{ background: 'var(--mint)', color: 'var(--navy)', padding: '2px 8px', WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}>
-                矽谷驗證
-              </span>
-            </h2>
-
-            <p style={{
-              fontFamily: 'var(--sans)', fontSize: isMobile ? 14 : 15, fontWeight: 300,
-              color: 'var(--muted)', lineHeight: 1.9, marginBottom: isMobile ? 32 : 44,
-              maxWidth: isMobile ? '100%' : 480,
-            }}>
-              10 堂課程，其中 7 週為矽谷沉浸式探索，與 Stanford、Berkeley SkyDeck、Google、Meta 創新生態深度連結。駐地業師 14 位 + 諮詢委員 2 位，補助機票上限 5 萬 + 生活費 10 萬。
-            </p>
-
-            {/* Stats */}
-            <div style={{ display: 'flex', gap: 0, marginBottom: isMobile ? 28 : 48 }}>
-              {stats.map((s, i) => (
-                <div key={i} style={{
-                  paddingRight: isMobile ? 16 : 40,
-                  marginRight: isMobile ? 16 : 40,
-                  borderRight: i < stats.length - 1 ? '1px solid var(--rule)' : 'none',
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                    <span style={{ fontFamily: 'var(--serif)', fontSize: isMobile ? 32 : 40, fontWeight: 600, color: 'var(--navy)', lineHeight: 1, letterSpacing: '-0.02em' }}>{s.n}</span>
-                    <span style={{ fontFamily: 'var(--sans)', fontSize: 14, color: 'var(--teal)', fontWeight: 500 }}>{s.unit}</span>
-                  </div>
-                  <div style={{ fontFamily: 'var(--sans)', fontSize: 12.5, color: 'var(--muted)', fontWeight: 300 }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-              <a href="#" style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: 'var(--navy)', color: '#fff',
-                fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, letterSpacing: '0.04em',
-                padding: '12px 28px', borderRadius: 4,
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background='var(--teal)'}
-              onMouseLeave={e => e.currentTarget.style.background='var(--navy)'}>
-                立即申請 →
-              </a>
-              <a href="#" className="more-detail" style={{ fontSize: 12 }}>
-                了解課程詳情
-              </a>
-            </div>
-          </div>
-
-          {/* Right: detail panel */}
           <div style={{
-            background: '#00C4CC',
-            padding: isMobile ? '32px 24px' : '48px 40px',
-            display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-            position: 'relative', overflow: 'hidden',
+            display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
+            color: dark ? 'rgba(255,255,255,0.85)' : 'var(--teal)',
+            transition: 'color 0.22s',
           }}>
-            {/* Subtle grid overlay */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-              backgroundSize: '32px 32px',
-              pointerEvents: 'none',
-            }} />
-            {/* Radial glow */}
-            <div style={{
-              position: 'absolute', bottom: -60, right: -60,
-              width: 220, height: 220, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(0,216,200,0.15) 0%, transparent 70%)',
-              pointerEvents: 'none',
-            }} />
-
-            <div style={{ position: 'relative' }}>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 600, letterSpacing: '0.14em', color: 'rgba(26,46,74,0.55)', textTransform: 'uppercase', marginBottom: 8 }}>
-                Silicon Valley Exploration Practicum
-              </div>
-              <div style={{ marginBottom: 36 }}>
-                <span style={{
-                  display: 'inline-block',
-                  background: 'rgba(0,0,0,0.5)',
-                  color: '#fff',
-                  fontFamily: 'var(--sans)', fontSize: 12.5, fontWeight: 400,
-                  padding: '4px 14px', borderRadius: 100,
-                  letterSpacing: '0.02em',
-                }}>國際創新創業探索與實踐 · 3 學分</span>
-              </div>
-
-              {/* Detail items */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-                {details.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                    <div style={{ color: 'rgba(26,46,74,0.5)', flexShrink: 0, marginTop: 2 }}>{d.icon}</div>
-                    <div>
-                      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'rgba(26,46,74,0.55)', marginBottom: 5, textTransform: 'uppercase' }}>{d.label}</div>
-                      <div style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 500, color: 'var(--navy)', lineHeight: 1.6 }}>{d.value}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{
-              position: 'relative',
-              marginTop: 36,
-              background: 'rgba(26,46,74,0.1)',
-              border: '1px solid rgba(26,46,74,0.2)',
-              borderRadius: 4, padding: '14px 18px',
-              display: 'flex', alignItems: 'center', gap: 10,
-            }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(26,46,74,0.6)" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              <span style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 500, color: 'var(--navy)', letterSpacing: '0.02em' }}>
-                申請截止：2026 年 5 月 18 日（一）
-              </span>
-            </div>
+            {e.icon}
+            <span style={{
+              fontFamily: 'var(--serif)', fontWeight: 600,
+              fontSize: isBig ? 22 : 17,
+              color: dark ? '#fff' : 'var(--navy)',
+              transition: 'color 0.22s',
+            }}>{e.title}</span>
           </div>
+          <div style={{
+            fontFamily: 'var(--sans)', fontWeight: 300,
+            fontSize: isBig ? 13 : 12, lineHeight: 1.65,
+            color: dark ? 'rgba(255,255,255,0.72)' : 'var(--muted)',
+            transition: 'color 0.22s',
+          }}>{e.desc}</div>
+        </div>
+      </a>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <section ref={ref} style={{ padding: '72px 6%', background: 'var(--white)' }}>
+        <div style={{ marginBottom: 36, opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(16px)', transition: 'opacity 0.6s, transform 0.6s' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 12 }}>Find Your Path</div>
+          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 28, fontWeight: 600, color: 'var(--navy)' }}>馬上找到你的合作機會</h2>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
+          {entries.map((_, i) => renderCard(i, SMALL, false))}
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section ref={ref} style={{ padding: '96px 10%', background: 'var(--white)' }}>
+      <div style={{ marginBottom: 48, opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(16px)', transition: 'opacity 0.6s, transform 0.6s' }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: 12 }}>Find Your Path</div>
+        <h2 style={{ fontFamily: 'var(--serif)', fontSize: 38, fontWeight: 600, color: 'var(--navy)' }}>馬上找到你的合作機會</h2>
+      </div>
+
+      {/* Bento: left=small/big/small  right=big/small/small */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: GAP }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
+          {leftEntries.map((idx, ci) => renderCard(idx, leftHeights[ci], ci === 1))}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
+          {rightEntries.map((idx, ci) => renderCard(idx, rightHeights[ci], ci === 0))}
         </div>
       </div>
     </section>
@@ -1833,7 +1822,7 @@ function App() {
       <div style={{ paddingRight: isMobile ? 0 : 80, maxWidth: '100vw', overflowX: 'hidden' }}>
         <Hero tweaks={tweaks} scrollY={scrollY} />
         <Stats />
-        <SiliconValley />
+        <FindYourPath />
         <FocusAreas />
         <Journey />
         <News />
