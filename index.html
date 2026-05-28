@@ -449,7 +449,7 @@ function Nav({ scrolled }) {
                 <div style={{ fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--muted)', marginBottom: 20, textTransform: 'uppercase' }}>{col.heading}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {col.links.map((lk, li) => (
-                    <a key={li} href={lk.href || '#'} style={{ display: 'flex', flexDirection: 'column', gap: 3, padding: '12px 14px', borderRadius: 8, transition: 'background 0.12s' }}
+                    <a key={li} href={lk.href || '#'} style={{ display: 'flex', flexDirection: 'column', gap: 3, padding: '12px 14px', borderRadius: 4, transition: 'background 0.12s' }}
                     onMouseEnter={e => e.currentTarget.style.background='var(--offwhite)'}
                     onMouseLeave={e => e.currentTarget.style.background='transparent'}>
                       <span style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600, color: 'var(--navy)' }}>{lk.label}</span>
@@ -763,7 +763,7 @@ function About() {
                 background: 'var(--navy)',
                 WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone',
                 padding: '3px 10px',
-              }}>引導創新旅程 的入口平台</h2>
+              }}>引導創新旅程<br/>的入口平台</h2>
             </div>
             <p style={{ fontFamily: 'var(--serif)', fontSize: 17, fontWeight: 300, lineHeight: 2, color: 'rgba(26,46,74,0.85)', marginBottom: 48 }}>
               台大創創中心不只是一個單位，而是陪伴每一位創業者走完整段旅程的夥伴。從校園中的想法萌芽，到產品驗證、資金連結、規模成長，我們在每個關鍵節點提供最適切的資源與陪伴。
@@ -824,7 +824,7 @@ function StatItem({ stat, index, started, isMobile, isLast }) {
       }}>
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           {index === 0 && <><circle cx="8" cy="7" r="3" stroke="#58A8A0" strokeWidth="1.5"/><circle cx="15" cy="9" r="2.5" stroke="#58A8A0" strokeWidth="1.5"/><path d="M2 18c0-3 2.5-5 6-5s6 2 6 5" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/><path d="M15 14c2.5 0 5 1.5 5 4" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/></>}
-          {index === 1 && <><path d="M4 14c0-1.5 1.2-2.5 3-3l4-1 4 1c1.8.5 3 1.5 3 3v1H4v-1z" stroke="#58A8A0" strokeWidth="1.5" strokeLinejoin="round"/><path d="M8 8a3 3 0 1 0 6 0 3 3 0 0 0-6 0z" stroke="#58A8A0" strokeWidth="1.5"/><path d="M7 11c-2 .5-3 1.5-3 3" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/></>}
+          {index === 1 && <><circle cx="11" cy="8" r="3.5" stroke="#58A8A0" strokeWidth="1.5"/><path d="M4 19c0-3.5 3-6 7-6s7 2.5 7 6" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/></>}
           {index === 2 && <><path d="M11 3v4M3 11h4M15 11h4M11 15v4" stroke="#58A8A0" strokeWidth="1.5" strokeLinecap="round"/><circle cx="11" cy="11" r="3" stroke="#58A8A0" strokeWidth="1.5"/></>}
         </svg>
       </div>
@@ -867,7 +867,7 @@ function Stats() {
     }}>
       <div style={{
         background: '#fff',
-        borderRadius: 8,
+        borderRadius: 4,
         boxShadow: '0 8px 48px rgba(26,46,74,0.13)',
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : `repeat(3, 1fr) auto`,
@@ -1133,6 +1133,18 @@ function FindYourPath() {
     const dark = isBig;
     const delay = idx * 60;
     const lift = active ? (isBig ? '0 12px 40px rgba(26,46,74,0.18)' : '0 8px 32px rgba(88,168,160,0.28)') : '0 2px 20px rgba(26,46,74,0.09)';
+
+    // SVG clip shape params (from Rectangle image_lg / image_sml)
+    const clipVW = isBig ? 206 : 223;
+    const clipVH = isBig ? 192 : 102;
+    const clipRx = isBig ? '-2.76074' : '91.8853';
+    const clipRy = isBig ? '35.8774'  : '-97.2676';
+    const clipRW = isBig ? '245.194'  : '208.899';
+    const clipRH = isBig ? '245.194'  : '208.899';
+    const clipRot = isBig ? 'rotate(-11.0219 -2.76074 35.8774)' : 'rotate(27.8224 91.8853 -97.2676)';
+    const gradSrc = isBig ? 'public/Rectangle graidents_01.svg' : 'public/Rectangle graidents_02.svg';
+    const clipId = `imgclip-${idx}`;
+
     return (
       <a key={idx} href={e.href}
         onMouseEnter={() => setHovered(idx)}
@@ -1140,61 +1152,49 @@ function FindYourPath() {
         style={{
           position: 'relative', overflow: 'hidden',
           display: 'flex', flexDirection: 'column', justifyContent: isBig ? 'flex-end' : 'center',
-          height, borderRadius: 16, textDecoration: 'none',
-          background: dark ? 'var(--teal)' : '#fff',
+          height, borderRadius: 4, textDecoration: 'none',
+          background: dark ? (idx === 1 || idx === 2 ? '#00DCC8' : 'var(--teal)') : '#fff',
           boxShadow: lift,
           transform: !inView ? 'translateY(22px)' : active ? 'translateY(-3px)' : 'none',
           opacity: inView ? 1 : 0,
-          transition: `background 0.22s, box-shadow 0.22s, transform 0.22s, opacity 0.6s ${delay}ms cubic-bezier(0.22,1,0.36,1)`,
+          transition: `box-shadow 0.22s, transform 0.22s, opacity 0.6s ${delay}ms cubic-bezier(0.22,1,0.36,1)`,
         }}>
 
-        {/* ── Image with diagonal clip ── */}
-        <div style={{
-          position: 'absolute', top: 0, right: 0,
-          width: isBig ? '65%' : '52%', height: '100%',
-          clipPath: 'polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          zIndex: 1,
-        }}>
-          <img src={e.img} alt="" style={{
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: e.pos, display: 'block',
-          }} />
-        </div>
-
-        {/* ── Gradient ON TOP of image ── */}
-        <div style={{
-          position: 'absolute', top: 0, right: 0,
-          width: isBig ? '72%' : '58%', height: '100%', zIndex: 2,
-          background: isBig
-            ? `linear-gradient(to right, var(--teal) 0%, rgba(88,168,160,0.7) 35%, transparent 65%)`
-            : `linear-gradient(to right, #fff 0%, rgba(255,255,255,0.8) 28%, transparent 58%)`,
-          transition: 'background 0.22s',
-        }} />
+        {/* ── Photo clipped with exact SVG rotated-rect shape ── */}
+        <svg viewBox={`0 0 ${clipVW} ${clipVH}`} xmlns="http://www.w3.org/2000/svg"
+          style={{ position: 'absolute', right: 0, top: 0, height: '100%', width: 'auto', zIndex: 1, display: 'block', overflow: 'visible' }}>
+          <defs>
+            <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
+              <rect x={clipRx} y={clipRy} width={clipRW} height={clipRH} rx="16" transform={clipRot}/>
+            </clipPath>
+          </defs>
+          <foreignObject x="0" y="0" width={clipVW} height={clipVH} clipPath={`url(#${clipId})`}>
+            <img xmlns="http://www.w3.org/1999/xhtml" src={e.img}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: e.pos, display: 'block' }}/>
+          </foreignObject>
+        </svg>
 
         {/* ── Text ── */}
         <div style={{
           position: 'relative', zIndex: 3,
           padding: isBig ? '0 32px 28px' : '0 24px',
-          maxWidth: isBig ? '52%' : '58%',
+          maxWidth: isBig ? '52%' : '55%',
         }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
             color: dark ? 'rgba(255,255,255,0.85)' : 'var(--teal)',
-            transition: 'color 0.22s',
           }}>
             {e.icon}
             <span style={{
               fontFamily: 'var(--serif)', fontWeight: 600,
               fontSize: isBig ? 22 : 17,
               color: dark ? '#fff' : 'var(--navy)',
-              transition: 'color 0.22s',
             }}>{e.title}</span>
           </div>
           <div style={{
             fontFamily: 'var(--sans)', fontWeight: 300,
             fontSize: isBig ? 13 : 12, lineHeight: 1.65,
             color: dark ? 'rgba(255,255,255,0.72)' : 'var(--muted)',
-            transition: 'color 0.22s',
           }}>{e.desc}</div>
         </div>
       </a>
@@ -1281,7 +1281,7 @@ function FocusAreas() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {areas.map((a, i) => (
               <AnimBlock key={i} animation="anim-fadeUp" delay={i * 60}>
-              <div style={{ borderRadius: 6, overflow: 'hidden', background: a.color }}>
+              <div style={{ borderRadius: 4, overflow: 'hidden', background: a.color }}>
                 <div style={{ display: 'flex', gap: 0 }}>
                   <div style={{ width: 88, flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
                     <img src={a.img} alt={a.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -1457,7 +1457,7 @@ function Journey() {
               const pal = palette[p.state];
               return (
                 <div key={i} style={{
-                  background: pal.bg, borderRadius: 6,
+                  background: pal.bg, borderRadius: 4,
                   padding: '20px 20px',
                   display: 'flex', gap: 16, alignItems: 'flex-start',
                   opacity: visible ? 1 : 0,
@@ -1630,7 +1630,7 @@ function Angel({ show, scrollY }) {
         <polygon points="0,425 386,600 0,600" fill="#FAFAF8" />
       </svg>
       <div style={{ position: 'absolute', left: '8%', top: '50%', transform: 'translateY(calc(-50% + 80px))', zIndex: 20 }}>
-        <div style={{ background: '#fff', boxShadow: '0 20px 64px rgba(26,46,74,0.22), 0 4px 16px rgba(26,46,74,0.10)', borderRadius: 8, padding: '44px 48px', maxWidth: 480 }}>
+        <div style={{ background: '#fff', boxShadow: '0 20px 64px rgba(26,46,74,0.22), 0 4px 16px rgba(26,46,74,0.10)', borderRadius: 4, padding: '44px 48px', maxWidth: 480 }}>
           <div style={{ width: 32, height: 3, background: 'var(--mint)', borderRadius: 1, marginBottom: 20 }} />
           <span style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', color: 'var(--teal)', textTransform: 'uppercase', display: 'block', marginBottom: 14 }}>
             Angel Investment Club
