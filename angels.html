@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
   <style>
@@ -596,7 +596,10 @@ function MembershipPlans() {
   ];
 
   const CheckIcon = ({ light }) => (
-    <LucideReact.CircleCheck size={16} color={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth={1.5} style={{ flexShrink: 0, marginTop: 2 }} />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <circle cx="8" cy="8" r="7" stroke={light ? 'rgba(0,216,200,0.5)' : 'rgba(88,168,160,0.5)'} strokeWidth="1"/>
+      <path d="M5 8l2 2 4-4" stroke={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
   );
 
   return (

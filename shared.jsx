@@ -54,10 +54,14 @@ function useIsMobile(bp = 768) {
 
 /* ── Shared social links ── */
 const SHARED_SOCIAL_LINKS = [
-  { name: 'Facebook', href: 'https://www.facebook.com/NTUTEC/', icon: <Icon name="Facebook" size={16} /> },
-  { name: 'Instagram', href: '#', icon: <Icon name="Instagram" size={16} /> },
-  { name: 'YouTube', href: '#', icon: <Icon name="Youtube" size={16} /> },
-  { name: 'LinkedIn', href: '#', icon: <Icon name="Linkedin" size={16} /> },
+  { name: 'Facebook', href: 'https://www.facebook.com/NTUTEC/',
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> },
+  { name: 'Instagram', href: '#',
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> },
+  { name: 'YouTube', href: '#',
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg> },
+  { name: 'LinkedIn', href: '#',
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg> },
 ];
 
 /* ── NAV with mega menu ── */
@@ -144,7 +148,9 @@ function SharedMobileDrawer({ open, onClose }) {
             <img src="uploads/Asset 6NTUTEC C+E.png" alt="NTUTEC" style={{ height: 28, width: 'auto' }} />
           </a>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, color: '#1A2E4A' }}>
-            <Icon name="X" size={20} />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
 
@@ -165,7 +171,10 @@ function SharedMobileDrawer({ open, onClose }) {
                     style={{ fontFamily: 'var(--sans)', fontSize: 16, fontWeight: 500, color: '#1A2E4A', textDecoration: 'none' }}>
                     {key}
                   </a>
-                  <Icon name="ChevronDown" size={14} style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0, color: '#1A2E4A' }}>
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
                 {isOpen && (
                   <div style={{ background: '#F5F5F2', paddingBottom: 8 }}>
@@ -263,7 +272,10 @@ function SharedNav({ activeKey, alwaysSolid = false }) {
                     position: 'relative', whiteSpace: 'nowrap', transition: 'color 0.15s',
                   }}>
                   {key}
-                  <Icon name="ChevronDown" size={12} style={{ marginLeft: 5, opacity: 0.55, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                    style={{ marginLeft: 5, opacity: 0.55, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                   {isOpen && <span style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: 20, height: 2, background: 'var(--teal)', borderRadius: 1 }} />}
                 </button>
               );
@@ -274,7 +286,9 @@ function SharedNav({ activeKey, alwaysSolid = false }) {
           <button className="shared-hamburger"
             onClick={() => setMobileOpen(true)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'none', alignItems: 'center', justifyContent: 'center', color: solid ? 'var(--navy)' : '#fff' }}>
-            <Icon name="Menu" size={22} />
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+              <path d="M0 1h22M0 8h22M0 15h22" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
 
