@@ -132,14 +132,10 @@ const ELIGIBILITY = [
 ];
 
 const ELIGIBILITY_ICONS = [
-  // 燈泡 — 有興趣
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="13" r="7" stroke="var(--teal)" strokeWidth="1.6"/><path d="M13 20h6M14 23h4" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round"/><path d="M16 6V4M22.5 9.5l1.5-1.5M25 16h2M9.5 9.5 8 8M7 16H5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round"/></svg>,
-  // 握手 — 認同使命
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 18l5-5 3 3 5-5 3 3 5-5 3 3" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 13l-5 5 2 2 5-5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M23 11l5 5-2 2-5-5" stroke="var(--mint)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  // 月曆 — 願意參與
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="5" y="8" width="22" height="18" rx="2" stroke="var(--teal)" strokeWidth="1.6"/><path d="M5 13h22M11 6v4M21 6v4" stroke="var(--teal)" strokeWidth="1.6" strokeLinecap="round"/><path d="M10 18h2M15 18h2M20 18h2M10 22h2M15 22h2" stroke="var(--mint)" strokeWidth="1.6" strokeLinecap="round"/></svg>,
-  // 硬幣 — 繳納年費
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="var(--teal)" strokeWidth="1.6"/><path d="M16 10v2M16 20v2M13 13.5c0-1 1-2 3-2s3 1 3 2-2 2-3 2-3 1-3 2 1 2 3 2 3-1 3-2" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+  <LucideReact.Lightbulb size={32} color="var(--teal)" strokeWidth={1.5} />,
+  <LucideReact.Handshake size={32} color="var(--teal)" strokeWidth={1.5} />,
+  <LucideReact.CalendarDays size={32} color="var(--teal)" strokeWidth={1.5} />,
+  <LucideReact.CircleDollarSign size={32} color="var(--teal)" strokeWidth={1.5} />,
 ];
 
 function Eligibility() {
@@ -231,12 +227,7 @@ function MemberFeatures() {
 /* ════ APPLICATION ════ */
 function Application() {
   const isMobile = useIsMobile();
-  const CheckIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
-      <circle cx="8" cy="8" r="7" stroke="rgba(0,216,200,0.5)" strokeWidth="1" />
-      <path d="M5 8l2 2 4-4" stroke="var(--mint)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  const CheckIcon = () => <LucideReact.CircleCheck size={16} color="var(--mint)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: 2 }} />;
   return (
     <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
@@ -249,12 +240,7 @@ function Application() {
           </div>
         </AnimUp>
         {(() => {
-          const CheckIcon = ({ light }) => (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
-              <circle cx="8" cy="8" r="7" stroke={light ? 'rgba(0,216,200,0.5)' : 'rgba(88,168,160,0.5)'} strokeWidth="1"/>
-              <path d="M5 8l2 2 4-4" stroke={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          );
+          const CheckIcon = ({ light }) => <LucideReact.CircleCheck size={16} color={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth={1.5} style={{ flexShrink: 0, marginTop: 2 }} />;
           const indFeatures = ['每月精選新創資訊卡片', '完整 DD 備忘錄與盡調資料', '月會出席與記名投票權', '40+ 天使投資人社群交流', '投後 Portfolio 追蹤更新', '月會後新創實地參訪'];
           const corpFeatures = ['可指派 3 位代表出席', '包含所有個人會員權益', '優先企業參訪安排', '企業品牌曝光與共投機會', '專屬案源推薦通道', '年度投資趨勢報告'];
           return (
