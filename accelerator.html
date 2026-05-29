@@ -351,10 +351,8 @@ function Timeline() {
                 <div style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 700, color: 'var(--navy)', lineHeight: 1.4 }}>{p.title}</div>
                 <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginTop: 4 }}>{p.period}</div>
               </div>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', color: 'var(--navy)' }}>
-                <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <LucideReact.ChevronDown size={16} strokeWidth={1.5}
+                style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', color: 'var(--navy)' }} />
             </button>
             {isOpen && (
               <div style={{ paddingBottom: 24, paddingLeft: 60 }}>
