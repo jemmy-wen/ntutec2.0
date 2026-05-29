@@ -132,10 +132,10 @@ const ELIGIBILITY = [
 ];
 
 const ELIGIBILITY_ICONS = [
-  <LucideReact.Lightbulb size={32} color="var(--teal)" strokeWidth={1.5} />,
-  <LucideReact.Handshake size={32} color="var(--teal)" strokeWidth={1.5} />,
-  <LucideReact.CalendarDays size={32} color="var(--teal)" strokeWidth={1.5} />,
-  <LucideReact.CircleDollarSign size={32} color="var(--teal)" strokeWidth={1.5} />,
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg>,
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-1"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>,
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>,
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>,
 ];
 
 function Eligibility() {
@@ -227,7 +227,7 @@ function MemberFeatures() {
 /* ════ APPLICATION ════ */
 function Application() {
   const isMobile = useIsMobile();
-  const CheckIcon = () => <LucideReact.CircleCheck size={16} color="var(--mint)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: 2 }} />;
+  const CheckIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>;
   return (
     <section style={{ padding: isMobile ? '72px 0' : '120px 0', background: 'var(--offwhite)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 6%' : '0 10%' }}>
@@ -240,7 +240,7 @@ function Application() {
           </div>
         </AnimUp>
         {(() => {
-          const CheckIcon = ({ light }) => <LucideReact.CircleCheck size={16} color={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth={1.5} style={{ flexShrink: 0, marginTop: 2 }} />;
+          const CheckIcon = ({ light }) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={light ? 'var(--mint)' : 'var(--teal)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>;
           const indFeatures = ['每月精選新創資訊卡片', '完整 DD 備忘錄與盡調資料', '月會出席與記名投票權', '40+ 天使投資人社群交流', '投後 Portfolio 追蹤更新', '月會後新創實地參訪'];
           const corpFeatures = ['可指派 3 位代表出席', '包含所有個人會員權益', '優先企業參訪安排', '企業品牌曝光與共投機會', '專屬案源推薦通道', '年度投資趨勢報告'];
           return (
