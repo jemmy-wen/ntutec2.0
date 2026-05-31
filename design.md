@@ -73,12 +73,29 @@ Space+Mono:wght@400;700
 | 角色 | 規格 |
 |---|---|
 | 大標題（H1 hero） | `--serif` / 58–64px / **weight 600** / `--navy` 或 `#fff` / letter-spacing 0.04em |
-| Section 標題（H2） | `--serif` / 32–40px / **weight 600** / `--navy` |
+| Section 標題（H2） | `--serif` / 32–40px / **weight 600** / `--navy` — 搭配底色方塊（見下方規則） |
 | 卡片標題（H3） | `--serif` / 18–24px / **weight 600** / `--navy` |
 | Section label | `--mono` / 10–11px / weight 500 / letter-spacing 0.14em / uppercase / `--teal` |
 | 內文 | `--sans` / 14–15px / weight 300 / line-height 1.9–2.0 / `--muted` |
 | CTA 按鈕文字 | `--sans` / 14–15px / weight 500–600 |
 | tag / chip | `--mono` / 11–12px / weight 500 / letter-spacing 0.06em |
+
+### Section 標題底色方塊規則（`.sec-title-hl`）
+
+Section 標題（H2）一律搭配底色方塊，顏色依所在區塊背景決定：
+
+| 區塊背景 | 底色方塊顏色 |
+|---|---|
+| 白底（`--white` / `--offwhite`） | `var(--mint)`（teal） |
+| 深色底（`--navy` / `--teal` / `--mint`） | `#ffffff`（白色） |
+
+```jsx
+// 白底區塊
+<span className="sec-title-hl">標題文字</span>
+
+// 深色 / teal 底區塊
+<span className="sec-title-hl" style={{ background: '#fff' }}>標題文字</span>
+```
 
 ---
 

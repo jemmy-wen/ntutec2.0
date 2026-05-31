@@ -685,6 +685,31 @@ function App() {
         </div>
       </Section>
 
+      {/* ── 3b. sec-title-hl 規範 ── */}
+      <span id="標題底色" />
+      <Section title="標題底色方塊" label="03b · sec-title-hl">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+          {/* 白底 */}
+          <div style={{ background: 'var(--offwhite)', border: '1px solid var(--rule)', borderRadius: 4, padding: 32 }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>白底區塊 → Teal 方塊</div>
+            <h2 style={{ marginBottom: 16 }}><span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 32, color: 'var(--navy)', background: 'var(--mint)', padding: '4px 10px', display: 'inline' }}>標題文字</span></h2>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.9 }}>
+              background: <span style={{ color: 'var(--teal)' }}>var(--mint)</span><br />
+              適用：白底（--white / --offwhite）區塊
+            </div>
+          </div>
+          {/* 深色底 */}
+          <div style={{ background: 'var(--mint)', border: '1px solid var(--rule)', borderRadius: 4, padding: 32 }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: 'var(--navy)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.7 }}>深色／Teal 底 → 白色方塊</div>
+            <h2 style={{ marginBottom: 16 }}><span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 32, color: 'var(--navy)', background: '#ffffff', padding: '4px 10px', display: 'inline' }}>標題文字</span></h2>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--navy)', lineHeight: 1.9, opacity: 0.7 }}>
+              background: <span style={{ color: 'var(--navy)' }}>#ffffff</span><br />
+              適用：深色底（--navy / --teal / --mint）區塊
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* ── 4. 按鈕 ── */}
       <span id="按鈕" />
       <Section title="按鈕元件" label="04 · Buttons" bg="var(--offwhite)">
