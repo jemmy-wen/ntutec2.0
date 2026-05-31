@@ -6,7 +6,7 @@
   <title>台大加速器 — 台大創創中心 NTUTEC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,700" rel="stylesheet">
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
@@ -198,7 +198,7 @@ function Hero() {
           {[{ num: '10', suffix: '個月', label: '深度輔導期' }, { num: '40', plus: '+', label: '業師顧問' }, { num: '20', label: '錄取隊數' }, { num: '0', suffix: '元', label: '參與費用' }].map((s, i) => (
             <div key={i} style={{ padding: '20px 24px', flex: '1 1 45%', borderBottom: i < 2 ? '1px solid var(--rule)' : 'none', borderRight: i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-                <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 32, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                <span style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: 32, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
                 {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
                 {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
               </div>
@@ -214,7 +214,7 @@ function Hero() {
                 {i > 0 && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
                 <div style={{ padding: '24px 36px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-                    <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+                    <span style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
                     {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
                     {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
                   </div>

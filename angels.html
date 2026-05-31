@@ -6,7 +6,7 @@
   <title>台大天使會 NTUTEC Angels — 台大創創中心 NTUTEC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,700" rel="stylesheet">
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
@@ -90,7 +90,7 @@ function Hero() {
           {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
           <div style={{ padding: isMobile ? '20px 24px' : '24px 36px', borderBottom: isMobile && i < STATS.length - 1 ? '1px solid var(--rule)' : 'none', flex: isMobile ? '1 1 45%' : 'none', borderRight: isMobile && i % 2 === 0 ? '1px solid var(--rule)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 6 }}>
-              <span style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
+              <span style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: isMobile ? 32 : 40, lineHeight: 1, color: 'var(--navy)' }}>{s.num}</span>
               {s.plus && <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 18, color: 'var(--teal)' }}>{s.plus}</span>}
               {s.suffix && <span style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: 14, color: 'var(--muted)', marginLeft: 3 }}>{s.suffix}</span>}
             </div>
@@ -626,7 +626,7 @@ function MembershipPlans() {
             <div style={{ background: '#fff', padding: isMobile ? '32px 24px' : '48px 44px', height: '100%', borderRadius: 4 }}>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: 'var(--navy)', marginBottom: 6 }}>個人會員</div>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'var(--muted)', marginBottom: 24 }}>天使投資人．企業高階主管</div>
-              <div style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 48, color: 'var(--navy)', lineHeight: 1, marginBottom: 36 }}>
+              <div style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: 48, color: 'var(--navy)', lineHeight: 1, marginBottom: 36 }}>
                 NT$50,000 <span style={{ fontSize: 16, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'var(--muted)' }}>/年</span>
               </div>
               <div style={{ borderTop: '1px solid var(--rule)', paddingTop: 28 }}>
@@ -645,7 +645,7 @@ function MembershipPlans() {
             <div style={{ background: '#0d0d0d', border: '2px solid var(--mint)', padding: isMobile ? '32px 24px' : '48px 44px', height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 4 }}>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 6 }}>企業會員</div>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 24 }}>CVC．創投．金融機構．企業集團</div>
-              <div style={{ fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 48, color: '#fff', lineHeight: 1, marginBottom: 36 }}>
+              <div style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: 48, color: '#fff', lineHeight: 1, marginBottom: 36 }}>
                 NT$100,000 <span style={{ fontSize: 16, fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 400, color: 'rgba(255,255,255,0.5)' }}>/年</span>
               </div>
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 28, flex: 1 }}>
