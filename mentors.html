@@ -6,7 +6,7 @@
   <title>業師陣容 Mentor Network — 台大創創中心 NTUTEC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:wght@100;300;400;700;900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,700" rel="stylesheet">
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide-react@0.474.0/dist/umd/lucide-react.js" crossorigin="anonymous"></script>
@@ -138,7 +138,7 @@ function Hero() {
             <React.Fragment key={i}>
               {i > 0 && !isMobile && <div style={{ width: 1, background: 'var(--rule)', alignSelf: 'stretch' }} />}
               <div style={{ padding: isMobile ? '20px 28px' : '24px 40px', flex: isMobile ? '1 1 45%' : 'none' }}>
-                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 600, fontSize: isMobile ? 28 : 36, lineHeight: 1, color: 'var(--navy)', marginBottom: 6 }}>{s.num}</div>
+                <div style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: isMobile ? 28 : 36, lineHeight: 1, color: 'var(--navy)', marginBottom: 6 }}>{s.num}</div>
                 <div style={{ fontFamily: 'var(--sans)', fontSize: 12, color: 'var(--muted)' }}>{s.label}</div>
               </div>
             </React.Fragment>
@@ -165,7 +165,7 @@ function CategoryOverview() {
           {CATEGORIES.map((cat, i) => (
             <AnimUp key={i} delay={i * 80} style={{ height: '100%' }}>
               <div style={{ background: '#fff', padding: '32px 24px', textAlign: 'center', height: '100%' }}>
-                <p style={{ fontFamily: 'var(--sans)', fontSize: 32, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.count}</p>
+                <p style={{ fontFamily: 'Lato', fontStyle: 'italic', fontWeight: 700, fontSize: 32, color: 'var(--navy)', marginBottom: 4 }}>{cat.count}</p>
                 <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{cat.title}</p>
                 <p style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--teal)', letterSpacing: '0.1em', marginBottom: 12 }}>{cat.en}</p>
                 <p style={{ fontFamily: 'var(--sans)', fontSize: 13, fontWeight: 300, lineHeight: 1.75, color: 'var(--muted)' }}>{cat.description}</p>
