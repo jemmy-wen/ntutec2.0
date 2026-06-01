@@ -478,19 +478,27 @@ function PageArchitectureTab() {
 /* ── Main App ── */
 function App() {
   const [tab, setTab] = React.useState('tokens');
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   return (
     <div style={{ minHeight: '100vh' }}>
 
       {/* Header */}
-      <div style={{ background: 'var(--navy)', padding: '48px 48px 0', position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ background: 'var(--navy)', padding: scrolled ? '0 48px 0' : '48px 48px 0', position: 'sticky', top: 0, zIndex: 100, transition: 'padding 0.3s cubic-bezier(0.22,1,0.36,1)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16 }}>NTUTEC</div>
-          <h1 style={{ fontFamily: 'var(--serif)', fontSize: 48, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Design Kit</h1>
-          <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, maxWidth: 560 }}>
-            台大創創中心設計規範。所有頁面的唯一設計來源，新增頁面時請遵循此規範。
-          </p>
+          <div style={{ overflow: 'hidden', maxHeight: scrolled ? 0 : 200, opacity: scrolled ? 0 : 1, transition: 'max-height 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', color: 'var(--mint)', textTransform: 'uppercase', marginBottom: 16 }}>NTUTEC</div>
+            <h1 style={{ fontFamily: 'var(--serif)', fontSize: 48, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Design Kit</h1>
+            <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, maxWidth: 560 }}>
+              台大創創中心設計規範。所有頁面的唯一設計來源，新增頁面時請遵循此規範。
+            </p>
+          </div>
           {/* Tabs */}
-          <div style={{ display: 'flex', gap: 0, marginTop: 36, borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
+          <div style={{ display: 'flex', gap: 0, marginTop: scrolled ? 0 : 36, borderBottom: '1px solid rgba(255,255,255,0.12)', transition: 'margin-top 0.3s' }}>
             {[
               { key: 'tokens', label: 'Design Tokens' },
               { key: 'architecture', label: '頁面架構' },
