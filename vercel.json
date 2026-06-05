@@ -2,6 +2,9 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "framework": null,
+  "rewrites": [
+    { "source": "/:page", "destination": "/:page.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)\\.jsx",
